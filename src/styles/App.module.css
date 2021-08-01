@@ -1,0 +1,57 @@
+body {
+  overflow: hidden;
+}
+
+.fullWindow {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+
+  transition: top 0.5s;
+}
+
+.subpage {
+  top: -100vh;
+}
+
+.sky {
+  height: 90vh;
+  background-color: skyblue;
+  overflow: auto;
+  white-space: nowrap;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.sky::-webkit-scrollbar {
+  display: none;
+}
+
+.ground {
+  height: 110vh;
+  padding-top: 10vh;
+  background-image: linear-gradient(to bottom, green, #948268 10%);
+}
+
+.rollingPicture {
+  position: absolute;
+  width: 20vmin;
+  min-width: 130px;
+  left: 3vw;
+  bottom: 8vmin;
+  border-radius: 50%;
+  border: 1px solid darkblue;
+}
+
+.horizontalPage {
+  width: 90vw;
+  margin: 5vh 5vw 0vw 5vw;
+  height: 80vh;
+  border: 1px solid black;
+  display: inline-block;
+  overflow-y: hidden;
+}
