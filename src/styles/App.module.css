@@ -48,7 +48,7 @@ body {
   left: 3vw;
   top: 100vh;
   border-radius: 50%;
-  border: 1px solid darkblue;
+  border: 1px solid black;
   z-index: 300;
 }
 
