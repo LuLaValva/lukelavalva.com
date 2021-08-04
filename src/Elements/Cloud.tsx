@@ -22,7 +22,7 @@ const Cloud = (props: Props) => {
         width: props.width + "em",
         height: height + "em",
         left: props.left + "em",
-        top: props.top + "em",
+        top: props.top + "%",
       }}
     >
       <svg

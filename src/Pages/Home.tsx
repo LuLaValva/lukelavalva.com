@@ -13,8 +13,12 @@ const Home = (props: Props) => {
     setLeft(e.currentTarget.scrollLeft);
   }
 
+  function handleWheel(e: React.WheelEvent<HTMLElement>) {
+    e.currentTarget.scrollBy({ left: e.deltaY });
+  }
+
   return (
-    <div className={styles.sky} onScroll={handleScroll}>
+    <div className={styles.sky} onScroll={handleScroll} onWheel={handleWheel}>
       <Cloud width={30} left={10} top={4}>
         Luke LaValva
       </Cloud>
