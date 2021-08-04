@@ -15,13 +15,13 @@ const Home = (props: Props) => {
 
   return (
     <div className={styles.sky} onScroll={handleScroll}>
-      <Cloud x={30} y={15} left={10} top={4}>
+      <Cloud width={30} left={10} top={4}>
         Luke LaValva
       </Cloud>
-      <Cloud x={20} y={10} left={40} top={15}>
+      <Cloud width={20} left={40} top={15}>
         <Link to="/albums">Albums thing</Link>
       </Cloud>
-      <Cloud x={24} y={12} left={800} top={0}>
+      <Cloud width={24} left={800} top={0}>
         Haha you made it to the end
       </Cloud>
       <img

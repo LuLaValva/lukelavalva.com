@@ -4,32 +4,35 @@ import { useState } from "react";
 import styles from "../styles/App.module.css";
 
 interface Props {
-  x: number;
-  y: number;
+  width: number;
   left: number;
   top: number;
   children?: string | React.ReactNode;
 }
 
 const Cloud = (props: Props) => {
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => setHeight(props.width / 2), [props.width]);
+
   return (
     <div
       className={styles.cloud}
       style={{
-        width: props.x + "em",
-        height: props.y + "em",
+        width: props.width + "em",
+        height: height + "em",
         left: props.left + "em",
         top: props.top + "em",
       }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox={`0 0 ${props.x} ${props.y}`}
+        viewBox={`0 0 ${props.width} ${height}`}
         width="100%"
         height="100%"
       >
         {[...Array(7)].map((_val, index) => (
-          <CloudCircle key={index} x={props.x} y={props.y} />
+          <CloudCircle key={index} x={props.width} y={height} />
         ))}
       </svg>
       <div>{props.children}</div>
