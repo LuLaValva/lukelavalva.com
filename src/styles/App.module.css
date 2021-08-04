@@ -46,8 +46,6 @@ body {
   position: sticky;
   width: 20vmin;
   min-width: 130px;
-  left: 3vw;
-  top: 100vh;
   border-radius: 50%;
   border: 1px solid black;
   z-index: 300;

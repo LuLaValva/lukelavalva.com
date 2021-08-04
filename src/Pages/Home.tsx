@@ -32,7 +32,10 @@ const Home = (props: Props) => {
         src="me_circle.gif"
         className={styles.rollingPicture}
         alt="My face"
-        style={{ transform: `rotate(${left}deg)` }}
+        style={{
+          transform: `rotate(${left}deg)`,
+          left: `${8 + Math.sin(left / 506) * 3 + Math.sin(335) * 2}%`,
+        }}
       />
     </div>
   );
