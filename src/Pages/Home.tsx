@@ -14,7 +14,7 @@ const Home = (props: Props) => {
   }
 
   function handleWheel(e: React.WheelEvent<HTMLElement>) {
-    e.currentTarget.scrollBy({ left: e.deltaY });
+    if (e.deltaX === 0) e.currentTarget.scrollBy({ left: e.deltaY });
   }
 
   return (
@@ -22,7 +22,7 @@ const Home = (props: Props) => {
       <Cloud width={30} left={10} top={4}>
         Luke LaValva
       </Cloud>
-      <Cloud width={20} left={40} top={15}>
+      <Cloud width={20} left={40} top={50}>
         <Link to="/albums">Albums thing</Link>
       </Cloud>
       <Cloud width={24} left={800} top={0}>

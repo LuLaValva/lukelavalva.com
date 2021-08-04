@@ -20,11 +20,14 @@ body {
 
 .sky {
   height: 90vh;
-  background-color: skyblue;
-  overflow-x: auto;
+  position: relative;
+  overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
+  padding-bottom: -5vh;
 
+  background-color: skyblue;
+  background-image: linear-gradient(to top, green 4%, skyblue 5%);
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -39,18 +42,18 @@ body {
 }
 
 .rollingPicture {
-  position: absolute;
+  position: sticky;
   width: 20vmin;
   min-width: 130px;
   left: 3vw;
-  bottom: 8vmin;
+  top: 100vh;
   border-radius: 50%;
   border: 1px solid darkblue;
   z-index: 300;
 }
 
 .cloud {
-  position: relative;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
