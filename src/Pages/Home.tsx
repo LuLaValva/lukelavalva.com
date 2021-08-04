@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../styles/App.module.css";
+import Cloud from "../Elements/Cloud";
 
 interface Props {}
 
@@ -14,12 +15,15 @@ const Home = (props: Props) => {
 
   return (
     <div className={styles.sky} onScroll={handleScroll}>
-      <div className={styles.horizontalPage}>
+      <Cloud x={30} y={15} left={10} top={4}>
+        Luke LaValva
+      </Cloud>
+      <Cloud x={20} y={10} left={40} top={15}>
         <Link to="/albums">Albums thing</Link>
-      </div>
-      <div className={styles.horizontalPage}>Testing</div>
-      <div className={styles.horizontalPage}></div>
-      <div className={styles.horizontalPage}></div>
+      </Cloud>
+      <Cloud x={24} y={12} left={800} top={0}>
+        Haha you made it to the end
+      </Cloud>
       <img
         src="me_circle.gif"
         className={styles.rollingPicture}

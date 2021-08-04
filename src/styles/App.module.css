@@ -55,3 +55,18 @@ body {
   display: inline-block;
   overflow-y: hidden;
 }
+
+.cloud {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cloud > svg {
+  position: absolute;
+}
+
+.cloud > div {
+  z-index: 1;
+}
