@@ -20,7 +20,7 @@ const Home = (props: Props) => {
   return (
     <div className={styles.sky} onScroll={handleScroll} onWheel={handleWheel}>
       <Cloud width={30} left={10} top={4}>
-        Luke LaValva
+        <h1>Luke LaValva</h1>
       </Cloud>
       <Cloud width={20} left={40} top={50}>
         <Link to="/albums">Albums thing</Link>
