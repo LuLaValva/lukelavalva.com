@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../styles/App.module.css";
-import Cloud from "../Elements/Cloud";
+import BoxInSky from "../Elements/BoxInSky";
 
 interface Props {}
 
@@ -19,15 +19,15 @@ const Home = (props: Props) => {
 
   return (
     <div className={styles.sky} onScroll={handleScroll} onWheel={handleWheel}>
-      <Cloud width={30} left={10} top={4}>
+      <BoxInSky width={30} left={10} top={4}>
         <h1>Luke LaValva</h1>
-      </Cloud>
-      <Cloud width={20} left={40} top={50}>
-        <Link to="/albums">Albums thing</Link>
-      </Cloud>
-      <Cloud width={24} left={800} top={0}>
+      </BoxInSky>
+      <BoxInSky width={20} left={40} top={50}>
+        <Link to="/albums">My opinion about a bunch of albums</Link>
+      </BoxInSky>
+      <BoxInSky width={24} left={800} top={2}>
         Haha you made it to the end
-      </Cloud>
+      </BoxInSky>
       <img
         src="me_circle.gif"
         className={styles.rollingPicture}

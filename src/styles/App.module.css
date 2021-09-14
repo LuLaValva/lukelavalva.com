@@ -24,11 +24,10 @@ body {
   position: relative;
   overflow-x: scroll;
   overflow-y: hidden;
-  white-space: nowrap;
   padding-bottom: -5vh;
 
-  background-color: skyblue;
-  background-image: linear-gradient(to top, green 4%, skyblue 5%);
+  background-color: #eee;
+  background-image: linear-gradient(to top, #242424 4%, #eee 5%);
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -39,7 +38,7 @@ body {
 .ground {
   height: 110vh;
   padding-top: 11vh;
-  background-image: linear-gradient(to bottom, green, #948268 10%);
+  background-image: linear-gradient(to bottom, #242424, #454545 9%);
 }
 
 .rollingPicture {
@@ -47,21 +46,16 @@ body {
   width: 20vmin;
   min-width: 130px;
   border-radius: 50%;
+  top: 90%;
   border: 1px solid black;
   z-index: 300;
 }
 
-.cloud {
+.boxInSky {
   position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cloud > svg {
-  position: absolute;
-}
-
-.cloud > div {
-  z-index: 1;
+  text-align: center;
+  border-radius: 1em;
+  box-shadow: inset 0 0 10px #121212;
+  background-color: #f2f2f2;
+  padding: 1em;
 }

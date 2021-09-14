@@ -1,0 +1,18 @@
+.cloud {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cloud > svg {
+  position: absolute;
+}
+
+.cloud > div {
+  z-index: 1;
+  width: 50%;
+  text-overflow: clip;
+  text-align: center;
+  flex-wrap: wrap;
+}

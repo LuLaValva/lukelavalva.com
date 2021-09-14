@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import styles from "../styles/App.module.css";
+import styles from "../styles/Cloud.module.css";
 
 interface Props {
   width: number;
