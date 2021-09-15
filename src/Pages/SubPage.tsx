@@ -9,8 +9,10 @@ interface Props {
 const SubPage = (props: Props) => {
   return (
     <div className={styles.ground}>
-      <Link to="/">
-        <img src="me_circle.gif" alt="My face" style={{ width: "4em" }}></img>
+      <Link to="/" className={styles.homeButton}>
+        <img src="me.gif" alt="My face" />
+        <br />
+        Home
       </Link>
       {props.children}
     </div>

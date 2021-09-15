@@ -5,6 +5,7 @@ import NavigationHandler from "./NavigationHandler";
 import Home from "./Pages/Home";
 import SubPage from "./Pages/SubPage";
 import AlbumRatingPage from "./Pages/AlbumRatingPage";
+import ResumePage from "./Pages/ResumePage";
 
 let App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ let App: React.FC = () => {
         <SubPage>
           <Switch>
             <Route path="/albums" component={AlbumRatingPage} />
+            <Route path="/resume" component={ResumePage} />
           </Switch>
         </SubPage>
       </NavigationHandler>

@@ -28,6 +28,9 @@ const Home = (props: Props) => {
       <BoxInSky width={24} left={800} top={2}>
         Haha you made it to the end
       </BoxInSky>
+      <BoxInSky width={23} left={30} top={20}>
+        <Link to="/resume">Resume</Link>
+      </BoxInSky>
       <img
         src="me_circle.gif"
         className={styles.rollingPicture}
