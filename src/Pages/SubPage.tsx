@@ -14,7 +14,7 @@ const SubPage = (props: Props) => {
         <br />
         Home
       </Link>
-      {props.children}
+      <div className={styles.groundScroll}>{props.children}</div>
     </div>
   );
 };
