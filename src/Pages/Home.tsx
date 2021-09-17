@@ -19,17 +19,21 @@ const Home = (props: Props) => {
 
   return (
     <div className={styles.sky} onScroll={handleScroll} onWheel={handleWheel}>
-      <BoxInSky width={30} left={10} top={4}>
+      <BoxInSky width={25} left={5} top={4}>
         <h1>Luke LaValva</h1>
       </BoxInSky>
-      <BoxInSky width={20} left={40} top={50}>
-        <Link to="/albums">My opinion about a bunch of albums</Link>
-      </BoxInSky>
+      <Link to="/resume" className={styles.boxLink}>
+        <BoxInSky width={23} left={30} top={60}>
+          Resume
+        </BoxInSky>
+      </Link>
+      <Link to="/albums" className={styles.boxLink}>
+        <BoxInSky width={20} left={135} top={50}>
+          My opinion about a bunch of albums
+        </BoxInSky>
+      </Link>
       <BoxInSky width={24} left={800} top={2}>
         Haha you made it to the end
-      </BoxInSky>
-      <BoxInSky width={23} left={30} top={20}>
-        <Link to="/resume">Resume</Link>
       </BoxInSky>
       <img
         src="me_circle.gif"
