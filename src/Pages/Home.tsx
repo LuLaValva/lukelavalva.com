@@ -32,6 +32,24 @@ const Home = (props: Props) => {
           My opinion about a bunch of albums
         </BoxInSky>
       </Link>
+      <BoxInSky width={15} left={80} top={5}>
+        Software Engineer
+      </BoxInSky>
+      <BoxInSky width={21} left={95} top={80}>
+        Mathematician
+      </BoxInSky>
+      <BoxInSky width={18} left={170} top={40}>
+        Full Stack Developer
+      </BoxInSky>
+      <BoxInSky width={23} left={255} top={60}>
+        Resident Rock Climber
+      </BoxInSky>
+      <BoxInSky width={30} left={290} top={12}>
+        Sociologist
+      </BoxInSky>
+      <BoxInSky width={14} left={385} top={44}>
+        Frequent Learner
+      </BoxInSky>
       <BoxInSky width={24} left={800} top={2}>
         Haha you made it to the end
       </BoxInSky>
