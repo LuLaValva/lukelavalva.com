@@ -27,33 +27,22 @@ body {
   display: none;
 }
 .sky {
-  height: 90vh;
+  height: 100vh;
   position: relative;
   overflow-x: scroll;
   overflow-y: hidden;
   padding-bottom: -5vh;
 
   background-color: #eee;
-  background-image: linear-gradient(to top, #242424 4%, #eee 5%);
-}
-
-.ground {
-  height: 110vh;
-  padding-top: 11vh;
-  background-image: linear-gradient(to bottom, #242424, #454545 9%);
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  color: white;
-  font-family: monospace;
-  font-size: large;
+  background-image: linear-gradient(to top, #242424 13%, #eee 14%);
 }
 
 .groundScroll {
-  width: 100%;
+  width: 100vw;
   overflow-y: scroll;
-  height: 80vh;
-  text-align: center;
+  height: 100vh;
+  background: #242424;
+  color: white;
 }
 
 .rollingPicture {
@@ -61,7 +50,7 @@ body {
   width: 20vmin;
   min-width: 130px;
   border-radius: 50%;
-  top: 90%;
+  top: 75vh;
   border: 1px solid black;
   z-index: 300;
 }
@@ -76,25 +65,13 @@ body {
   transition: all 0.3s;
 }
 
-.homeButton {
-  text-align: center;
-  color: white;
-  margin-bottom: 1em;
-}
-.homeButton:hover > img {
-  box-shadow: 0 0 1em #fff;
-}
-
-.homeButton > img {
-  width: 6em;
-  max-width: 10vw;
-  border-radius: 50%;
-  transition: all 0.3s;
-}
-
 .boxLink {
   color: blue;
 }
 .boxLink:hover .boxInSky {
   transform: scale(1.2);
+}
+
+.gameCanvas {
+  background-color: lightblue;
 }

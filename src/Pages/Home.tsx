@@ -24,12 +24,12 @@ const Home = (props: Props) => {
       </BoxInSky>
       <Link to="/resume" className={styles.boxLink}>
         <BoxInSky width={23} left={30} top={60}>
-          Resume
+          My Resume
         </BoxInSky>
       </Link>
       <Link to="/albums" className={styles.boxLink}>
         <BoxInSky width={20} left={135} top={50}>
-          My opinion about a bunch of albums
+          My opinions about a bunch of albums
         </BoxInSky>
       </Link>
       <BoxInSky width={15} left={80} top={5}>
@@ -42,15 +42,15 @@ const Home = (props: Props) => {
         Full Stack Developer
       </BoxInSky>
       <BoxInSky width={23} left={255} top={60}>
-        Resident Rock Climber
+        Frequent Rock Climber
       </BoxInSky>
       <BoxInSky width={30} left={290} top={12}>
         Sociologist
       </BoxInSky>
       <BoxInSky width={14} left={385} top={44}>
-        Frequent Learner
+        Constant Learner
       </BoxInSky>
-      <BoxInSky width={24} left={800} top={2}>
+      <BoxInSky width={24} left={3400} top={2}>
         Haha you made it to the end
       </BoxInSky>
       <img
