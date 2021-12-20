@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && aws s3 rm s3://lukelavalva.com --recursive && aws s3 cp build s3://lukelavalva.com --recursive",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
