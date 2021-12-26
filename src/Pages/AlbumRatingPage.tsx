@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+import { API } from "aws-amplify";
+
+import { ApiConstants } from "../consts";
 
 type AlbumRatingPageProps = {};
 
+type Album = { name: String; artist: String };
+
 const AlbumRatingPage: React.FC<AlbumRatingPageProps> = () => {
+  const [albums, setAlbums] = useState<Album[]>([]);
+
+  useEffect(() => {
+    API.get(ApiConstants.ALBUMS_NAME, ApiConstants.ALBUMS_PATH, null).then(
+      (res: { albums: Album[] }) => setAlbums(res.albums)
+    );
+  }, []);
+
   return (
     <>
       <p>
@@ -11,15 +25,11 @@ const AlbumRatingPage: React.FC<AlbumRatingPageProps> = () => {
         albums in no particular order:
       </p>
       <ul>
-        <li>Graceland (Paul Simon)</li>
-        <li>Hawaii: Part II (Miracle Musical)</li>
-        <li>Bookends (Simon & Garfunkel)</li>
-        <li>In Between Dreams (Jack Johnson)</li>
-        <li>Comfort Eagle (Cake)</li>
-        <li>Lola vs. Powerman and the Money-Go-Round, Pt. 1 (The Kinks)</li>
-        <li>Magical Mystery Tour (The Beatles)</li>
-        <li>Out of the Blue (Electric Light Orchestra)</li>
-        <li>Marvin's Marvelous Mechanical Museum (Tally Hall)</li>
+        {albums.map((album, key) => (
+          <li key={key}>
+            {album.name} ({album.artist})
+          </li>
+        ))}
       </ul>
     </>
   );
