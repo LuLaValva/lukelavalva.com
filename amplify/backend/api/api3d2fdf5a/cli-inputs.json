@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/albums": {
+      "name": "/albums",
+      "lambdaFunction": "lukelavalvacom2fc76426",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
