@@ -10,6 +10,14 @@
       "StackName": "amplify-amplifydeca423a98b54-staging-215539",
       "StackId": "arn:aws:cloudformation:us-east-1:988766322608:stack/amplify-amplifydeca423a98b54-staging-215539/bc550900-62a8-11ec-a51a-0e0dd218c4a7",
       "AmplifyAppId": "d17aw0ajtubqry"
+    },
+    "categories": {
+      "function": {
+        "lukelavalvacom2fc76426": {
+          "deploymentBucketName": "amplify-amplifydeca423a98b54-staging-215539-deployment",
+          "s3Key": "amplify-builds/lukelavalvacom2fc76426-4a3867736b5a76337030-build.zip"
+        }
+      }
     }
   }
 }
