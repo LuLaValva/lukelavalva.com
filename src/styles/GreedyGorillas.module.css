@@ -1,0 +1,13 @@
+.playerDisplayBox {
+  width: 40vmin;
+  height: 40vmin;
+  margin: 2vmin;
+  border: 1px solid #aaa;
+  text-align: center;
+}
+
+.allGorillas {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
