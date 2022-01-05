@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import GGLogin from "./GGLogin";
 import { ApiConstants } from "../consts";
-import GorillaDisplay from "./GorillaDisplay";
+import GreedyGorillasGame from "./GreedyGorillasGame";
+import GreedyGorillasLobby from "./GreedyGorillasLobby";
 
 export type Player = {
   connectionId: string;
@@ -13,11 +14,19 @@ export type Player = {
   };
 };
 
+export type GameState = {
+  room: string;
+  turn: number;
+  playerOrder: string[];
+  availableRoles: number[];
+};
+
 const GreedyGorillasPage: React.FC = () => {
   const [wsConnection, setWsConnection] = useState<WebSocket>();
   const [players, setPlayers] = useState<{ [connectionId: string]: Player }>(
     {}
   );
+  const [gameState, setGameState] = useState<GameState>();
 
   const socketMessageActions: { [action: string]: (data: any) => void } = {
     playerJoin: (data: any) => {
@@ -27,6 +36,14 @@ const GreedyGorillasPage: React.FC = () => {
       console.log(`Player "${data.player.username}" joined the room`);
     },
     playerExit: (data: any) => {
+      setGameState((prevState) => {
+        if (prevState !== undefined) {
+          console.log(
+            `"${data.player.username}" left mid-game! The game has been forced to quit as a result.`
+          );
+        }
+        return undefined;
+      });
       setPlayers((currentPlayers) => {
         const newPlayers = { ...currentPlayers };
         delete newPlayers[data.player.connectionId];
@@ -43,6 +60,9 @@ const GreedyGorillasPage: React.FC = () => {
           ),
         };
       });
+    },
+    initGameState: (data: any) => {
+      setGameState(data.state);
     },
   };
 
@@ -69,12 +89,18 @@ const GreedyGorillasPage: React.FC = () => {
 
   return (
     <>
-      {wsConnection === undefined && (
+      {(wsConnection === undefined && (
         <GGLogin socketConnectionFunction={connectToSocket} />
-      )}
-      {Object.values(players).map((player) => (
-        <GorillaDisplay key={player.connectionId} player={player} />
-      ))}
+      )) ||
+        (gameState && (
+          <GreedyGorillasGame
+            players={players}
+            playerOrder={gameState.playerOrder}
+          />
+        )) ||
+        (wsConnection && (
+          <GreedyGorillasLobby players={players} wsConnection={wsConnection} />
+        ))}
     </>
   );
 };
