@@ -3,6 +3,8 @@
   height: 40vmin;
   margin: 2vmin;
   border: 1px solid #aaa;
+  border-radius: 3vmin;
+  background-color: #00000022;
   text-align: center;
 }
 

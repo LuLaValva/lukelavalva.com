@@ -10,7 +10,8 @@ export type Player = {
   username: string;
   gameState: {
     points: number;
-    role: number;
+    knownRole?: number;
+    apparentRole?: number;
   };
 };
 
@@ -18,7 +19,7 @@ export type GameState = {
   room: string;
   turn: number;
   playerOrder: string[];
-  availableRoles: number[];
+  roles: number[];
 };
 
 const GreedyGorillasPage: React.FC = () => {

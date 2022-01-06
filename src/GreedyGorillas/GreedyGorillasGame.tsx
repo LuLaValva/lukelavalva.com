@@ -1,6 +1,6 @@
 import React from "react";
 import { Player } from "./GreedyGorillasPage";
-import GorillaDisplay from "./GorillaDisplay";
+import PlayerDisplay from "./PlayerDisplay";
 import styles from "../styles/GreedyGorillas.module.css";
 
 interface Props {
@@ -14,7 +14,7 @@ const GreedyGorillasGame = (props: Props) => {
       <h1>Greedy Gorillas!</h1>
       <div className={styles.allGorillas}>
         {props.playerOrder.map((connectionId) => (
-          <GorillaDisplay
+          <PlayerDisplay
             key={connectionId}
             player={props.players[connectionId]}
           />
