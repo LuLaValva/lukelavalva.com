@@ -6,6 +6,7 @@ import styles from "../styles/GreedyGorillas.module.css";
 interface Props {
   players: { [connectionId: string]: Player };
   playerOrder: string[];
+  connectionId: string;
 }
 
 const GreedyGorillasGame = (props: Props) => {
@@ -17,6 +18,7 @@ const GreedyGorillasGame = (props: Props) => {
           <PlayerDisplay
             key={connectionId}
             player={props.players[connectionId]}
+            isYou={connectionId === props.connectionId}
           />
         ))}
       </div>

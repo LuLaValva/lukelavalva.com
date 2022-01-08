@@ -5,6 +5,7 @@ import GorillaRiveComponent from "./GorillaRiveComponent";
 
 interface Props {
   player: Player;
+  isYou: boolean;
 }
 
 const PlayerDisplay = (props: Props) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import GGLogin from "./GGLogin";
 import { ApiConstants } from "../consts";
 import GreedyGorillasGame from "./GreedyGorillasGame";
@@ -16,10 +16,9 @@ export type Player = {
 };
 
 export type GameState = {
-  room: string;
   turn: number;
   playerOrder: string[];
-  roles: number[];
+  roleList: number[];
 };
 
 const GreedyGorillasPage: React.FC = () => {
@@ -27,50 +26,105 @@ const GreedyGorillasPage: React.FC = () => {
   const [players, setPlayers] = useState<{ [connectionId: string]: Player }>(
     {}
   );
-  const [gameState, setGameState] = useState<GameState>();
+  const [connectionId, setConnectionId] = useState("");
+  const [gameState, setGameState] = useState<GameState>({
+    turn: -1,
+    playerOrder: [],
+    roleList: [],
+  });
 
-  const socketMessageActions: { [action: string]: (data: any) => void } = {
-    playerJoin: (data: any) => {
-      setPlayers((currentPlayers) => {
-        return { ...currentPlayers, [data.player.connectionId]: data.player };
-      });
-      console.log(`Player "${data.player.username}" joined the room`);
-    },
-    playerExit: (data: any) => {
-      setGameState((prevState) => {
-        if (prevState !== undefined) {
-          console.log(
-            `"${data.player.username}" left mid-game! The game has been forced to quit as a result.`
-          );
-        }
-        return undefined;
-      });
-      setPlayers((currentPlayers) => {
-        const newPlayers = { ...currentPlayers };
-        delete newPlayers[data.player.connectionId];
-        return newPlayers;
-      });
-      console.log(`Player "${data.player.username}" left the room`);
-    },
-    playerList: (data: any) => {
-      setPlayers((currentPlayers) => {
-        return {
-          ...currentPlayers,
-          ...Object.fromEntries(
-            data.players.map((player: Player) => [player.connectionId, player])
-          ),
-        };
-      });
-    },
-    initGameState: (data: any) => {
-      setGameState(data.state);
-    },
-  };
+  const socketMessageActions: { [action: string]: (data: any) => void } =
+    useMemo(() => {
+      return {
+        playerJoin: (data: any) => {
+          setPlayers((currentPlayers) => {
+            return {
+              ...currentPlayers,
+              [data.player.connectionId]: data.player,
+            };
+          });
+          console.log(`Player "${data.player.username}" joined the room`);
+        },
+        playerExit: (data: any) => {
+          if (gameState.turn !== -1) {
+            console.log(
+              `"${data.player.username}" left mid-game! The game has been forced to quit as a result.`
+            );
+          }
+          setGameState((prevState) => {
+            return {
+              ...prevState,
+              turn: -1,
+            };
+          });
+          setPlayers((currentPlayers) => {
+            const newPlayers = { ...currentPlayers };
+            delete newPlayers[data.player.connectionId];
+            return newPlayers;
+          });
+          console.log(`Player "${data.player.username}" left the room`);
+        },
+        initializePlayer: (data: any) => {
+          setPlayers((currentPlayers) => {
+            return {
+              ...currentPlayers,
+              ...Object.fromEntries(
+                data.players.map((player: Player) => [
+                  player.connectionId,
+                  player,
+                ])
+              ),
+            };
+          });
+          setConnectionId(data.you);
+          setGameState(data.gameState);
+        },
+        startGame: (data: any) => {
+          setGameState((currentState) => {
+            return {
+              ...currentState,
+              turn: 0,
+              playerOrder: data.playerOrder,
+              roleList: data.finalRoles,
+            };
+          });
+          setPlayers((currentPlayers) => {
+            return {
+              ...currentPlayers,
+              [connectionId]: {
+                ...currentPlayers[connectionId],
+                gameState: {
+                  ...currentPlayers[connectionId].gameState,
+                  knownRole: data.yourRole,
+                },
+              },
+            };
+          });
+        },
+        updateRoles: (data: any) => {
+          setGameState((currentState) => {
+            return {
+              ...currentState,
+              roleList: data.newRoles,
+            };
+          });
+        },
+      };
+    }, [connectionId]);
 
-  const receiveMessage = (message: MessageEvent<any>) => {
-    const parsedData = JSON.parse(message.data);
-    socketMessageActions[parsedData.action](parsedData);
-  };
+  const receiveMessage = useCallback(
+    (message: MessageEvent<any>) => {
+      const parsedData = JSON.parse(message.data);
+      console.log(parsedData);
+      console.log(connectionId);
+      parsedData.action && socketMessageActions[parsedData.action](parsedData);
+    },
+    [socketMessageActions, connectionId]
+  );
+
+  useEffect(() => {
+    if (wsConnection) wsConnection.onmessage = receiveMessage;
+  }, [wsConnection, receiveMessage]);
 
   const connectToSocket = (username: string, room: string) => {
     const baseUrl = new URL(ApiConstants.GREEDY_GORILLAS_URL);
@@ -93,14 +147,19 @@ const GreedyGorillasPage: React.FC = () => {
       {(wsConnection === undefined && (
         <GGLogin socketConnectionFunction={connectToSocket} />
       )) ||
-        (gameState && (
+        (gameState && gameState.turn !== -1 && (
           <GreedyGorillasGame
             players={players}
             playerOrder={gameState.playerOrder}
+            connectionId={connectionId}
           />
         )) ||
         (wsConnection && (
-          <GreedyGorillasLobby players={players} wsConnection={wsConnection} />
+          <GreedyGorillasLobby
+            players={players}
+            wsConnection={wsConnection}
+            roles={gameState.roleList}
+          />
         ))}
     </>
   );

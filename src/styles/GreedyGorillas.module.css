@@ -10,6 +10,57 @@
 
 .allGorillas {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
+  justify-content: space-evenly;
+}
+
+.roleSelectionBox {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  border: 1px solid white;
+  padding: 1em;
+  margin: 1em;
+  border-radius: 2em;
+  background-color: #00000022;
+  text-align: center;
+}
+
+.roleSelectionBox > h2 {
+  width: 100%;
+  border-bottom: 1px solid #ffffff44;
+  padding-bottom: 0.5em;
+}
+
+.roleSelector {
+  width: 9em;
+  height: 9em;
+  margin: 1em;
+  border: 1px solid #aaa;
+  background-color: #00000022;
+  text-align: center;
+  line-height: 9em;
+  border-radius: 50%;
+  user-select: none;
+}
+
+.roleSelector:hover {
+  background-color: #ffffff22;
+}
+.roleSelector:active {
+  background-color: #ffffff88;
+}
+
+.roleSelector.add:hover {
+  background-image: url("http://cdn.onlinewebfonts.com/svg/img_84809.png");
+  background-size: 30%;
+  background-repeat: no-repeat;
+  background-position: 50% 10%;
+}
+.roleSelector.remove:hover {
+  background-image: url("http://cdn.onlinewebfonts.com/svg/img_110190.png");
+  background-size: 30%;
+  background-repeat: no-repeat;
+  background-position: 50% 90%;
 }

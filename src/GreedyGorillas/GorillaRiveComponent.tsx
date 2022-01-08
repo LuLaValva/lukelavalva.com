@@ -30,9 +30,15 @@ const GorillaRiveComponent = (props: Props) => {
 
   useEffect(() => {
     roleInput &&
-      props.player.gameState.apparentRole &&
-      (roleInput.value = props.player.gameState.apparentRole);
-  }, [roleInput, props.player.gameState.apparentRole]);
+      (roleInput.value =
+        props.player.gameState.apparentRole ||
+        props.player.gameState.knownRole ||
+        0);
+  }, [
+    roleInput,
+    props.player.gameState.apparentRole,
+    props.player.gameState.knownRole,
+  ]);
 
   return (
     <RiveComponent
