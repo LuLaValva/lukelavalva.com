@@ -10,7 +10,7 @@ interface Props {
 
 const GreedyGorillasLobby = (props: Props) => {
   const startGame = () => {
-    if (Object.keys(props.players).length <= props.roles.length) {
+    if (Object.keys(props.players).length < props.roles.length) {
       props.wsConnection.send(
         JSON.stringify({
           action: "startGame",

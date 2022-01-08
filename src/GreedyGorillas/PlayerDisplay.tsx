@@ -17,7 +17,8 @@ const PlayerDisplay = (props: Props) => {
       } ${props.isOnTheClock && styles.currentPlayerDisplayBox}`}
     >
       <GorillaRiveComponent player={props.player} />
-      {props.player.username}
+      <div>{props.player.username}</div>
+      <h1 className={styles.playerScore}>{props.player.gameState.points}</h1>
     </div>
   );
 };

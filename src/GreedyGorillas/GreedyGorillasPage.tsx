@@ -33,6 +33,43 @@ const GreedyGorillasPage: React.FC = () => {
     roleList: [],
   });
 
+  const playerSubactions: { [action: string]: (data: any) => void } =
+    useMemo(() => {
+      return {
+        showRole: (data: any) => {
+          setPlayers((currentPlayers) => {
+            return {
+              ...currentPlayers,
+              [data.targetPlayer]: {
+                ...currentPlayers[data.targetPlayer],
+                gameState: {
+                  ...currentPlayers[data.targetPlayer].gameState,
+                  knownRole: data.role,
+                },
+              },
+            };
+          });
+        },
+        hideRole: (data: any) => {
+          if (players[data.targetPlayer].gameState.knownRole) {
+            setPlayers((currentPlayers) => {
+              const newPlayers: { [connectionId: string]: Player } = {
+                ...currentPlayers,
+                [data.targetPlayer]: {
+                  ...currentPlayers[data.targetPlayer],
+                  gameState: {
+                    ...currentPlayers[data.targetPlayer].gameState,
+                  },
+                },
+              };
+              delete newPlayers[data.targetPlayer].gameState.knownRole;
+              return newPlayers;
+            });
+          }
+        },
+      };
+    }, [players]);
+
   const socketMessageActions: { [action: string]: (data: any) => void } =
     useMemo(() => {
       return {
@@ -109,8 +146,21 @@ const GreedyGorillasPage: React.FC = () => {
             };
           });
         },
+        applyPlayerAction: (data: any) => {
+          if (data.newTurn !== undefined) {
+            setGameState((currentState) => {
+              return {
+                ...currentState,
+                turn: data.newTurn,
+              };
+            });
+          }
+          if (data.subaction && playerSubactions[data.subaction]) {
+            playerSubactions[data.subaction](data);
+          }
+        },
       };
-    }, [connectionId, gameState.turn]);
+    }, [connectionId, gameState.turn, playerSubactions]);
 
   const receiveMessage = useCallback(
     (message: MessageEvent<any>) => {
@@ -146,11 +196,12 @@ const GreedyGorillasPage: React.FC = () => {
       {(wsConnection === undefined && (
         <GGLogin socketConnectionFunction={connectToSocket} />
       )) ||
-        (gameState && gameState.turn !== -1 && (
+        (wsConnection && gameState && gameState.turn !== -1 && (
           <GreedyGorillasGame
             players={players}
             connectionId={connectionId}
             gameState={gameState}
+            wsConnection={wsConnection}
           />
         )) ||
         (wsConnection && (

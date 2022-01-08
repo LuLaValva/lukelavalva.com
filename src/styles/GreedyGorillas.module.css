@@ -6,6 +6,7 @@
   border-radius: 4vmin;
   background-color: #00000022;
   text-align: center;
+  position: relative;
 }
 
 .mainPlayerDisplayBox {
@@ -14,6 +15,12 @@
 
 .currentPlayerDisplayBox {
   background-color: #ffffff22;
+}
+
+.playerScore {
+  position: absolute;
+  top: 0vmin;
+  right: 4vmin;
 }
 
 .allGorillas {
