@@ -110,7 +110,7 @@ const GreedyGorillasPage: React.FC = () => {
           });
         },
       };
-    }, [connectionId]);
+    }, [connectionId, gameState.turn]);
 
   const receiveMessage = useCallback(
     (message: MessageEvent<any>) => {
