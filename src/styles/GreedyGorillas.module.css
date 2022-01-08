@@ -3,9 +3,17 @@
   height: 40vmin;
   margin: 2vmin;
   border: 1px solid #aaa;
-  border-radius: 3vmin;
+  border-radius: 4vmin;
   background-color: #00000022;
   text-align: center;
+}
+
+.mainPlayerDisplayBox {
+  font-weight: bolder;
+}
+
+.currentPlayerDisplayBox {
+  background-color: #ffffff22;
 }
 
 .allGorillas {

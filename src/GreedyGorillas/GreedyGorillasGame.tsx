@@ -1,11 +1,11 @@
 import React from "react";
-import { Player } from "./GreedyGorillasPage";
+import { Player, GameState } from "./GreedyGorillasPage";
 import PlayerDisplay from "./PlayerDisplay";
 import styles from "../styles/GreedyGorillas.module.css";
 
 interface Props {
   players: { [connectionId: string]: Player };
-  playerOrder: string[];
+  gameState: GameState;
   connectionId: string;
 }
 
@@ -14,11 +14,15 @@ const GreedyGorillasGame = (props: Props) => {
     <>
       <h1>Greedy Gorillas!</h1>
       <div className={styles.allGorillas}>
-        {props.playerOrder.map((connectionId) => (
+        {props.gameState.playerOrder.map((connectionId, index) => (
           <PlayerDisplay
             key={connectionId}
             player={props.players[connectionId]}
             isYou={connectionId === props.connectionId}
+            isOnTheClock={
+              index ===
+              props.gameState.turn % props.gameState.playerOrder.length
+            }
           />
         ))}
       </div>

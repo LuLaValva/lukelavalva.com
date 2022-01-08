@@ -116,10 +116,9 @@ const GreedyGorillasPage: React.FC = () => {
     (message: MessageEvent<any>) => {
       const parsedData = JSON.parse(message.data);
       console.log(parsedData);
-      console.log(connectionId);
       parsedData.action && socketMessageActions[parsedData.action](parsedData);
     },
-    [socketMessageActions, connectionId]
+    [socketMessageActions]
   );
 
   useEffect(() => {
@@ -150,8 +149,8 @@ const GreedyGorillasPage: React.FC = () => {
         (gameState && gameState.turn !== -1 && (
           <GreedyGorillasGame
             players={players}
-            playerOrder={gameState.playerOrder}
             connectionId={connectionId}
+            gameState={gameState}
           />
         )) ||
         (wsConnection && (

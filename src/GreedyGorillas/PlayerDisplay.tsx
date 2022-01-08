@@ -6,11 +6,16 @@ import GorillaRiveComponent from "./GorillaRiveComponent";
 interface Props {
   player: Player;
   isYou: boolean;
+  isOnTheClock: boolean;
 }
 
 const PlayerDisplay = (props: Props) => {
   return (
-    <div className={styles.playerDisplayBox}>
+    <div
+      className={`${styles.playerDisplayBox} ${
+        props.isYou && styles.mainPlayerDisplayBox
+      } ${props.isOnTheClock && styles.currentPlayerDisplayBox}`}
+    >
       <GorillaRiveComponent player={props.player} />
       {props.player.username}
     </div>
