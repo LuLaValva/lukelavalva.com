@@ -8,6 +8,9 @@
   text-align: center;
   position: relative;
 }
+.playerDisplayBox > h2 {
+  margin-top: 0;
+}
 
 .mainPlayerDisplayBox {
   font-weight: bolder;
@@ -21,6 +24,13 @@
   position: absolute;
   top: 0vmin;
   right: 4vmin;
+}
+
+.playerRole {
+  position: absolute;
+  top: 1vmin;
+  left: 3vmin;
+  width: 8vmin;
 }
 
 .allGorillas {
@@ -71,10 +81,14 @@
   line-height: 3em;
 }
 
-.lobbyButton:hover {
+.lobbyButton:hover,
+.joinRoomButton:hover,
+.startButton:hover {
   background-color: #ffffff22;
 }
-.lobbyButton:active {
+.lobbyButton:active,
+.joinRoomButton:active,
+.startButton:active {
   background-color: #ffffff88;
 }
 
@@ -89,4 +103,72 @@
   background-size: 30%;
   background-repeat: no-repeat;
   background-position: 50% 10%;
+}
+
+.boxBox {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.boxBox > .buttonContainer {
+  flex-grow: 4;
+}
+
+.nameDisplay {
+  border: 1px solid white;
+  padding: 1em;
+  border-radius: 2em;
+  margin: 0em 1em;
+}
+
+.startButton {
+  width: 30%;
+  margin: 2em auto;
+  text-align: center;
+  background-color: #00000022;
+  padding: 1em;
+  border: 1px solid white;
+  border-radius: 2em;
+  font-size: 2em;
+}
+
+.joinRoomButton {
+  background-color: #00000022;
+  padding: 1em;
+  border: 1px solid white;
+  border-radius: 2em;
+  margin: 1em;
+}
+
+.loginContainer {
+  max-width: 70em;
+  border: 1px solid white;
+  margin: auto;
+  padding: 2em;
+  border-radius: 2em;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.loginContainer input {
+  background-color: #00000022;
+  border: 1px solid white;
+  color: white;
+  font-size: 1em;
+  padding: 0.5em;
+  font-family: inherit;
+  border-radius: 0.5em;
+}
+
+.loginContainer > div {
+  font-size: 2em;
+  padding: 1em;
+}
+
+.loginContainer > button {
+  font-size: 2em;
+  color: white;
+  font-family: inherit;
 }

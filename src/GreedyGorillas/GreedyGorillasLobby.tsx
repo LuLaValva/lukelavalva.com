@@ -2,6 +2,7 @@ import React from "react";
 import { GameState, Player } from "./GreedyGorillasPage";
 import GreedyGorillasRoleSelection from "./GreedyGorillasRoleSelection";
 import PlusMinusScoreDisplay from "./PlusMinusScoreDisplay";
+import styles from "../styles/GreedyGorillas.module.css";
 
 interface Props {
   players: { [connectionId: string]: Player };
@@ -24,16 +25,21 @@ const GreedyGorillasLobby = (props: Props) => {
 
   return (
     <>
-      {Object.values(props.players).map((player) => (
-        <div key={player.connectionId}>{player.username}</div>
-      ))}
+      <div className={styles.buttonContainer}>
+        <h2>Players</h2>
+        {Object.values(props.players).map((player) => (
+          <div key={player.connectionId} className={styles.nameDisplay}>
+            {player.username}
+          </div>
+        ))}
+      </div>
       {Object.keys(props.players).length > 0 && (
         <>
           <GreedyGorillasRoleSelection
             roles={props.gameState.roleList}
             wsConnection={props.wsConnection}
           />
-          <div>
+          <div className={styles.boxBox}>
             <PlusMinusScoreDisplay
               score={props.gameState.startingPoints}
               changeAction="updateStartingPoints"
@@ -47,7 +53,9 @@ const GreedyGorillasLobby = (props: Props) => {
               title="Goal Points"
             />
           </div>
-          <button onClick={startGame}>Start Game</button>
+          <div onClick={startGame} className={styles.startButton}>
+            Start Game
+          </div>
         </>
       )}
     </>

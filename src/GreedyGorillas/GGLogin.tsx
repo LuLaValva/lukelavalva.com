@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "../styles/GreedyGorillas.module.css";
 
 interface Props {
   socketConnectionFunction: (username: string, room: string) => void;
@@ -20,11 +21,17 @@ const GGLogin = (props: Props) => {
   };
 
   return (
-    <>
-      Room Key: <input name="room" onChange={handleRoomChange} />
-      Player Name: <input name="username" onChange={handleUsernameChange} />
-      <button onClick={joinRoom}>Join Room</button>
-    </>
+    <div className={`${styles.loginContainer}`}>
+      <div>
+        Room Key: <input name="room" onChange={handleRoomChange} />
+      </div>
+      <div>
+        Player Name: <input name="username" onChange={handleUsernameChange} />
+      </div>
+      <button onClick={joinRoom} className={styles.joinRoomButton}>
+        Join Room
+      </button>
+    </div>
   );
 };
 

@@ -14,7 +14,6 @@ interface Props {
 const GreedyGorillasGame = (props: Props) => {
   return (
     <>
-      <h1>Greedy Gorillas!</h1>
       <div className={styles.allGorillas}>
         {props.gameState.playerOrder.map((connectionId, index) => (
           <PlayerDisplay

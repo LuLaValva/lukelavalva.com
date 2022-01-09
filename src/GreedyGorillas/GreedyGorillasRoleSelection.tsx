@@ -60,7 +60,7 @@ const GreedyGorillasActiveRole = (props: ActiveRoleProps) => {
 const GreedyGorillasRoleSelection = (props: RoleSelectionProps) => {
   return (
     <>
-      <div className={`${styles.buttonContainer}`}>
+      <div className={styles.buttonContainer}>
         <h2>Roles available to add</h2>
         {ApiConstants.GREEDY_GORILLAS_ROLES.slice(1).map((_name, index) => (
           <GreedyGorillasRoleSelector
@@ -70,7 +70,7 @@ const GreedyGorillasRoleSelection = (props: RoleSelectionProps) => {
           />
         ))}
       </div>
-      <div className={`${styles.buttonContainer}`}>
+      <div className={styles.buttonContainer}>
         <h2>Currently Selected Roles</h2>
         {props.roles.map((role, index) => (
           <GreedyGorillasActiveRole

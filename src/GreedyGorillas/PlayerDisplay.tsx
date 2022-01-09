@@ -2,6 +2,7 @@ import React from "react";
 import { Player } from "./GreedyGorillasPage";
 import styles from "../styles/GreedyGorillas.module.css";
 import GorillaRiveComponent from "./GorillaRiveComponent";
+import { ApiConstants } from "../consts";
 
 interface Props {
   player: Player;
@@ -17,8 +18,17 @@ const PlayerDisplay = (props: Props) => {
       } ${props.isOnTheClock && styles.currentPlayerDisplayBox}`}
     >
       <GorillaRiveComponent player={props.player} />
-      <div>{props.player.username}</div>
+      <h2>{props.player.username}</h2>
       <h1 className={styles.playerScore}>{props.player.gameState.points}</h1>
+      <h3 className={styles.playerRole}>
+        {
+          ApiConstants.GREEDY_GORILLAS_ROLES[
+            props.player.gameState.apparentRole ||
+              props.player.gameState.knownRole ||
+              0
+          ]
+        }
+      </h3>
     </div>
   );
 };

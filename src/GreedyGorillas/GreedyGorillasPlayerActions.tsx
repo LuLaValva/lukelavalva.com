@@ -1,5 +1,6 @@
 import React from "react";
 import { Player, GameState } from "./GreedyGorillasPage";
+import styles from "../styles/GreedyGorillas.module.css";
 
 interface Props {
   players: { [connectionId: string]: Player };
@@ -18,12 +19,18 @@ const GreedyGorillasPlayerActions = (props: Props) => {
   };
 
   return (
-    <div>
+    <div className={styles.buttonContainer}>
+      <h2>Actions</h2>
       {props.gameState.playerOrder[
         props.gameState.turn % props.gameState.playerOrder.length
       ] === props.connectionId && (
         <>
-          <button onClick={changeRole}>Change Role</button>
+          <div
+            onClick={changeRole}
+            className={`${styles.lobbyButton} ${styles.large}`}
+          >
+            Change Role
+          </div>
         </>
       )}
     </div>
