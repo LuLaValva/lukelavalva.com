@@ -23,7 +23,10 @@ const GreedyGorillasRoleSelector = (props: RoleSelectorProps) => {
   };
 
   return (
-    <div className={`${styles.roleSelector} ${styles.add}`} onClick={addRole}>
+    <div
+      className={`${styles.lobbyButton} ${styles.large} ${styles.add}`}
+      onClick={addRole}
+    >
       {ApiConstants.GREEDY_GORILLAS_ROLES[props.roleId]}
     </div>
   );
@@ -46,7 +49,7 @@ const GreedyGorillasActiveRole = (props: ActiveRoleProps) => {
 
   return (
     <div
-      className={`${styles.roleSelector} ${styles.remove}`}
+      className={`${styles.lobbyButton} ${styles.large} ${styles.remove}`}
       onClick={removeRole}
     >
       {ApiConstants.GREEDY_GORILLAS_ROLES[props.roleId]}
@@ -57,23 +60,23 @@ const GreedyGorillasActiveRole = (props: ActiveRoleProps) => {
 const GreedyGorillasRoleSelection = (props: RoleSelectionProps) => {
   return (
     <>
-      <div className={styles.roleSelectionBox}>
+      <div className={`${styles.buttonContainer}`}>
+        <h2>Roles available to add</h2>
+        {ApiConstants.GREEDY_GORILLAS_ROLES.slice(1).map((_name, index) => (
+          <GreedyGorillasRoleSelector
+            key={index}
+            roleId={index + 1}
+            wsConnection={props.wsConnection}
+          />
+        ))}
+      </div>
+      <div className={`${styles.buttonContainer}`}>
         <h2>Currently Selected Roles</h2>
         {props.roles.map((role, index) => (
           <GreedyGorillasActiveRole
             key={index}
             index={index}
             roleId={role}
-            wsConnection={props.wsConnection}
-          />
-        ))}
-      </div>
-      <div className={styles.roleSelectionBox}>
-        <h2>Roles available to add</h2>
-        {ApiConstants.GREEDY_GORILLAS_ROLES.slice(1).map((_name, index) => (
-          <GreedyGorillasRoleSelector
-            key={index}
-            roleId={index + 1}
             wsConnection={props.wsConnection}
           />
         ))}

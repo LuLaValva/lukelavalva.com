@@ -19,6 +19,8 @@ export type GameState = {
   turn: number;
   playerOrder: string[];
   roleList: number[];
+  startingPoints: number;
+  pointsToWin: number;
 };
 
 const GreedyGorillasPage: React.FC = () => {
@@ -31,6 +33,8 @@ const GreedyGorillasPage: React.FC = () => {
     turn: -1,
     playerOrder: [],
     roleList: [],
+    startingPoints: -1,
+    pointsToWin: -1,
   });
 
   const playerSubactions: { [action: string]: (data: any) => void } =
@@ -133,6 +137,7 @@ const GreedyGorillasPage: React.FC = () => {
                 gameState: {
                   ...currentPlayers[connectionId].gameState,
                   knownRole: data.yourRole,
+                  points: data.points,
                 },
               },
             };
@@ -158,6 +163,22 @@ const GreedyGorillasPage: React.FC = () => {
           if (data.subaction && playerSubactions[data.subaction]) {
             playerSubactions[data.subaction](data);
           }
+        },
+        updateStartingPoints: (data: any) => {
+          setGameState((currentState) => {
+            return {
+              ...currentState,
+              startingPoints: data.newStartingPoints,
+            };
+          });
+        },
+        updatePointsToWin: (data: any) => {
+          setGameState((currentState) => {
+            return {
+              ...currentState,
+              pointsToWin: data.newPointsToWin,
+            };
+          });
         },
       };
     }, [connectionId, gameState.turn, playerSubactions]);
@@ -208,7 +229,7 @@ const GreedyGorillasPage: React.FC = () => {
           <GreedyGorillasLobby
             players={players}
             wsConnection={wsConnection}
-            roles={gameState.roleList}
+            gameState={gameState}
           />
         ))}
     </>
