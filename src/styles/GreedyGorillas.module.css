@@ -83,11 +83,13 @@
 
 .lobbyButton:hover,
 .joinRoomButton:hover,
+.clickable:hover,
 .startButton:hover {
   background-color: #ffffff22;
 }
 .lobbyButton:active,
 .joinRoomButton:active,
+.clickable:active,
 .startButton:active {
   background-color: #ffffff88;
 }

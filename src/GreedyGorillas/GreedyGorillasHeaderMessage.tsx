@@ -6,6 +6,7 @@ interface Props {
   gameState: GameState;
   connectionId: string;
   players: { [connectionId: string]: Player };
+  messageOverride?: string;
 }
 
 const GreedyGorillasHeaderMessage = (props: Props) => {
@@ -30,7 +31,11 @@ const GreedyGorillasHeaderMessage = (props: Props) => {
     props.gameState.turn,
   ]);
 
-  return <div className={styles.gameHeaderMessage}>{message}</div>;
+  return (
+    <div className={styles.gameHeaderMessage}>
+      {props.messageOverride || message}
+    </div>
+  );
 };
 
 export default GreedyGorillasHeaderMessage;

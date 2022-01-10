@@ -8,6 +8,7 @@ interface Props {
   player: Player;
   isYou: boolean;
   isOnTheClock: boolean;
+  clickRequestFunc?: (connectionId: string) => void;
 }
 
 const PlayerDisplay = (props: Props) => {
@@ -15,7 +16,14 @@ const PlayerDisplay = (props: Props) => {
     <div
       className={`${styles.playerDisplayBox} ${
         props.isYou && styles.mainPlayerDisplayBox
-      } ${props.isOnTheClock && styles.currentPlayerDisplayBox}`}
+      } ${props.isOnTheClock && styles.currentPlayerDisplayBox} ${
+        !props.isYou && props.clickRequestFunc !== undefined && styles.clickable
+      }`}
+      onClick={() =>
+        !props.isYou &&
+        props.clickRequestFunc &&
+        props.clickRequestFunc(props.player.connectionId)
+      }
     >
       <GorillaRiveComponent player={props.player} />
       <h2>{props.player.username}</h2>

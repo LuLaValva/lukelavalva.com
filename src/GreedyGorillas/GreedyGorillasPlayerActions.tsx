@@ -7,6 +7,7 @@ interface Props {
   gameState: GameState;
   connectionId: String;
   wsConnection: WebSocket;
+  requestPlayersFunction: (messages: string[]) => Promise<string[]>;
 }
 
 const GreedyGorillasPlayerActions = (props: Props) => {
@@ -16,6 +17,20 @@ const GreedyGorillasPlayerActions = (props: Props) => {
         action: "changeRole",
       })
     );
+  };
+
+  const beThief = () => {
+    props
+      .requestPlayersFunction(["Select somebody to steal from"])
+      .then((connectionIds) => console.log(connectionIds));
+  };
+  const beCommunist = () => {
+    props
+      .requestPlayersFunction([
+        "Select the gorilla you're taking from",
+        "Select the gorilla you're giving to",
+      ])
+      .then((connectionIds) => console.log(connectionIds));
   };
 
   return (
@@ -30,6 +45,18 @@ const GreedyGorillasPlayerActions = (props: Props) => {
             className={`${styles.lobbyButton} ${styles.large}`}
           >
             Change Role
+          </div>
+          <div
+            onClick={beThief}
+            className={`${styles.lobbyButton} ${styles.large}`}
+          >
+            Thief
+          </div>
+          <div
+            onClick={beCommunist}
+            className={`${styles.lobbyButton} ${styles.large}`}
+          >
+            Communist
           </div>
         </>
       )}
