@@ -130,17 +130,20 @@ const GreedyGorillasPage: React.FC = () => {
             };
           });
           setPlayers((currentPlayers) => {
-            return {
-              ...currentPlayers,
-              [connectionId]: {
-                ...currentPlayers[connectionId],
-                gameState: {
-                  ...currentPlayers[connectionId].gameState,
-                  knownRole: data.yourRole,
-                  points: data.points,
+            // Object map idea attained from https://stackoverflow.com/a/14810722
+            return Object.fromEntries(
+              Object.entries(currentPlayers).map(([key, player]) => [
+                key,
+                {
+                  ...player,
+                  gameState: {
+                    ...player.gameState,
+                    points: data.points,
+                    knownRole: key === connectionId ? data.yourRole : undefined,
+                  },
                 },
-              },
-            };
+              ])
+            );
           });
         },
         updateRoles: (data: any) => {
