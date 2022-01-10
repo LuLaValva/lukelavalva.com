@@ -1,7 +1,7 @@
 .playerDisplayBox {
   width: 40vmin;
   height: 40vmin;
-  margin: 2vmin;
+  margin: 2vmin 2vmin 5vmin 2vmin;
   border: 1px solid #aaa;
   border-radius: 4vmin;
   background-color: #00000022;
@@ -171,4 +171,10 @@
   font-size: 2em;
   color: white;
   font-family: inherit;
+}
+
+.gameHeaderMessage {
+  border-bottom: 1px solid white;
+  padding: 1em;
+  text-align: center;
 }

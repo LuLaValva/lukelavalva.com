@@ -3,6 +3,7 @@ import { Player, GameState } from "./GreedyGorillasPage";
 import PlayerDisplay from "./PlayerDisplay";
 import styles from "../styles/GreedyGorillas.module.css";
 import GreedyGorillasPlayerActions from "./GreedyGorillasPlayerActions";
+import GreedyGorillasHeaderMessage from "./GreedyGorillasHeaderMessage";
 
 interface Props {
   players: { [connectionId: string]: Player };
@@ -14,6 +15,11 @@ interface Props {
 const GreedyGorillasGame = (props: Props) => {
   return (
     <>
+      <GreedyGorillasHeaderMessage
+        players={props.players}
+        gameState={props.gameState}
+        connectionId={props.connectionId}
+      />
       <div className={styles.allGorillas}>
         {props.gameState.playerOrder.map((connectionId, index) => (
           <PlayerDisplay
