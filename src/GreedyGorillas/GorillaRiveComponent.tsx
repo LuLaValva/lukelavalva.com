@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { Player } from "./GreedyGorillasPage";
 import { useRive, useStateMachineInput } from "rive-react";
 
 interface Props {
-  player: Player;
+  activeRole: number;
 }
 
 const GorillaRiveComponent = (props: Props) => {
@@ -29,16 +28,8 @@ const GorillaRiveComponent = (props: Props) => {
   const roleInput = useStateMachineInput(rive, STATE_MACHINE_NAME, "Role");
 
   useEffect(() => {
-    roleInput &&
-      (roleInput.value =
-        props.player.gameState.apparentRole ||
-        props.player.gameState.knownRole ||
-        0);
-  }, [
-    roleInput,
-    props.player.gameState.apparentRole,
-    props.player.gameState.knownRole,
-  ]);
+    roleInput && (roleInput.value = props.activeRole);
+  }, [roleInput, props.activeRole]);
 
   return (
     <RiveComponent

@@ -37,6 +37,24 @@ const GreedyGorillasPage: React.FC = () => {
     pointsToWin: -1,
   });
 
+  const updateApparentRole = (
+    updateId: string,
+    newRole: number | undefined
+  ) => {
+    setPlayers((currentPlayers) => {
+      return {
+        ...currentPlayers,
+        [updateId]: {
+          ...currentPlayers[updateId],
+          gameState: {
+            ...currentPlayers[updateId].gameState,
+            apparentRole: newRole,
+          },
+        },
+      };
+    });
+  };
+
   const playerSubactions: { [action: string]: (data: any) => void } =
     useMemo(() => {
       return {
@@ -70,6 +88,26 @@ const GreedyGorillasPage: React.FC = () => {
               return newPlayers;
             });
           }
+        },
+        incrementPlayerScores: (data: any) => {
+          data.scoreUpdates.forEach(
+            (scoreUpdate: { connectionId: string; change: number }) => {
+              setPlayers((currentPlayers) => {
+                return {
+                  ...currentPlayers,
+                  [scoreUpdate.connectionId]: {
+                    ...currentPlayers[scoreUpdate.connectionId],
+                    gameState: {
+                      ...currentPlayers[scoreUpdate.connectionId].gameState,
+                      points:
+                        currentPlayers[scoreUpdate.connectionId].gameState
+                          .points + scoreUpdate.change,
+                    },
+                  },
+                };
+              });
+            }
+          );
         },
       };
     }, [players]);
@@ -156,12 +194,26 @@ const GreedyGorillasPage: React.FC = () => {
         },
         applyPlayerAction: (data: any) => {
           if (data.newTurn !== undefined) {
+            if (gameState.turn > 0) {
+              updateApparentRole(
+                gameState.playerOrder[
+                  (gameState.turn - 1) % gameState.playerOrder.length
+                ],
+                undefined
+              );
+            }
             setGameState((currentState) => {
               return {
                 ...currentState,
                 turn: data.newTurn,
               };
             });
+          }
+          if (data.apparentRoleUpdate !== undefined) {
+            updateApparentRole(
+              data.apparentRoleUpdate.connectionId,
+              data.apparentRoleUpdate.role
+            );
           }
           if (data.subaction && playerSubactions[data.subaction]) {
             playerSubactions[data.subaction](data);
@@ -184,7 +236,7 @@ const GreedyGorillasPage: React.FC = () => {
           });
         },
       };
-    }, [connectionId, gameState.turn, playerSubactions]);
+    }, [connectionId, gameState.turn, playerSubactions, gameState.playerOrder]);
 
   const receiveMessage = useCallback(
     (message: MessageEvent<any>) => {
