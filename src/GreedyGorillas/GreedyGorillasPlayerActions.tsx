@@ -21,7 +21,7 @@ const ActionButton = (props: ActionButtonProps) => {
 interface Props {
   players: { [connectionId: string]: Player };
   gameState: GameState;
-  connectionId: String;
+  connectionId: string;
   wsConnection: WebSocket;
   requestPlayersFunction: (messages: string[]) => Promise<string[]>;
 }
@@ -35,10 +35,26 @@ const GreedyGorillasPlayerActions = (props: Props) => {
     );
   };
 
+  const callBluff = () => {
+    props.wsConnection.send(
+      JSON.stringify({
+        action: "callBluff",
+      })
+    );
+  };
+
   const beRegularGorilla = () => {
     props.wsConnection.send(
       JSON.stringify({
         action: "actAsNormalGorilla",
+      })
+    );
+  };
+
+  const beCop = () => {
+    props.wsConnection.send(
+      JSON.stringify({
+        action: "actAsCop",
       })
     );
   };
@@ -54,6 +70,14 @@ const GreedyGorillasPlayerActions = (props: Props) => {
           })
         );
       });
+  };
+
+  const beCIA = () => {
+    props.wsConnection.send(
+      JSON.stringify({
+        action: "actAsCIA",
+      })
+    );
   };
 
   const bePI = () => {
@@ -97,6 +121,22 @@ const GreedyGorillasPlayerActions = (props: Props) => {
   return (
     <div className={styles.buttonContainer}>
       <h2>Actions</h2>
+      {props.gameState.lastAction &&
+        props.gameState.lastAction.playerId !== props.connectionId && (
+          <>
+            {props.players[props.connectionId].score > 3 && (
+              <ActionButton onClick={callBluff} text="Call Bluff" />
+            )}
+            {props.gameState.lastAction.role === 2 &&
+              props.gameState.roleList.includes(1) && (
+                <ActionButton onClick={beCop} text="Cop" />
+              )}
+            {[5, 6].includes(props.gameState.lastAction.role) &&
+              props.gameState.roleList.includes(3) && (
+                <ActionButton onClick={beCIA} text="CIA" />
+              )}
+          </>
+        )}
       {props.gameState.playerOrder[
         props.gameState.turn % props.gameState.playerOrder.length
       ] === props.connectionId && (

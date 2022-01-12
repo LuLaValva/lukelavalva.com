@@ -67,9 +67,8 @@ const GreedyGorillasGame = (props: Props) => {
               props.gameState.turn % props.gameState.playerOrder.length
             }
             isPretendingToBe={
-              index ===
-              (props.gameState.turn - 1) % props.gameState.playerOrder.length
-                ? props.gameState.lastAction
+              props.gameState.lastAction?.playerId === connectionId
+                ? props.gameState.lastAction.role
                 : 0
             }
             clickRequestFunc={

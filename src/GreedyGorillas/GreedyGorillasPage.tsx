@@ -18,7 +18,10 @@ export type GameState = {
   roleList: number[];
   startingPoints: number;
   pointsToWin: number;
-  lastAction: number;
+  lastAction?: {
+    playerId: string;
+    role: number;
+  };
 };
 
 const GreedyGorillasPage: React.FC = () => {
@@ -33,7 +36,7 @@ const GreedyGorillasPage: React.FC = () => {
     roleList: [],
     startingPoints: -1,
     pointsToWin: -1,
-    lastAction: 0,
+    lastAction: undefined,
   });
 
   const playerSubactions: { [action: string]: (data: any) => void } =
@@ -135,6 +138,7 @@ const GreedyGorillasPage: React.FC = () => {
             return {
               ...currentState,
               turn: 0,
+              lastAction: undefined,
               playerOrder: data.playerOrder,
               roleList: data.finalRoles,
             };
@@ -170,14 +174,12 @@ const GreedyGorillasPage: React.FC = () => {
               };
             });
           }
-          if (data.lastRole !== undefined) {
-            setGameState((currentState) => {
-              return {
-                ...currentState,
-                lastAction: data.lastRole,
-              };
-            });
-          }
+          setGameState((currentState) => {
+            return {
+              ...currentState,
+              lastAction: data.lastAction,
+            };
+          });
           if (data.subaction && playerSubactions[data.subaction]) {
             playerSubactions[data.subaction](data);
           }
