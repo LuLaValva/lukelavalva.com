@@ -8,10 +8,8 @@ export type Player = {
   connectionId: string;
   room: string;
   username: string;
-  gameState: {
-    points: number;
-    knownRole?: number;
-  };
+  score: number;
+  knownRole?: number;
 };
 
 export type GameState = {
@@ -47,27 +45,21 @@ const GreedyGorillasPage: React.FC = () => {
               ...currentPlayers,
               [data.targetPlayer]: {
                 ...currentPlayers[data.targetPlayer],
-                gameState: {
-                  ...currentPlayers[data.targetPlayer].gameState,
-                  knownRole: data.role,
-                },
+                knownRole: data.role,
               },
             };
           });
         },
         hideRole: (data: any) => {
-          if (players[data.targetPlayer].gameState.knownRole) {
+          if (players[data.targetPlayer].knownRole) {
             setPlayers((currentPlayers) => {
               const newPlayers: { [connectionId: string]: Player } = {
                 ...currentPlayers,
                 [data.targetPlayer]: {
                   ...currentPlayers[data.targetPlayer],
-                  gameState: {
-                    ...currentPlayers[data.targetPlayer].gameState,
-                  },
                 },
               };
-              delete newPlayers[data.targetPlayer].gameState.knownRole;
+              delete newPlayers[data.targetPlayer].knownRole;
               return newPlayers;
             });
           }
@@ -80,12 +72,9 @@ const GreedyGorillasPage: React.FC = () => {
                   ...currentPlayers,
                   [scoreUpdate.connectionId]: {
                     ...currentPlayers[scoreUpdate.connectionId],
-                    gameState: {
-                      ...currentPlayers[scoreUpdate.connectionId].gameState,
-                      points:
-                        currentPlayers[scoreUpdate.connectionId].gameState
-                          .points + scoreUpdate.change,
-                    },
+                    score:
+                      currentPlayers[scoreUpdate.connectionId].score +
+                      scoreUpdate.change,
                   },
                 };
               });
@@ -157,11 +146,8 @@ const GreedyGorillasPage: React.FC = () => {
                 key,
                 {
                   ...player,
-                  gameState: {
-                    ...player.gameState,
-                    points: data.points,
-                    knownRole: key === connectionId ? data.yourRole : undefined,
-                  },
+                  score: data.points,
+                  knownRole: key === connectionId ? data.yourRole : undefined,
                 },
               ])
             );
