@@ -9,7 +9,7 @@ export class ApiConstants {
     "Cop",
     "Thief",
     "CIA",
-    "P.I.",
+    "Detective",
     "Snarl Marx",
     "Robber",
     "Middle Class",

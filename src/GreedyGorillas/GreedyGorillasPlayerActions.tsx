@@ -107,7 +107,7 @@ const GreedyGorillasPlayerActions = (props: Props) => {
             <ActionButton onClick={beThief} text="Thief" />
           )}
           {props.gameState.roleList.includes(4) && (
-            <ActionButton onClick={bePI} text="P.I." />
+            <ActionButton onClick={bePI} text="Detective" />
           )}
           {props.gameState.roleList.includes(5) && (
             <ActionButton onClick={beSnarlMarx} text="Communist" />
