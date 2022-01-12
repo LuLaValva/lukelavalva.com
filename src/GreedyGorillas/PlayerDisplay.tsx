@@ -8,6 +8,7 @@ interface Props {
   player: Player;
   isYou: boolean;
   isOnTheClock: boolean;
+  isPretendingToBe: number;
   clickRequestFunc?: (connectionId: string) => void;
 }
 
@@ -15,12 +16,8 @@ const PlayerDisplay = (props: Props) => {
   const [visibleRole, setVisibleRole] = useState(0);
 
   useEffect(() => {
-    setVisibleRole(
-      props.player.gameState.knownRole ||
-        props.player.gameState.apparentRole ||
-        0
-    );
-  }, [props.player.gameState.apparentRole, props.player.gameState.knownRole]);
+    setVisibleRole(props.player.gameState.knownRole || props.isPretendingToBe);
+  }, [props.isPretendingToBe, props.player.gameState.knownRole]);
 
   return (
     <div
@@ -40,10 +37,7 @@ const PlayerDisplay = (props: Props) => {
       <h1 className={styles.playerScore}>{props.player.gameState.points}</h1>
       <h3 className={styles.playerRole}>
         {ApiConstants.GREEDY_GORILLAS_ROLES[visibleRole]}
-        {props.player.gameState.apparentRole &&
-        !props.player.gameState.knownRole
-          ? "?"
-          : ""}
+        {!props.player.gameState.knownRole && props.isPretendingToBe ? "?" : ""}
       </h3>
     </div>
   );

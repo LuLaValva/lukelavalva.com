@@ -66,6 +66,12 @@ const GreedyGorillasGame = (props: Props) => {
               index ===
               props.gameState.turn % props.gameState.playerOrder.length
             }
+            isPretendingToBe={
+              index ===
+              (props.gameState.turn - 1) % props.gameState.playerOrder.length
+                ? props.gameState.lastAction
+                : 0
+            }
             clickRequestFunc={
               requestedPlayerList.includes(connectionId)
                 ? undefined

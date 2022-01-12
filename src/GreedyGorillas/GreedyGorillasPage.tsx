@@ -11,7 +11,6 @@ export type Player = {
   gameState: {
     points: number;
     knownRole?: number;
-    apparentRole?: number;
   };
 };
 
@@ -21,6 +20,7 @@ export type GameState = {
   roleList: number[];
   startingPoints: number;
   pointsToWin: number;
+  lastAction: number;
 };
 
 const GreedyGorillasPage: React.FC = () => {
@@ -35,25 +35,8 @@ const GreedyGorillasPage: React.FC = () => {
     roleList: [],
     startingPoints: -1,
     pointsToWin: -1,
+    lastAction: 0,
   });
-
-  const updateApparentRole = (
-    updateId: string,
-    newRole: number | undefined
-  ) => {
-    setPlayers((currentPlayers) => {
-      return {
-        ...currentPlayers,
-        [updateId]: {
-          ...currentPlayers[updateId],
-          gameState: {
-            ...currentPlayers[updateId].gameState,
-            apparentRole: newRole,
-          },
-        },
-      };
-    });
-  };
 
   const playerSubactions: { [action: string]: (data: any) => void } =
     useMemo(() => {
@@ -194,14 +177,6 @@ const GreedyGorillasPage: React.FC = () => {
         },
         applyPlayerAction: (data: any) => {
           if (data.newTurn !== undefined) {
-            if (gameState.turn > 0) {
-              updateApparentRole(
-                gameState.playerOrder[
-                  (gameState.turn - 1) % gameState.playerOrder.length
-                ],
-                undefined
-              );
-            }
             setGameState((currentState) => {
               return {
                 ...currentState,
@@ -209,11 +184,13 @@ const GreedyGorillasPage: React.FC = () => {
               };
             });
           }
-          if (data.apparentRoleUpdate !== undefined) {
-            updateApparentRole(
-              data.apparentRoleUpdate.connectionId,
-              data.apparentRoleUpdate.role
-            );
+          if (data.lastRole !== undefined) {
+            setGameState((currentState) => {
+              return {
+                ...currentState,
+                lastAction: data.lastRole,
+              };
+            });
           }
           if (data.subaction && playerSubactions[data.subaction]) {
             playerSubactions[data.subaction](data);
@@ -236,7 +213,7 @@ const GreedyGorillasPage: React.FC = () => {
           });
         },
       };
-    }, [connectionId, gameState.turn, playerSubactions, gameState.playerOrder]);
+    }, [connectionId, gameState.turn, playerSubactions]);
 
   const receiveMessage = useCallback(
     (message: MessageEvent<any>) => {
