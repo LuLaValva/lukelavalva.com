@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useRive, useStateMachineInput } from "rive-react";
-import Gorilla from "./gorilla.riv"
 
 // interface Props {
 //   activeRole: number;
@@ -10,7 +9,7 @@ const GorillaRiveComponent = (props) => {
   const STATE_MACHINE_NAME = "All Anims";
 
   const { rive, RiveComponent } = useRive({
-    src: Gorilla,
+    src: "gorilla.riv",
     stateMachines: STATE_MACHINE_NAME,
     autoplay: true,
   });
