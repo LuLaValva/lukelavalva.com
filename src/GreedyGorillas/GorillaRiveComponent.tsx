@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useRive, useStateMachineInput } from "rive-react";
 
-// interface Props {
-//   activeRole: number;
-// }
+interface Props {
+  activeRole: number;
+}
 
-const GorillaRiveComponent = (props) => {
+const GorillaRiveComponent = (props: Props) => {
   const STATE_MACHINE_NAME = "All Anims";
 
   const { rive, RiveComponent } = useRive({
