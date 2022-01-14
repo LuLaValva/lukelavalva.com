@@ -10,12 +10,13 @@ interface Props {
   gameState: GameState;
   connectionId: string;
   wsConnection: WebSocket;
+  latestMessage: string;
+  setLatestMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const GreedyGorillasGame = (props: Props) => {
   const [playerRequestFunction, setPlayerRequestFunction] =
     useState<(connectionId: string) => void>();
-  const [headerMessageOverride, setHeaderMessageOverride] = useState<string>();
   const [requestedPlayerList, setRequestedPlayerList] = useState<string[]>([]);
 
   const requestPlayerClicks = async (messages: string[]) => {
@@ -24,7 +25,7 @@ const GreedyGorillasGame = (props: Props) => {
         previousPromise.then(
           () =>
             new Promise((resolve) => {
-              setHeaderMessageOverride(message);
+              props.setLatestMessage(message);
               setPlayerRequestFunction(() => {
                 return (connectionId: string) => {
                   setRequestedPlayerList((currentList) => [
@@ -38,7 +39,6 @@ const GreedyGorillasGame = (props: Props) => {
         ),
       Promise.resolve()
     );
-    setHeaderMessageOverride(undefined);
     setPlayerRequestFunction(undefined);
     let requestedPlayers: string[] = [];
     setRequestedPlayerList((updatedPlayerList) => {
@@ -47,14 +47,13 @@ const GreedyGorillasGame = (props: Props) => {
     });
     return requestedPlayers;
   };
-
   return (
     <>
       <GreedyGorillasHeaderMessage
         players={props.players}
         gameState={props.gameState}
         connectionId={props.connectionId}
-        messageOverride={headerMessageOverride}
+        latestMessage={props.latestMessage}
       />
       <div className={styles.allGorillas}>
         {props.gameState.playerOrder.map((connectionId, index) => (

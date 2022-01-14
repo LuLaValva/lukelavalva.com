@@ -6,7 +6,7 @@ interface Props {
   gameState: GameState;
   connectionId: string;
   players: { [connectionId: string]: Player };
-  messageOverride?: string;
+  latestMessage: string;
 }
 
 const GreedyGorillasHeaderMessage = (props: Props) => {
@@ -33,7 +33,8 @@ const GreedyGorillasHeaderMessage = (props: Props) => {
 
   return (
     <div className={styles.gameHeaderMessage}>
-      {props.messageOverride || message}
+      <p>{props.latestMessage}</p>
+      <p>{message}</p>
     </div>
   );
 };

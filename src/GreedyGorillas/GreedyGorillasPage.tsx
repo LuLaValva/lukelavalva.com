@@ -38,6 +38,8 @@ const GreedyGorillasPage: React.FC = () => {
     pointsToWin: -1,
     lastAction: undefined,
   });
+  const [latestMessage, setLatestMessage] =
+    useState<string>("Let the game begin");
 
   const playerSubactions: { [action: string]: (data: any) => void } =
     useMemo(() => {
@@ -166,6 +168,13 @@ const GreedyGorillasPage: React.FC = () => {
           });
         },
         applyPlayerAction: (data: any) => {
+          if (data.message) {
+            setLatestMessage(
+              data.message
+                .map((segment: string) => players[segment]?.username || segment)
+                .join(" ")
+            );
+          }
           if (data.newTurn !== undefined) {
             setGameState((currentState) => {
               return {
@@ -201,7 +210,7 @@ const GreedyGorillasPage: React.FC = () => {
           });
         },
       };
-    }, [connectionId, gameState.turn, playerSubactions]);
+    }, [connectionId, gameState.turn, playerSubactions, players]);
 
   const receiveMessage = useCallback(
     (message: MessageEvent<any>) => {
@@ -243,6 +252,8 @@ const GreedyGorillasPage: React.FC = () => {
             connectionId={connectionId}
             gameState={gameState}
             wsConnection={wsConnection}
+            latestMessage={latestMessage}
+            setLatestMessage={setLatestMessage}
           />
         )) ||
         (wsConnection && (
