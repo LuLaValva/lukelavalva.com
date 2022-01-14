@@ -8,6 +8,16 @@ import Amplify from "aws-amplify";
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
+const resetCssVh = () => {
+  document.documentElement.style.setProperty(
+    "--vh",
+    `${window.innerHeight / 100}px`
+  );
+};
+
+resetCssVh();
+window.addEventListener("resize", resetCssVh);
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

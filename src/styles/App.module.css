@@ -6,6 +6,7 @@ body {
 .fullWindow {
   width: 100vw;
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   position: absolute;
   top: 0;
   left: 0;
@@ -17,6 +18,7 @@ body {
 
 .subpage {
   top: -100vh;
+  top: calc(var(--vh, 1vh) * -100);
 }
 
 * {
@@ -28,10 +30,12 @@ body {
 }
 .sky {
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   position: relative;
   overflow-x: scroll;
   overflow-y: hidden;
   padding-bottom: -5vh;
+  padding-bottom: calc(var(--vh, 1vh) * -5);
 
   background-color: #d8d8d8;
   background-image: linear-gradient(to top, #242424 13%, #d8d8d8 14%);
@@ -41,6 +45,7 @@ body {
   width: 100vw;
   overflow-y: scroll;
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background: #242424;
   color: white;
 }
@@ -51,6 +56,7 @@ body {
   min-width: 130px;
   border-radius: 50%;
   top: 75vh;
+  top: calc(var(--vh, 1vh) * 75);
   border: 1px solid black;
   z-index: 300;
 }
