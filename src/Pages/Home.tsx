@@ -32,6 +32,11 @@ const Home = (props: Props) => {
           My opinions about a bunch of albums
         </BoxInSky>
       </Link>
+      <Link to="/greedygorillas" className={styles.boxLink}>
+        <BoxInSky width={20} left={212} top={30}>
+          Greedy Gorillas Game
+        </BoxInSky>
+      </Link>
       <BoxInSky width={15} left={80} top={5}>
         Software Engineer
       </BoxInSky>
