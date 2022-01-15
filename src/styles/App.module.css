@@ -81,3 +81,7 @@ body {
 .gameCanvas {
   background-color: lightblue;
 }
+
+iframe {
+  box-sizing: border-box;
+}
