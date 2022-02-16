@@ -1,0 +1,19 @@
+.paper {
+  padding: 1em;
+  text-align: center;
+}
+
+.paper div.p {
+  max-width: 700px;
+  text-align: justify;
+  margin: 1em auto;
+  line-height: 1.5em;
+}
+
+.paper a {
+  color: white;
+}
+
+.paper a:visited {
+  color: lightgray;
+}

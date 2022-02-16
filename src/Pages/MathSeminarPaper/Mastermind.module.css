@@ -1,0 +1,77 @@
+.board {
+  background-color: #000080;
+  border: 3px solid #ccf;
+  display: flex;
+  flex-direction: column;
+  border-radius: 2.5rem;
+  padding: 1rem;
+  gap: 1rem;
+  width: fit-content;
+  margin: auto;
+}
+
+.board > .row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.row > .guess {
+  border: 2px solid #ccf;
+  border-radius: 50%;
+  width: min(10vw, 50px);
+  height: min(10vw, 50px);
+}
+
+.row > .pegs {
+  height: min(10vw, 50px);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: min(1vw, 5px);
+  width: 10rem;
+  align-content: center;
+}
+
+.pegs > .peg {
+  height: min(3vw, 15px);
+  width: min(3vw, 15px);
+  border: 1px solid #ccf;
+  border-radius: 50%;
+}
+
+.board > h2 {
+  text-align: center;
+}
+
+.board button {
+  border-radius: 10vw;
+  font-family: inherit;
+  font-size: large;
+  border: 2px solid #eef;
+  background-color: #44a;
+  color: #eef;
+}
+
+.board button:active {
+  opacity: 0.8;
+}
+
+.board button:disabled {
+  opacity: 0.4;
+}
+
+.board > .actionButton {
+  height: 4rem;
+}
+
+.row > .guessButton {
+  width: 8rem;
+  margin: 0 1rem;
+  transition: width 40ms, margin 40ms;
+}
+
+.row > .guessButton:active {
+  width: 10rem;
+  margin: 0;
+}

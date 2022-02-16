@@ -7,6 +7,7 @@ import SubPage from "./Pages/SubPage";
 import AlbumRatingPage from "./Pages/AlbumRatingPage";
 import ResumePage from "./Pages/ResumePage";
 import GreedyGorillasPage from "./GreedyGorillas/GreedyGorillasPage";
+import MathSeminarPaper from "./Pages/MathSeminarPaper/MathSeminarPaper";
 
 let App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ let App: React.FC = () => {
             <Route path="/albums" component={AlbumRatingPage} />
             <Route path="/resume" component={ResumePage} />
             <Route path="/greedygorillas" component={GreedyGorillasPage} />
+            <Route path="/informationtheory" component={MathSeminarPaper} />
           </Switch>
         </SubPage>
       </NavigationHandler>
