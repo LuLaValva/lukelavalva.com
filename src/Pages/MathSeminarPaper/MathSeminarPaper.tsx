@@ -56,7 +56,7 @@ const MathSeminarPaper = (props: Props) => {
         differences that <i>Mastermind®</i> has from <i>Cows and Bulls</i> are
         that it uses 6 differently colored pegs instead of 10 digits, and it
         allows for a code to contain multiple values that are the same. Cows are
-        replaced with small red tacks, and bulls with white ones. Before
+        replaced with small white tacks, and bulls with red ones. Before
         proceeding, it is recommended that you, the reader, solve this randomly
         generated <i>Mastermind®</i> game at least once:
       </div>

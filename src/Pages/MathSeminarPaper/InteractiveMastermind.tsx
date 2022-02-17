@@ -76,11 +76,11 @@ const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
               style={{
                 backgroundColor:
                   index < answers[INFORMATION_PEGS.CORRECT_SPOT]
-                    ? "white"
+                    ? "red"
                     : index <
                       answers[INFORMATION_PEGS.CORRECT_SPOT] +
                         answers[INFORMATION_PEGS.WRONG_SPOT]
-                    ? "red"
+                    ? "white"
                     : "black",
               }}
               key={index}
@@ -186,7 +186,7 @@ const InteractiveMastermind: React.FC<Props> = ({
       ))}
       {success && (
         <>
-          <h2>Code Found in {board.length} moves</h2>
+          <h2>Code found after {board.length} guesses</h2>
           <button onClick={restartGame} className={styles.actionButton}>
             Try Again
           </button>
