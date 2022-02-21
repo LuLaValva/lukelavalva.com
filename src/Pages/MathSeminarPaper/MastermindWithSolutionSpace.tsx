@@ -51,9 +51,7 @@ const PotentialSolution: React.FC<PotentialSolutionProps> = (props) => {
   }, [props.latestGuessResponse, ruledOut, solution]);
 
   return (
-    <div
-      className={`${styles.solutionSpaceGrid} ${ruledOut && styles.ruledOut}`}
-    >
+    <div className={`${styles.solution} ${ruledOut && styles.ruledOut}`}>
       {solution.map((colorIndex) => (
         <div
           className={styles.peg}
@@ -80,18 +78,20 @@ const MastermindWithSolutionSpace: React.FC<Props> = ({
 
   return (
     <>
-      <div
-        className={styles.wordGrid}
-        style={{ gridTemplateColumns: `repeat(${numColors}, auto)` }}
-      >
-        {[...Array(numColors ** wordLength)].map((_, index) => (
-          <PotentialSolution
-            numColors={numColors}
-            wordLength={wordLength}
-            solutionIndex={index}
-            latestGuessResponse={latestGuessResponse}
-          />
-        ))}
+      <div className={styles.solutionSpaceGridContainer}>
+        <div
+          className={styles.solutionSpaceGrid}
+          style={{ gridTemplateColumns: `repeat(${numColors}, auto)` }}
+        >
+          {[...Array(numColors ** wordLength)].map((_, index) => (
+            <PotentialSolution
+              numColors={numColors}
+              wordLength={wordLength}
+              solutionIndex={index}
+              latestGuessResponse={latestGuessResponse}
+            />
+          ))}
+        </div>
       </div>
       {props.children}
       <InteractiveMastermind

@@ -200,23 +200,25 @@ const InteractiveMastermind: React.FC<Props> = ({
   };
 
   return (
-    <div className={styles.board}>
-      {board.map((row, rowIndex) => (
-        <MastermindRow
-          guesses={row}
-          key={rowIndex + rowIndexOffset}
-          updateColor={updateColor}
-          submitGuesses={submitGuesses}
-        />
-      ))}
-      {success && (
-        <>
-          <h2>Code found after {board.length} guesses</h2>
-          <button onClick={restartGame} className={styles.actionButton}>
-            Try Again
-          </button>
-        </>
-      )}
+    <div className={styles.boardContainer}>
+      <div className={styles.board}>
+        {board.map((row, rowIndex) => (
+          <MastermindRow
+            guesses={row}
+            key={rowIndex + rowIndexOffset}
+            updateColor={updateColor}
+            submitGuesses={submitGuesses}
+          />
+        ))}
+        {success && (
+          <>
+            <h2>Code found after {board.length} guesses</h2>
+            <button onClick={restartGame} className={styles.actionButton}>
+              Try Again
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
