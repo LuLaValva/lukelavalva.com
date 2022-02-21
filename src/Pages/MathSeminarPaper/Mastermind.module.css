@@ -7,7 +7,7 @@
   padding: 1rem;
   gap: 1rem;
   width: fit-content;
-  margin: auto;
+  margin: 1em auto;
 }
 
 .board > .row {
@@ -33,7 +33,7 @@
   align-content: center;
 }
 
-.pegs > .peg {
+.peg {
   height: min(3vw, 15px);
   width: min(3vw, 15px);
   border: 1px solid #ccf;
@@ -74,4 +74,27 @@
 .row > .guessButton:active {
   width: 10rem;
   margin: 0;
+}
+
+.wordGrid {
+  display: grid;
+  /* grid-template-columns: repeat(4, 1fr); 
+      Controlled by component in React*/
+  width: fit-content;
+  margin: auto;
+  gap: 0.5rem;
+}
+
+.solutionSpaceGrid {
+  display: flex;
+  border: 1px solid #eef;
+  background-color: #000080;
+  width: fit-content;
+  gap: min(1vw, 5px);
+  padding: min(1vw, 5px);
+  border-radius: 100px;
+}
+
+.solutionSpaceGrid.ruledOut {
+  opacity: 0.15;
 }

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import styles from "./Mastermind.module.css";
 
-const colors = [
+export const COLORS = [
   "red",
   "yellow",
   "lime",
@@ -16,15 +16,21 @@ const colors = [
   "teal",
 ];
 
-enum INFORMATION_PEGS {
+export enum INFORMATION_PEGS {
   NOWHERE,
   WRONG_SPOT,
   CORRECT_SPOT,
 }
 
-type PegSet = {
+export type PegSet = {
+  [INFORMATION_PEGS.NOWHERE]: number;
   [INFORMATION_PEGS.WRONG_SPOT]: number;
   [INFORMATION_PEGS.CORRECT_SPOT]: number;
+};
+
+export type GuessResponse = {
+  guess: number[];
+  pegs: PegSet;
 };
 
 const generateRandomRow = (wordLength: number, numColors: number) =>
@@ -56,7 +62,7 @@ type RowProps = {
 };
 
 const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
-  const [answers, setAnswers] = useState<undefined | PegSet>();
+  const [solutions, setAnswers] = useState<undefined | PegSet>();
 
   return (
     <div className={styles.row}>
@@ -64,22 +70,24 @@ const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
         <button
           key={index}
           className={styles.guess}
-          style={{ backgroundColor: guess ? colors[guess - 1] : "black" }}
+          style={{
+            backgroundColor: guess ? COLORS[guess - 1] : "black",
+          }}
           onClick={() => props.updateColor(index)}
         />
       ))}
-      {answers ? (
-        <div className={styles.pegs} title={generatePegMessage(answers)}>
+      {solutions ? (
+        <div className={styles.pegs} title={generatePegMessage(solutions)}>
           {[...Array(props.guesses.length)].map((_val, index) => (
             <div
               className={styles.peg}
               style={{
                 backgroundColor:
-                  index < answers[INFORMATION_PEGS.CORRECT_SPOT]
+                  index < solutions[INFORMATION_PEGS.CORRECT_SPOT]
                     ? "red"
                     : index <
-                      answers[INFORMATION_PEGS.CORRECT_SPOT] +
-                        answers[INFORMATION_PEGS.WRONG_SPOT]
+                      solutions[INFORMATION_PEGS.CORRECT_SPOT] +
+                        solutions[INFORMATION_PEGS.WRONG_SPOT]
                     ? "white"
                     : "black",
               }}
@@ -100,17 +108,51 @@ const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
   );
 };
 
+export const calculateInformationPegs: (
+  guesses: number[],
+  solution: number[]
+) => PegSet = (guesses: number[], solution: number[]) => {
+  const solutionCopy = [...solution];
+  let numCorrect = 0,
+    numPresent = 0;
+  let impreciseGuesses = guesses.filter((guess, index) => {
+    if (solutionCopy[index] === guess) {
+      solutionCopy[index] = -1;
+      numCorrect++;
+      return false;
+    }
+    return true;
+  });
+  impreciseGuesses.forEach((guess) => {
+    let found = solutionCopy.indexOf(guess);
+    if (found !== -1) {
+      solutionCopy[found] = -1;
+      numPresent++;
+    }
+  });
+
+  return {
+    [INFORMATION_PEGS.NOWHERE]: solution.length - numPresent - numCorrect,
+    [INFORMATION_PEGS.WRONG_SPOT]: numPresent,
+    [INFORMATION_PEGS.CORRECT_SPOT]: numCorrect,
+  };
+};
+
 type Props = {
   numColors?: number;
   wordLength?: number;
+  setParentGuessResponse?: React.Dispatch<
+    React.SetStateAction<GuessResponse | undefined>
+  >;
 };
 
 const InteractiveMastermind: React.FC<Props> = ({
   numColors = 6,
   wordLength = 4,
+  ...props
 }) => {
   const [board, setBoard] = useState([Array<number>(wordLength).fill(0)]);
-  const [answer, setAnswer] = useState(
+  const [solution, setAnswer] = useState(
     generateRandomRow(wordLength, numColors)
   );
   const [success, setSuccess] = useState(false);
@@ -126,6 +168,7 @@ const InteractiveMastermind: React.FC<Props> = ({
     setBoard([Array(wordLength).fill(0)]);
     setAnswer(generateRandomRow(wordLength, numColors));
     setSuccess(false);
+    props.setParentGuessResponse && props.setParentGuessResponse(undefined);
   };
 
   const updateColor = (guessIndex: number, value?: number) => {
@@ -140,38 +183,20 @@ const InteractiveMastermind: React.FC<Props> = ({
       });
   };
 
-  const submitGuesses: () => PegSet = () => {
-    // Calculate information pegs
-    let guesses = board[board.length - 1];
-    const answerCopy = [...answer];
-    let numCorrect = 0,
-      numPresent = 0;
-    guesses = guesses.filter((guess, index) => {
-      if (answerCopy[index] === guess) {
-        answerCopy[index] = -1;
-        numCorrect++;
-        return false;
-      }
-      return true;
-    });
-    guesses.forEach((guess) => {
-      let found = answerCopy.indexOf(guess);
-      if (found !== -1) {
-        answerCopy[found] = -1;
-        numPresent++;
-      }
-    });
+  const submitGuesses = () => {
+    const guess = board[board.length - 1];
+    const pegs = calculateInformationPegs(board[board.length - 1], solution);
 
-    if (numCorrect === wordLength) {
+    props.setParentGuessResponse &&
+      props.setParentGuessResponse({ guess: guess, pegs: pegs });
+
+    if (pegs[INFORMATION_PEGS.CORRECT_SPOT] === wordLength) {
       setSuccess(true);
     } else {
       // Add empty row
       setBoard((currBoard) => [...currBoard, Array(wordLength).fill(0)]);
     }
-    return {
-      [INFORMATION_PEGS.WRONG_SPOT]: numPresent,
-      [INFORMATION_PEGS.CORRECT_SPOT]: numCorrect,
-    };
+    return pegs;
   };
 
   return (
