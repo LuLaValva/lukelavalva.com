@@ -77,7 +77,7 @@ const MathSeminarPaper = (props: Props) => {
         <div className={styles.paragraph}>
           Each time a guess is made in this <TeX math="M_{2, 4}" /> game, the
           "cows and bulls" (white and red pins) reveal a subset of solutions
-          which are definitely <i>not</i> the secret code. Using this knowledge,
+          which are definitely <i>not</i> the secret code. Under this framework,
           it may be guessed that the most efficient way to solve a{" "}
           <i>Mastermind®</i> puzzle is by maximally reducing the set of
           solutions with each guess.

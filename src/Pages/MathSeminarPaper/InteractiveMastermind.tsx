@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./Mastermind.module.css";
 
 export const COLORS = [
@@ -144,6 +144,7 @@ type Props = {
   setParentGuessResponse?: React.Dispatch<
     React.SetStateAction<GuessResponse | undefined>
   >;
+  presetGuess?: number[];
 };
 
 const InteractiveMastermind: React.FC<Props> = ({
@@ -198,6 +199,16 @@ const InteractiveMastermind: React.FC<Props> = ({
     }
     return pegs;
   };
+
+  useEffect(() => {
+    setBoard((currBoard) => {
+      if (props.presetGuess) {
+        let newBoard = [...currBoard];
+        newBoard[newBoard.length - 1] = props.presetGuess;
+        return newBoard;
+      } else return currBoard;
+    });
+  }, [props.presetGuess]);
 
   return (
     <div className={styles.boardContainer}>

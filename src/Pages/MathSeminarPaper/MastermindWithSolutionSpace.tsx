@@ -12,6 +12,7 @@ type PotentialSolutionProps = {
   wordLength: number;
   solutionIndex: number;
   latestGuessResponse?: GuessResponse;
+  setGuess: React.Dispatch<React.SetStateAction<number[] | undefined>>;
 };
 
 const PotentialSolution: React.FC<PotentialSolutionProps> = (props) => {
@@ -51,7 +52,10 @@ const PotentialSolution: React.FC<PotentialSolutionProps> = (props) => {
   }, [props.latestGuessResponse, ruledOut, solution]);
 
   return (
-    <div className={`${styles.solution} ${ruledOut && styles.ruledOut}`}>
+    <div
+      className={`${styles.solution} ${ruledOut && styles.ruledOut}`}
+      onClick={() => props.setGuess(solution)}
+    >
       {solution.map((colorIndex) => (
         <div
           className={styles.peg}
@@ -76,6 +80,8 @@ const MastermindWithSolutionSpace: React.FC<Props> = ({
   const [latestGuessResponse, setLatestGuessResponse] =
     useState<GuessResponse>();
 
+  const [presetGuess, setPresetGuess] = useState<number[]>();
+
   return (
     <>
       <div className={styles.solutionSpaceGridContainer}>
@@ -89,6 +95,7 @@ const MastermindWithSolutionSpace: React.FC<Props> = ({
               wordLength={wordLength}
               solutionIndex={index}
               latestGuessResponse={latestGuessResponse}
+              setGuess={setPresetGuess}
             />
           ))}
         </div>
@@ -98,6 +105,7 @@ const MastermindWithSolutionSpace: React.FC<Props> = ({
         numColors={numColors}
         wordLength={wordLength}
         setParentGuessResponse={setLatestGuessResponse}
+        presetGuess={presetGuess}
       />
     </>
   );
