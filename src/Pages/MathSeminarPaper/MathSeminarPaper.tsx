@@ -77,12 +77,15 @@ const MathSeminarPaper = (props: Props) => {
         <div className={styles.paragraph}>
           Each time a guess is made in this <TeX math="M_{2, 4}" /> game, the
           "cows and bulls" (white and red pins) reveal a subset of solutions
-          which are definitely <i>not</i> the secret code. Under this framework,
-          it may be guessed that the most efficient way to solve a{" "}
-          <i>Mastermind®</i> puzzle is by maximally reducing the set of
-          solutions with each guess.
+          which are definitely <i>not</i> the secret code.
         </div>
       </MastermindWithSolutionSpace>
+      <div className={styles.paragraph}>
+        With this in mind, it becomes obvious that in order confidently to solve
+        a <i>Mastermind®</i> puzzle with the fewest numbers of moves, the
+        objective of each guess should be to maximally reduce the solution
+        space.
+      </div>
     </div>
   );
 };

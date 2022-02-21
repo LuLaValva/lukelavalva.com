@@ -52,9 +52,10 @@ const PotentialSolution: React.FC<PotentialSolutionProps> = (props) => {
   }, [props.latestGuessResponse, ruledOut, solution]);
 
   return (
-    <div
-      className={`${styles.solution} ${ruledOut && styles.ruledOut}`}
+    <button
+      className={styles.solution}
       onClick={() => props.setGuess(solution)}
+      disabled={ruledOut}
     >
       {solution.map((colorIndex) => (
         <div
@@ -62,7 +63,7 @@ const PotentialSolution: React.FC<PotentialSolutionProps> = (props) => {
           style={{ backgroundColor: COLORS[colorIndex - 1] }}
         />
       ))}
-    </div>
+    </button>
   );
 };
 
