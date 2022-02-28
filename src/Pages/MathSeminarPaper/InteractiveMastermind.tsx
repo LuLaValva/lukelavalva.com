@@ -73,7 +73,9 @@ const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
           style={{
             backgroundColor: guess ? COLORS[guess - 1] : "black",
           }}
-          onClick={() => props.updateColor(index)}
+          onClick={() =>
+            props.updateColor(index, solutions ? guess : undefined)
+          }
         />
       ))}
       {solutions ? (

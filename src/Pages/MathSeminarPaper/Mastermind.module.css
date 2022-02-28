@@ -25,6 +25,16 @@
   border-radius: 50%;
   width: min(10vw, 50px);
   height: min(10vw, 50px);
+  transition: transform 80ms;
+}
+
+.row > .guess:hover {
+  transform: scale(110%, 110%);
+}
+
+.row > .guess:active {
+  transition: transform 10ms;
+  transform: scale(90%, 90%);
 }
 
 .row > .pegs {
@@ -55,10 +65,12 @@
   border: 2px solid #eef;
   background-color: #44a;
   color: #eef;
+  transition: transform 80ms;
 }
 
 .board button:active {
-  opacity: 0.8;
+  transition: transform 10ms;
+  transform: scale(90%, 90%);
 }
 
 .board button:disabled {
@@ -72,10 +84,10 @@
 .row > .guessButton {
   width: 8rem;
   margin: 0 1rem;
-  transition: width 40ms, margin 40ms;
+  transition: width 80ms, margin 80ms;
 }
 
-.row > .guessButton:active {
+.row > .guessButton:not([disabled]):hover {
   width: 10rem;
   margin: 0;
 }
@@ -88,7 +100,7 @@
 .solutionSpaceGrid {
   display: grid;
   /* grid-template-columns: repeat(4, 1fr); 
-      Controlled by component in React*/
+      Controlled by component in React */
   width: fit-content;
   margin: auto;
   gap: 0.5rem;
@@ -102,10 +114,16 @@
   gap: min(1vw, 5px);
   padding: min(1vw, 5px);
   border-radius: 100px;
+  transition: transform 80ms;
+}
+
+.solutionSpaceGrid .solution:hover {
+  transform: scale(110%, 110%);
 }
 
 .solutionSpaceGrid .solution:active {
-  opacity: 0.85;
+  transition: transform 10ms;
+  transform: scale(90%, 90%);
 }
 
 .solutionSpaceGrid .solution:disabled {
