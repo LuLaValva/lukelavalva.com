@@ -7,13 +7,11 @@ import TeX from "@matejmazur/react-katex";
 import InteractiveMastermind from "./InteractiveMastermind";
 import MastermindWithSolutionSpace from "./MastermindWithSolutionSpace";
 
-type Props = {};
-
-const MathSeminarPaper = (props: Props) => {
+const MathSeminarPaper: React.FC = () => {
   return (
     <div className={styles.paper}>
       <h1>Cows, Bulls and Beyond</h1>
-      <h2>Information Theory in a Nutshell</h2>
+      <h2>Solving Code-Breaking Games with Information Theory</h2>
       <div className={styles.paragraph}>
         For hundreds of years, pairs of people all over England have resigned to
         competing with one another in a rip-roaring, hair-raising game of wits
@@ -68,10 +66,9 @@ const MathSeminarPaper = (props: Props) => {
         represents the length of the secret code and <TeX>k</TeX> is the number
         of available colors. Then, since each position can contain any of the{" "}
         <TeX>k</TeX> colors, the number of possible solutions <TeX>N</TeX> is
-        found using
-        <TeX block>N=k^n.</TeX>
-        As a concrete example, <TeX math="M_{2, 4}" /> has <TeX>4^2=16</TeX>{" "}
-        unique solutions, which are displayed here.
+        found using <TeX block>N=k^n.</TeX> As a concrete example, the solution
+        space of <TeX math="M_{2, 4}" /> has <TeX>4^2=16</TeX> unique solutions,
+        which are displayed here.
       </div>
       <MastermindWithSolutionSpace>
         <div className={styles.paragraph}>
