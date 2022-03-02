@@ -17,3 +17,10 @@
 .paper a:visited {
   color: lightgray;
 }
+
+.paper .citation {
+  max-width: 600px;
+  margin: 0.5rem auto;
+  text-align: left;
+  font-size: small;
+}

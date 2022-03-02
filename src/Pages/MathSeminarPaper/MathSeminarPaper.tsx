@@ -6,6 +6,24 @@ import TeX from "@matejmazur/react-katex";
 
 import InteractiveMastermind from "./InteractiveMastermind";
 import MastermindWithSolutionSpace from "./MastermindWithSolutionSpace";
+import Bibliography from "./Bibliography";
+
+const bibliography = [
+  {
+    title: "The Computer as Master Mind",
+    authors: ["Donald Knuth"],
+    year: 1977,
+    url: "http://www.cs.uni.edu/~wallingf/teaching/cs3530/resources/knuth-mastermind.pdf",
+  },
+  {
+    title: "Cracking the Mastermind Code",
+    authors: ["Sylvester de Graaf"],
+    year: 2019,
+    url: "https://theses.liacs.nl/pdf/2018-2019-GraafSde.pdf",
+  },
+];
+
+const mastermind = <i>Mastermind®</i>;
 
 const MathSeminarPaper: React.FC = () => {
   return (
@@ -50,19 +68,18 @@ const MathSeminarPaper: React.FC = () => {
       </div>
       <div className={styles.paragraph}>
         In the late 1960s, Mordecai Meirowitz slightly modified the rules of{" "}
-        <i>Cows and Bulls</i> and rebranded it as <i>Mastermind®</i> before
-        selling it to a plastics company for a large profit. The only
-        differences that <i>Mastermind®</i> has from <i>Cows and Bulls</i> are
-        that it uses 6 differently colored pegs instead of 10 digits, and it
-        allows for a code to contain multiple values that are the same. Cows are
-        replaced with small white pins, and bulls with red ones. Below is an
-        interactive version of <i>Mastermind®</i> with the standard set of
-        rules.
+        <i>Cows and Bulls</i> and rebranded it as {mastermind} before selling it
+        to a plastics company for a large profit. The only differences that{" "}
+        {mastermind} has from <i>Cows and Bulls</i> are that it uses 6
+        differently colored pegs instead of 10 digits, and it allows for a code
+        to contain multiple values that are the same. Cows are replaced with
+        small white pins, and bulls with red ones. Below is an interactive
+        version of {mastermind} with the standard set of rules.
       </div>
       <InteractiveMastermind />
       <div className={styles.paragraph}>
-        Let us define any <i>Mastermind®</i> game as <TeX math="M_{n, k}" />,
-        where <TeX>n</TeX>
+        Let us define any {mastermind} game as <TeX math="M_{n, k}" />, where{" "}
+        <TeX>n</TeX>
         represents the length of the secret code and <TeX>k</TeX> is the number
         of available colors. Then, since each position can contain any of the{" "}
         <TeX>k</TeX> colors, the number of possible solutions <TeX>N</TeX> is
@@ -78,11 +95,12 @@ const MathSeminarPaper: React.FC = () => {
         </div>
       </MastermindWithSolutionSpace>
       <div className={styles.paragraph}>
-        With this in mind, it becomes obvious that in order confidently to solve
-        a <i>Mastermind®</i> puzzle with the fewest numbers of moves, the
-        objective of each guess should be to maximally reduce the solution
-        space.
+        After exposure to this framework, one might imagine that each guess
+        should be selected to reduce the size of the solution space as much as
+        possible. This is the inspiration behind Donald Knuth's implementation
+        of the minimax algorithm in his {mastermind} solver.
       </div>
+      <Bibliography citations={bibliography} />
     </div>
   );
 };
