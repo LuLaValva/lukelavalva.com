@@ -22,11 +22,11 @@ const Home = (props: Props) => {
       <BoxInSky width={25} left={5} top={4}>
         <h1>Luke LaValva</h1>
       </BoxInSky>
-      <Link to="/resume" className={styles.boxLink}>
+      <a href="/resume.pdf" className={styles.boxLink}>
         <BoxInSky width={23} left={30} top={60}>
           My Resume
         </BoxInSky>
-      </Link>
+      </a>
       <Link to="/albums" className={styles.boxLink}>
         <BoxInSky width={20} left={135} top={50}>
           My opinions about a bunch of albums
