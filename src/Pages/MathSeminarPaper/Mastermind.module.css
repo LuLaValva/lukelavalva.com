@@ -34,7 +34,7 @@
 
 .row > .guess:active {
   transition: transform 10ms;
-  transform: scale(90%, 90%);
+  transform: scale(100%, 100%);
 }
 
 .row > .pegs {
@@ -70,7 +70,7 @@
 
 .board button:active {
   transition: transform 10ms;
-  transform: scale(90%, 90%);
+  transform: scale(100%, 100%);
 }
 
 .board button:disabled {
@@ -117,13 +117,13 @@
   transition: transform 80ms;
 }
 
-.solutionSpaceGrid .solution:hover {
+.solutionSpaceGrid .solution:not([disabled]):hover {
   transform: scale(110%, 110%);
 }
 
-.solutionSpaceGrid .solution:active {
+.solutionSpaceGrid .solution:not([disabled]):active {
   transition: transform 10ms;
-  transform: scale(90%, 90%);
+  transform: scale(100%, 100%);
 }
 
 .solutionSpaceGrid .solution:disabled {
