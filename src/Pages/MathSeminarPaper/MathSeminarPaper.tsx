@@ -8,20 +8,36 @@ import InteractiveMastermind from "./InteractiveMastermind";
 import MastermindWithSolutionSpace from "./MastermindWithSolutionSpace";
 import Bibliography from "./Bibliography";
 
-const bibliography = [
-  {
+const bibliography = {
+  knuth77: {
     title: "The Computer as Master Mind",
     authors: ["Donald Knuth"],
     year: 1977,
     url: "http://www.cs.uni.edu/~wallingf/teaching/cs3530/resources/knuth-mastermind.pdf",
   },
-  {
+  graaf19: {
     title: "Cracking the Mastermind Code",
     authors: ["Sylvester de Graaf"],
     year: 2019,
     url: "https://theses.liacs.nl/pdf/2018-2019-GraafSde.pdf",
   },
-];
+  solvesnov: {
+    title: "Optimal Algorithms for Bulls and Cows Game",
+    authors: ["Alexey Slovesnov"],
+    url: "http://slovesnov.users.sourceforge.net/index.php?bullscows",
+  },
+  gur: {
+    title: "Serkan Gur’s VB Examples Page",
+    authors: ["Serkan Gur"],
+    url: "http://serkangur.freeservers.com/",
+  },
+  gur21: {
+    title:
+      "New and Powerful Mastermind Strategies: A deep dive into heuristic and optimal code-breaking algorithms and board game AI bots",
+    authors: ["Serkan Gur"],
+    year: 2021,
+  },
+};
 
 const mastermind = <i>Mastermind®</i>;
 
@@ -62,9 +78,10 @@ const MathSeminarPaper: React.FC = () => {
         guesses until one or both of them were able to guess their competitor's
         code. The best players of <i>Cows and Bulls</i> usually figured out the
         secret code in about 5-6 turns, as was{" "}
-        <a href="http://slovesnov.users.sourceforge.net/index.php?bullscows_tree,,avgBullsCows">
-          shown algorithmically by Alexey Slovesnov.
+        <a href={bibliography.solvesnov.url} target="_blank" rel="noreferrer">
+          shown algorithmically by Alexey Slovesnov
         </a>
+        .
       </div>
       <div className={styles.paragraph}>
         In the late 1960s, Mordecai Meirowitz slightly modified the rules of{" "}
@@ -98,7 +115,11 @@ const MathSeminarPaper: React.FC = () => {
         After exposure to this framework, one might imagine that each guess
         should be selected to reduce the size of the solution space as much as
         possible. This is the inspiration behind Donald Knuth's implementation
-        of the minimax algorithm in his {mastermind} solver.
+        of the minimax algorithm in{" "}
+        <a href={bibliography.knuth77.url} target="_blank" rel="noreferrer">
+          his discussion of {mastermind}
+        </a>
+        .
       </div>
       <Bibliography citations={bibliography} />
     </div>

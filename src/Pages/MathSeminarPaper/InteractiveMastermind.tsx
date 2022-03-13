@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./Mastermind.module.css";
 
 export const COLORS = [
@@ -166,13 +166,15 @@ const InteractiveMastermind: React.FC<Props> = ({
     [gameLengths]
   );
 
-  const restartGame = () => {
+  const restartGame = useCallback(() => {
     setGameLengths([...gameLengths, board.length]);
     setBoard([Array(wordLength).fill(0)]);
     setAnswer(generateRandomRow(wordLength, numColors));
     setSuccess(false);
     props.setParentGuessResponse && props.setParentGuessResponse(undefined);
-  };
+  }, [board.length, gameLengths, numColors, wordLength, props]);
+
+  useEffect(() => restartGame(), [numColors, wordLength, restartGame]);
 
   const updateColor = (guessIndex: number, value?: number) => {
     success ||

@@ -20,6 +20,7 @@
 
 .paper .citation {
   max-width: 600px;
+  overflow-wrap: break-word;
   margin: 0.5rem auto;
   text-align: left;
   font-size: small;

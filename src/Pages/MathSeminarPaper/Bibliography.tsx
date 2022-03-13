@@ -9,7 +9,7 @@ export type Citation = {
 };
 
 type Props = {
-  citations: Citation[];
+  citations: { [key: string]: Citation };
 };
 
 const formatLastNameFirst = (name: string) => {
@@ -26,7 +26,8 @@ const stringifyAuthors = (authors?: string[]) => {
       formatLastNameFirst(authors[0]) +
       authors
         .slice(1)
-        .reduce((fullString, nextName) => fullString + " and " + nextName, "")
+        .reduce((fullString, nextName) => fullString + " and " + nextName, "") +
+      "."
     );
   else return `${formatLastNameFirst(authors[0])} et. al.`;
 };
@@ -35,10 +36,10 @@ const Bibliography = (props: Props) => {
   return (
     <>
       <h2>Bibliography</h2>
-      {props.citations.map((citation) => (
+      {Object.values(props.citations).map((citation) => (
         <div className={styles.citation}>
-          {stringifyAuthors(citation.authors)} <i>{citation.title}</i> (
-          {citation.year}){" "}
+          {stringifyAuthors(citation.authors)} <i>{citation.title}</i>{" "}
+          {citation.year && `(${citation.year})`}{" "}
           {citation.url && <a href={citation.url}>{citation.url}</a>}
         </div>
       ))}
