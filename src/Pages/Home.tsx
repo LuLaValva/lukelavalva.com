@@ -23,7 +23,7 @@ const Home = (props: Props) => {
         <h1>Luke LaValva</h1>
       </BoxInSky>
       <a href="/resume.pdf" className={styles.boxLink}>
-        <BoxInSky width={23} left={30} top={60}>
+        <BoxInSky width={23} left={30} top={30}>
           My Resume
         </BoxInSky>
       </a>
@@ -37,24 +37,6 @@ const Home = (props: Props) => {
           Greedy Gorillas Game
         </BoxInSky>
       </Link>
-      <BoxInSky width={15} left={80} top={5}>
-        Software Engineer
-      </BoxInSky>
-      <BoxInSky width={21} left={95} top={80}>
-        Mathematician
-      </BoxInSky>
-      <BoxInSky width={18} left={170} top={40}>
-        Full Stack Developer
-      </BoxInSky>
-      <BoxInSky width={23} left={255} top={60}>
-        Frequent Rock Climber
-      </BoxInSky>
-      <BoxInSky width={30} left={290} top={12}>
-        Sociologist
-      </BoxInSky>
-      <BoxInSky width={14} left={385} top={44}>
-        Constant Learner
-      </BoxInSky>
       <BoxInSky width={24} left={3400} top={2}>
         Haha you made it to the end
       </BoxInSky>
