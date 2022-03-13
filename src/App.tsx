@@ -12,6 +12,7 @@ const GreedyGorillasPage = React.lazy(
 const MathSeminarPaper = React.lazy(
   () => import("./Pages/MathSeminarPaper/MathSeminarPaper")
 );
+const Muchumme = React.lazy(() => import("./Pages/Muchumme/Muchumme"));
 
 let App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ let App: React.FC = () => {
               <Route path="/resume" component={ResumePage} />
               <Route path="/greedygorillas" component={GreedyGorillasPage} />
               <Route path="/informationtheory" component={MathSeminarPaper} />
+              <Route path="/muchumme" component={Muchumme} />
             </Switch>
           </Suspense>
         </SubPage>

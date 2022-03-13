@@ -1,0 +1,60 @@
+.poem {
+  text-align: center;
+  margin: 5rem 1rem;
+}
+
+.code {
+  text-align: center;
+  margin: 10rem 1rem;
+}
+
+.code input {
+  width: min(20rem, 90%);
+  padding: 1rem;
+  background-color: inherit;
+  font-family: inherit;
+  color: inherit;
+  border-radius: 1rem;
+  font-size: 2rem;
+  text-align: center;
+  border: 2px solid white;
+}
+
+h1 {
+  margin: auto;
+  width: fit-content;
+  text-align: center;
+  margin-top: calc(50vh - 1em);
+  animation: fadeIn 8s ease-in backwards, rotate 2s linear infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    font-size: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  13.5% {
+    transform: rotate(30deg);
+  }
+  37.5% {
+    transform: rotate(-30deg);
+  }
+  62.5% {
+    transform: rotate(390deg);
+  }
+  87.5% {
+    transform: rotate(330deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
