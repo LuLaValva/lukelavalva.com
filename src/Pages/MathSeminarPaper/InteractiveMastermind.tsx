@@ -174,7 +174,8 @@ const InteractiveMastermind: React.FC<Props> = ({
     props.setParentGuessResponse && props.setParentGuessResponse(undefined);
   }, [board.length, gameLengths, numColors, wordLength, props]);
 
-  useEffect(() => restartGame(), [numColors, wordLength, restartGame]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => restartGame(), [numColors, wordLength]);
 
   const updateColor = (guessIndex: number, value?: number) => {
     success ||

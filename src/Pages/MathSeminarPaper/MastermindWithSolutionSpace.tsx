@@ -57,9 +57,10 @@ const PotentialSolution: React.FC<PotentialSolutionProps> = (props) => {
       onClick={() => props.setGuess(solution)}
       disabled={ruledOut}
     >
-      {solution.map((colorIndex) => (
+      {solution.map((colorIndex, index) => (
         <div
           className={styles.peg}
+          key={index}
           style={{ backgroundColor: COLORS[colorIndex - 1] }}
         />
       ))}
@@ -95,6 +96,7 @@ const MastermindWithSolutionSpace: React.FC<Props> = ({
               numColors={numColors}
               wordLength={wordLength}
               solutionIndex={index}
+              key={index}
               latestGuessResponse={latestGuessResponse}
               setGuess={setPresetGuess}
             />

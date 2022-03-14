@@ -36,8 +36,8 @@ const Bibliography = (props: Props) => {
   return (
     <>
       <h2>Bibliography</h2>
-      {Object.values(props.citations).map((citation) => (
-        <div className={styles.citation}>
+      {Object.values(props.citations).map((citation, index) => (
+        <div className={styles.citation} key={index}>
           {stringifyAuthors(citation.authors)} <i>{citation.title}</i>{" "}
           {citation.year && `(${citation.year})`}{" "}
           {citation.url && <a href={citation.url}>{citation.url}</a>}

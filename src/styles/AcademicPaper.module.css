@@ -25,3 +25,12 @@
   text-align: left;
   font-size: small;
 }
+
+.draggableNumber {
+  border: 1px solid white;
+  border-radius: 0.2em;
+  padding: 0.1em 0.3em;
+  scroll-behavior: auto;
+  text-align: center;
+  display: inline-block;
+}

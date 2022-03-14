@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../../styles/AcademicPaper.module.css";
 
 import "katex/dist/katex.min.css";
@@ -7,6 +7,7 @@ import TeX from "@matejmazur/react-katex";
 import InteractiveMastermind from "./InteractiveMastermind";
 import MastermindWithSolutionSpace from "./MastermindWithSolutionSpace";
 import Bibliography from "./Bibliography";
+import NumberScrubber from "./NumberScrubber";
 
 const bibliography = {
   knuth77: {
@@ -27,7 +28,7 @@ const bibliography = {
     url: "http://slovesnov.users.sourceforge.net/index.php?bullscows",
   },
   gur: {
-    title: "Serkan Gur’s VB Examples Page",
+    title: "Serkan Gur's VB Examples Page",
     authors: ["Serkan Gur"],
     url: "http://serkangur.freeservers.com/",
   },
@@ -42,6 +43,9 @@ const bibliography = {
 const mastermind = <i>Mastermind®</i>;
 
 const MathSeminarPaper: React.FC = () => {
+  const [solSpace1_numColors, updateSolSpace1_numColors] = useState(4);
+  const [solSpace1_wordLength, updateSolSpace1_wordLength] = useState(2);
+
   return (
     <div className={styles.paper}>
       <h1>Cows, Bulls and Beyond</h1>
@@ -100,15 +104,39 @@ const MathSeminarPaper: React.FC = () => {
         represents the length of the secret code and <TeX>k</TeX> is the number
         of available colors. Then, since each position can contain any of the{" "}
         <TeX>k</TeX> colors, the number of possible solutions <TeX>N</TeX> is
-        found using <TeX block>N=k^n.</TeX> As a concrete example, the solution
-        space of <TeX math="M_{2, 4}" /> has <TeX>4^2=16</TeX> unique solutions,
-        which are displayed here.
+        found using <TeX block>N=k^n.</TeX> As a concrete example, suppose that
+        we have a {mastermind} board with{" "}
+        <NumberScrubber
+          value={solSpace1_wordLength}
+          updateValue={updateSolSpace1_wordLength}
+          min={1}
+          max={4}
+        />{" "}
+        elements in its code and{" "}
+        <NumberScrubber
+          value={solSpace1_numColors}
+          updateValue={updateSolSpace1_numColors}
+          min={1}
+          max={10}
+        />{" "}
+        colors available. The solution space of{" "}
+        <TeX math={`M_{${solSpace1_wordLength}, ${solSpace1_numColors}}`} /> has{" "}
+        <TeX
+          math={`${solSpace1_numColors}^${solSpace1_wordLength}=${
+            solSpace1_numColors ** solSpace1_wordLength
+          }`}
+        />{" "}
+        unique solutions, which are displayed here.
       </div>
-      <MastermindWithSolutionSpace>
+      <MastermindWithSolutionSpace
+        numColors={solSpace1_numColors}
+        wordLength={solSpace1_wordLength}
+      >
         <div className={styles.paragraph}>
-          Each time a guess is made in this <TeX math="M_{2, 4}" /> game, the
-          "cows and bulls" (white and red pins) reveal a subset of solutions
-          which are definitely <i>not</i> the secret code.
+          Each time a guess is made in this{" "}
+          <TeX math={`M_{${solSpace1_wordLength}, ${solSpace1_numColors}}`} />{" "}
+          game, the "cows and bulls" (white and red pins) reveal a subset of
+          solutions which are definitely <i>not</i> the secret code.
         </div>
       </MastermindWithSolutionSpace>
       <div className={styles.paragraph}>
