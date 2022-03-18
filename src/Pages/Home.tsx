@@ -27,14 +27,24 @@ const Home = (props: Props) => {
           My Resume
         </BoxInSky>
       </a>
-      <Link to="/albums" className={styles.boxLink}>
-        <BoxInSky width={20} left={135} top={50}>
-          My opinions about a bunch of albums
+      <Link to="/informationtheory" className={styles.boxLink}>
+        <BoxInSky width={20} left={67} top={60}>
+          Math Seminar Paper (WIP)
         </BoxInSky>
       </Link>
       <Link to="/greedygorillas" className={styles.boxLink}>
-        <BoxInSky width={20} left={212} top={30}>
+        <BoxInSky width={20} left={85} top={35}>
           Greedy Gorillas Game
+        </BoxInSky>
+      </Link>
+      <Link to="/slide" className={styles.boxLink}>
+        <BoxInSky width={20} left={133} top={10}>
+          Face Slide
+        </BoxInSky>
+      </Link>
+      <Link to="/albums" className={styles.boxLink}>
+        <BoxInSky width={20} left={142} top={50}>
+          My opinions about a bunch of albums
         </BoxInSky>
       </Link>
       <BoxInSky width={24} left={3400} top={2}>

@@ -85,3 +85,15 @@ body {
 iframe {
   box-sizing: border-box;
 }
+
+.title {
+  text-align: center;
+}
+
+.link {
+  color: white;
+}
+
+.link:visited {
+  color: #aaa;
+}

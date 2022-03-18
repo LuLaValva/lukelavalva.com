@@ -1,0 +1,36 @@
+.puzzleBox {
+  width: 90vmin;
+  height: 90vmin;
+  margin: 3vmin auto;
+  border: 2vmin solid white;
+}
+
+.puzzlePiece {
+  background-size: 90vmin;
+  box-sizing: border-box;
+  border: 0.5vmin solid #00000044;
+  position: fixed;
+  /* transition: transform 1s; */
+}
+
+.winMessage {
+  position: fixed;
+  color: white;
+  text-shadow: 1px 1px black, -1px 1px black, 1px -1px black, -1px -1px black;
+  top: 0;
+  left: 2vmin;
+  transform-origin: 0 0;
+  animation: celebrate 1s cubic-bezier(0.075, 0.82, 0.165, 1) both;
+}
+
+@keyframes celebrate {
+  from {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(10);
+  }
+  to {
+    transform: scale(0);
+  }
+}
