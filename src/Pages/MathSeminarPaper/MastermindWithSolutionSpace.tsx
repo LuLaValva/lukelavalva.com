@@ -68,6 +68,71 @@ const PotentialSolution: React.FC<PotentialSolutionProps> = (props) => {
   );
 };
 
+type SolutionBlockProps = {
+  numColors: number;
+  wordLength: number;
+  blockNumber: number;
+  latestGuessResponse?: GuessResponse;
+  setGuess: React.Dispatch<React.SetStateAction<number[] | undefined>>;
+};
+
+const SolutionBlock = (props: SolutionBlockProps) => {
+  return (
+    <div
+      className={styles.solutionSpaceGrid}
+      style={{ gridTemplateColumns: `repeat(${props.numColors}, auto)` }}
+    >
+      {[...Array(props.numColors ** (props.wordLength === 1 ? 1 : 2))].map(
+        (_, index) => (
+          <PotentialSolution
+            key={index}
+            numColors={props.numColors}
+            wordLength={props.wordLength}
+            solutionIndex={props.blockNumber * props.numColors ** 2 + index}
+            latestGuessResponse={props.latestGuessResponse}
+            setGuess={props.setGuess}
+          />
+        )
+      )}
+    </div>
+  );
+};
+
+type SolutionSetProps = {
+  numColors: number;
+  wordLength: number;
+  layer?: number;
+  blockNumber?: number;
+  latestGuessResponse?: GuessResponse;
+  setGuess: React.Dispatch<React.SetStateAction<number[] | undefined>>;
+};
+
+const SolutionSet: React.FC<SolutionSetProps> = ({
+  layer = 0,
+  blockNumber = 0,
+  ...props
+}) => {
+  return props.wordLength - layer <= 2 ? (
+    <SolutionBlock
+      numColors={props.numColors}
+      wordLength={props.wordLength}
+      blockNumber={blockNumber}
+      latestGuessResponse={props.latestGuessResponse}
+      setGuess={props.setGuess}
+    />
+  ) : (
+    <div className={styles.solutionSet}>
+      {[...Array(props.numColors)].map((_0, index) => (
+        <SolutionSet
+          {...props}
+          layer={layer + 1}
+          blockNumber={blockNumber * props.numColors + index}
+        />
+      ))}
+    </div>
+  );
+};
+
 type Props = {
   numColors?: number;
   wordLength?: number;
@@ -87,21 +152,12 @@ const MastermindWithSolutionSpace: React.FC<Props> = ({
   return (
     <>
       <div className={styles.solutionSpaceGridContainer}>
-        <div
-          className={styles.solutionSpaceGrid}
-          style={{ gridTemplateColumns: `repeat(${numColors}, auto)` }}
-        >
-          {[...Array(numColors ** wordLength)].map((_, index) => (
-            <PotentialSolution
-              numColors={numColors}
-              wordLength={wordLength}
-              solutionIndex={index}
-              key={index}
-              latestGuessResponse={latestGuessResponse}
-              setGuess={setPresetGuess}
-            />
-          ))}
-        </div>
+        <SolutionSet
+          numColors={numColors}
+          wordLength={wordLength}
+          latestGuessResponse={latestGuessResponse}
+          setGuess={setPresetGuess}
+        />
       </div>
       {props.children}
       <InteractiveMastermind

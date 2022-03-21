@@ -93,17 +93,33 @@
 }
 
 .solutionSpaceGridContainer {
-  overflow-x: scroll;
   width: 100%;
+}
+
+.solutionSet,
+.solutionSpaceGridContainer {
+  overflow-x: scroll;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.solutionSet,
+.solutionSpaceGrid {
+  border: 1px solid white;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  background-color: #fff1;
 }
 
 .solutionSpaceGrid {
   display: grid;
-  /* grid-template-columns: repeat(4, 1fr); 
+  /* grid-template-columns: repeat(n, 1fr); 
       Controlled by component in React */
   width: fit-content;
-  margin: auto;
   gap: 0.5rem;
+  border: 1px solid white;
 }
 
 .solutionSpaceGrid .solution {
