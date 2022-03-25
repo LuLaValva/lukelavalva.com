@@ -12,7 +12,7 @@ const AlbumRatingPage: React.FC<AlbumRatingPageProps> = () => {
   const [albums, setAlbums] = useState<Album[]>([]);
 
   useEffect(() => {
-    API.get(ApiConstants.ALBUMS_NAME, ApiConstants.ALBUMS_PATH, null).then(
+    API.get(ApiConstants.ALBUMS_NAME, ApiConstants.ALBUMS_PATH, {}).then(
       (res: { albums: Album[] }) => setAlbums(res.albums)
     );
   }, []);
