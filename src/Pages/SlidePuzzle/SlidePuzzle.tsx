@@ -57,7 +57,7 @@ const SlidePuzzle = (props: Props) => {
     let locs = [...Array(props.dim * props.dim)].map((_0, index) => index);
     let empty = props.dim * props.dim - 1;
     while (isSolved(locs)) {
-      for (let i = 0, lastMove = 0; i < props.dim ** 3; i++) {
+      for (let i = 0, lastMove = 0; i < props.dim ** 4; i++) {
         let nextMove = Math.floor(Math.random() * 3);
         if (nextMove >= lastMove) nextMove += 1;
         lastMove = nextMove ^ 0x01; // 0 <-> 1, 2 <-> 3

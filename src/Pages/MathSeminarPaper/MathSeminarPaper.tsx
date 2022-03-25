@@ -117,7 +117,7 @@ const MathSeminarPaper: React.FC = () => {
           value={solSpace1_numColors}
           updateValue={updateSolSpace1_numColors}
           min={1}
-          max={10}
+          max={9}
         />{" "}
         colors available. The solution space of{" "}
         <TeX math={`M_{${solSpace1_wordLength}, ${solSpace1_numColors}}`} /> has{" "}

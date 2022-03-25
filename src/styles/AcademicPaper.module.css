@@ -34,3 +34,8 @@
   text-align: center;
   display: inline-block;
 }
+
+.draggableNumber:focus {
+  border-width: 3px;
+  padding: calc(0.1em - 2px) calc(0.3em - 2px);
+}

@@ -127,6 +127,7 @@ const SolutionSet: React.FC<SolutionSetProps> = ({
           {...props}
           layer={layer + 1}
           blockNumber={blockNumber * props.numColors + index}
+          key={index}
         />
       ))}
     </div>

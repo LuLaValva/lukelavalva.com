@@ -16,21 +16,31 @@
 .winMessage {
   position: fixed;
   color: white;
-  text-shadow: 1px 1px black, -1px 1px black, 1px -1px black, -1px -1px black;
   top: 0;
-  left: 2vmin;
-  transform-origin: 0 0;
+  margin-top: 0;
+  width: 100vw;
+  text-align: center;
+  text-shadow: 2px 2px black, -2px 2px black, 2px -2px black, -2px -2px black;
+  font-size: 25vw;
   animation: celebrate 1s cubic-bezier(0.075, 0.82, 0.165, 1) both;
 }
 
 @keyframes celebrate {
   from {
     transform: scale(0);
+    transform-origin: 0 0;
+  }
+  49% {
+    transform-origin: 0 0;
   }
   50% {
-    transform: scale(10);
+    transform: scale(1);
+  }
+  51% {
+    transform-origin: 100% 0;
   }
   to {
     transform: scale(0);
+    transform-origin: 100% 0;
   }
 }
