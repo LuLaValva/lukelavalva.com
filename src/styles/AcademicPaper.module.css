@@ -10,8 +10,17 @@
   line-height: 1.5em;
 }
 
+.paper div.aside {
+  max-width: 550px;
+  text-align: justify;
+  margin: 1em auto;
+  font-size: small;
+  color: lightgray;
+  font-family: "Courier New", Courier, monospace;
+}
+
 .paper a {
-  color: white;
+  color: inherit;
 }
 
 .paper a:visited {
@@ -24,6 +33,18 @@
   margin: 0.5rem auto;
   text-align: left;
   font-size: small;
+}
+
+.paper .sectionBreak {
+  border-top: 0.25rem solid #ffffff14;
+  border-radius: 1rem;
+  margin: 2rem auto;
+  width: 100px;
+}
+
+.paper em {
+  color: #ffa;
+  font-style: normal;
 }
 
 .draggableNumber {

@@ -36,20 +36,34 @@ const bibliography = {
     title:
       "New and Powerful Mastermind Strategies: A deep dive into heuristic and optimal code-breaking algorithms and board game AI bots",
     authors: ["Serkan Gur"],
-    year: 2021,
+    year: 2016,
+    url: "https://www.amazon.com/Optimal-Mastermind-Solutions-comprehensive-programming-ebook/dp/B01M17PMIQ",
   },
 };
 
 const mastermind = <i>Mastermind®</i>;
+const sectionBreak = <div className={styles.sectionBreak} />;
 
 const MathSeminarPaper: React.FC = () => {
+  const [mastermind1_numColors, updateMastermind1_numColors] = useState(6);
+  const [mastermind1_wordLength, updateMastermind1_wordLength] = useState(4);
+
   const [solSpace1_numColors, updateSolSpace1_numColors] = useState(4);
   const [solSpace1_wordLength, updateSolSpace1_wordLength] = useState(2);
 
   return (
     <div className={styles.paper}>
-      <h1>Cows, Bulls and Beyond</h1>
+      <h1>Cows, Bulls, and Beyond</h1>
       <h2>Solving Code-Breaking Games with Information Theory</h2>
+
+      {sectionBreak}
+
+      <div className={styles.aside}>
+        Disclaimer: almost every part of this article is interactive and
+        designed to be played with by you, the reader. To get the most out of
+        your experience, please nudge numbers and play code-breaking games to
+        your heart's content.
+      </div>
       <div className={styles.paragraph}>
         For hundreds of years, pairs of people all over England have resigned to
         competing with one another in a rip-roaring, hair-raising game of wits
@@ -94,39 +108,83 @@ const MathSeminarPaper: React.FC = () => {
         {mastermind} has from <i>Cows and Bulls</i> are that it uses 6
         differently colored pegs instead of 10 digits, and it allows for a code
         to contain multiple values that are the same. Cows are replaced with
-        small white pins, and bulls with red ones. Below is an interactive
-        version of {mastermind} with the standard set of rules.
+        small white pins, and bulls with red ones. Before reading on any
+        further, please play this interactive {mastermind} game a few times to
+        get acquainted with the rules.
       </div>
-      <InteractiveMastermind />
+      <InteractiveMastermind
+        numColors={mastermind1_numColors}
+        wordLength={mastermind1_wordLength}
+      />
       <div className={styles.paragraph}>
-        Let us define any {mastermind} game as <TeX math="M_{n, k}" />, where{" "}
-        <TeX>n</TeX>
-        represents the length of the secret code and <TeX>k</TeX> is the number
-        of available colors. Then, since each position can contain any of the{" "}
-        <TeX>k</TeX> colors, the number of possible solutions <TeX>N</TeX> is
-        found using <TeX block>N=k^n.</TeX> As a concrete example, suppose that
-        we have a {mastermind} board with{" "}
+        In the development of strategies for puzzles like this, it is often
+        beneficial to consider simplified versions first. For the sake of
+        conciseness, let us refer to a {mastermind} game with a secret code of
+        length <TeX>n</TeX> that has <TeX>k</TeX> available colors as{" "}
+        <TeX math="M_{n, k}" />. The board above should be labeled as{" "}
+        <TeX math={`M_{${mastermind1_wordLength}, ${mastermind1_numColors}}`} />{" "}
+        because it has a code of length{" "}
+        <NumberScrubber
+          value={mastermind1_wordLength}
+          updateValue={updateMastermind1_wordLength}
+          min={1}
+          max={10}
+        />{" "}
+        with{" "}
+        <NumberScrubber
+          value={mastermind1_numColors}
+          updateValue={updateMastermind1_numColors}
+          min={1}
+          max={12}
+        />{" "}
+        color{mastermind1_numColors !== 1 && "s"} available. If you'd like, you
+        can adjust these values by clicking and dragging these boxed numbers or
+        by selecting them and using the arrow keys.
+      </div>
+
+      {sectionBreak}
+
+      <div className={styles.paragraph}>
+        Since each of the <TeX>n</TeX> positions can contain any of <TeX>k</TeX>{" "}
+        colors, it is fairly straightforward to enumerate the set of all
+        possible solutions. Let us call this set the <em>solution space</em>,
+        and label the solution space of each <TeX math="M_{n, k}" /> as{" "}
+        <TeX math="S_{n, k}." /> If we choose to represent each color as a
+        digit, then we can quickly find all values in <TeX math="S_{n, k}." />{" "}
+        by listing all <TeX>n</TeX>-digit integers with a base of <TeX>k.</TeX>{" "}
+        Because there are <TeX>k</TeX> choices for each of the <TeX>n</TeX>{" "}
+        positions, the size of this set can be found using
+        <TeX
+          block
+          math={String.raw`
+          \begin{equation}
+            |S_{n, k}| = k^n
+          \end{equation}
+        `}
+        />
+        Let's start simple with the solution space for a {mastermind} game with{" "}
         <NumberScrubber
           value={solSpace1_wordLength}
           updateValue={updateSolSpace1_wordLength}
           min={1}
           max={4}
         />{" "}
-        elements in its code and{" "}
+        element{solSpace1_wordLength !== 1 && "s"} in its code and{" "}
         <NumberScrubber
           value={solSpace1_numColors}
           updateValue={updateSolSpace1_numColors}
           min={1}
           max={9}
         />{" "}
-        colors available. The solution space of{" "}
-        <TeX math={`M_{${solSpace1_wordLength}, ${solSpace1_numColors}}`} /> has{" "}
+        color{solSpace1_numColors !== 1 && "s"} available. Using equation{" "}
+        <TeX>(1)</TeX>, we can determine that{" "}
         <TeX
-          math={`${solSpace1_numColors}^${solSpace1_wordLength}=${
+          math={`|S_{${solSpace1_wordLength}, ${solSpace1_numColors}}| = ${solSpace1_numColors}^${solSpace1_wordLength} = ${
             solSpace1_numColors ** solSpace1_wordLength
-          }`}
+          }.`}
         />{" "}
-        unique solutions, which are displayed here.
+        Below are the enumerated values of{" "}
+        <TeX math={`S_{${solSpace1_wordLength}, ${solSpace1_numColors}}.`} />
       </div>
       <MastermindWithSolutionSpace
         numColors={solSpace1_numColors}
@@ -135,19 +193,33 @@ const MathSeminarPaper: React.FC = () => {
         <div className={styles.paragraph}>
           Each time a guess is made in this{" "}
           <TeX math={`M_{${solSpace1_wordLength}, ${solSpace1_numColors}}`} />{" "}
-          game, the "cows and bulls" (white and red pins) reveal a subset of
-          solutions which are definitely <i>not</i> the secret code.
+          game, the response that is given reveals a subset of{" "}
+          <TeX math={`S_{${solSpace1_wordLength}, ${solSpace1_numColors}}`} />{" "}
+          that can no longer be a possible solution.
         </div>
       </MastermindWithSolutionSpace>
       <div className={styles.paragraph}>
-        After exposure to this framework, one might imagine that each guess
-        should be selected to reduce the size of the solution space as much as
-        possible. This is the inspiration behind Donald Knuth's implementation
-        of the minimax algorithm in{" "}
-        <a href={bibliography.knuth77.url} target="_blank" rel="noreferrer">
-          his discussion of {mastermind}
+        Most computational {mastermind} strategies are based on the idea of
+        choosing each guess based on the expected resulting reduction of the
+        solution space. In{" "}
+        <a href={bibliography.gur21.url} target="_blank" rel="noreferrer">
+          Serkan Gur's 2016 analysis of {mastermind}
         </a>
-        .
+        , he labels these as <em>heuristic strategies</em>.
+      </div>
+
+      {sectionBreak}
+
+      <div className={styles.paragraph}>
+        The first person who publicly documented knowledge of their
+        computational solution to {mastermind} was the computing legend and
+        oft-proclaimed "father of algorithm analysis" Donald Knuth, in his short
+        work entitled{" "}
+        <a href={bibliography.knuth77.url} target="_blank" rel="noreferrer">
+          The Computer As Master Mind
+        </a>
+        . In this work, he applied what is known as the <em>minimax</em>{" "}
+        algorithm in information theory.
       </div>
       <Bibliography citations={bibliography} />
     </div>
