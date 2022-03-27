@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import React, { Suspense, useEffect } from "react";
+import { BrowserRouter, Route, Switch, RouteProps } from "react-router-dom";
 
 import NavigationHandler from "./NavigationHandler";
 import Home from "./Pages/Home";
@@ -18,6 +18,17 @@ const SlidePuzzlePage = React.lazy(
 );
 const PageNotFound = React.lazy(() => import("./Pages/PageNotFound"));
 
+interface PageProps extends RouteProps {
+  title: string;
+}
+
+const Page: React.FC<PageProps> = ({ title, ...rest }) => {
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+  return <Route {...rest} />;
+};
+
 let App: React.FC = () => {
   return (
     <BrowserRouter>
@@ -26,14 +37,34 @@ let App: React.FC = () => {
         <SubPage>
           <Suspense fallback={<></>}>
             <Switch>
-              <Route path="/albums" component={AlbumRatingPage} />
-              <Route path="/resume" component={ResumePage} />
-              <Route path="/greedygorillas" component={GreedyGorillasPage} />
-              <Route path="/informationtheory" component={MathSeminarPaper} />
-              <Route path="/muchumme" component={Muchumme} />
-              <Route path="/slide" component={SlidePuzzlePage} />
-              <Route exact path="/" />
-              <Route component={PageNotFound} />
+              <Page
+                path="/albums"
+                component={AlbumRatingPage}
+                title="Luke's Favorite Albums"
+              />
+              <Page
+                path="/resume"
+                component={ResumePage}
+                title="Luke's Resume"
+              />
+              <Page
+                path="/greedygorillas"
+                component={GreedyGorillasPage}
+                title="Greedy Gorillas"
+              />
+              <Page
+                path="/informationtheory"
+                component={MathSeminarPaper}
+                title="Cows, Bulls, and Beyond"
+              />
+              <Page path="/muchumme" component={Muchumme} title="Muchumme" />
+              <Page
+                path="/slide"
+                component={SlidePuzzlePage}
+                title="Slide Puzzle"
+              />
+              <Page exact path="/" title="Luke LaValva" />
+              <Page component={PageNotFound} title="Luke LaValva - Not Found" />
             </Switch>
           </Suspense>
         </SubPage>
