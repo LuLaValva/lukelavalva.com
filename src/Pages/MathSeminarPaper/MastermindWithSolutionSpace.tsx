@@ -165,7 +165,7 @@ const MastermindWithSolutionSpace: React.FC<Props> = ({
         numColors={numColors}
         wordLength={wordLength}
         setParentGuessResponse={setLatestGuessResponse}
-        presetGuess={presetGuess}
+        externalGuess={presetGuess}
       />
     </>
   );

@@ -58,7 +58,7 @@ const generatePegMessage = (pegs: PegSet) => {
 type RowProps = {
   guesses: number[];
   updateColor: (guessIndex: number, value?: number) => void;
-  submitGuesses: () => PegSet;
+  submitGuess: () => PegSet;
 };
 
 const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
@@ -100,7 +100,7 @@ const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
       ) : (
         <button
           className={styles.guessButton}
-          onClick={() => setAnswers(props.submitGuesses())}
+          onClick={() => setAnswers(props.submitGuess())}
           disabled={props.guesses.includes(0)}
         >
           Guess
@@ -146,7 +146,7 @@ type Props = {
   setParentGuessResponse?: React.Dispatch<
     React.SetStateAction<GuessResponse | undefined>
   >;
-  presetGuess?: number[];
+  externalGuess?: number[];
 };
 
 const InteractiveMastermind: React.FC<Props> = ({
@@ -159,20 +159,20 @@ const InteractiveMastermind: React.FC<Props> = ({
     generateRandomRow(wordLength, numColors)
   );
   const [success, setSuccess] = useState(false);
-  const [gameLengths, setGameLengths] = useState<number[]>([]);
+  const [gameLengthHistory, setGameLengthHistory] = useState<number[]>([]);
 
-  const rowIndexOffset = useMemo(
-    () => gameLengths.reduce((sum, next) => sum + next, 0),
-    [gameLengths]
+  const numTotalGuesses = useMemo(
+    () => gameLengthHistory.reduce((sum, next) => sum + next, 0),
+    [gameLengthHistory]
   );
 
   const restartGame = useCallback(() => {
-    setGameLengths([...gameLengths, board.length]);
+    setGameLengthHistory([...gameLengthHistory, board.length]);
     setBoard([Array(wordLength).fill(0)]);
     setAnswer(generateRandomRow(wordLength, numColors));
     setSuccess(false);
     props.setParentGuessResponse && props.setParentGuessResponse(undefined);
-  }, [board.length, gameLengths, numColors, wordLength, props]);
+  }, [board.length, gameLengthHistory, numColors, wordLength, props]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => restartGame(), [numColors, wordLength]);
@@ -189,7 +189,7 @@ const InteractiveMastermind: React.FC<Props> = ({
       });
   };
 
-  const submitGuesses = () => {
+  const submitGuess = () => {
     const guess = board[board.length - 1];
     const pegs = calculateInformationPegs(board[board.length - 1], solution);
 
@@ -207,13 +207,13 @@ const InteractiveMastermind: React.FC<Props> = ({
 
   useEffect(() => {
     setBoard((currBoard) => {
-      if (props.presetGuess) {
+      if (props.externalGuess) {
         let newBoard = [...currBoard];
-        newBoard[newBoard.length - 1] = props.presetGuess;
+        newBoard[newBoard.length - 1] = props.externalGuess;
         return newBoard;
       } else return currBoard;
     });
-  }, [props.presetGuess]);
+  }, [props.externalGuess]);
 
   return (
     <div className={styles.boardContainer}>
@@ -221,9 +221,9 @@ const InteractiveMastermind: React.FC<Props> = ({
         {board.map((row, rowIndex) => (
           <MastermindRow
             guesses={row}
-            key={rowIndex + rowIndexOffset}
+            key={rowIndex + numTotalGuesses}
             updateColor={updateColor}
-            submitGuesses={submitGuesses}
+            submitGuess={submitGuess}
           />
         ))}
         {success && (
