@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import styles from "./Mastermind.module.css";
 import InteractiveMastermind, {
   INFORMATION_PEGS,
-  calculateInformationPegs,
+  calculateDistanceVector,
   COLORS,
   GuessResponse,
 } from "./InteractiveMastermind";
@@ -32,7 +32,7 @@ const PotentialSolution: React.FC<PotentialSolutionProps> = (props) => {
   useEffect(() => {
     if (props.latestGuessResponse !== undefined) {
       if (!ruledOut) {
-        let pegsIfCorrect = calculateInformationPegs(
+        let pegsIfCorrect = calculateDistanceVector(
           props.latestGuessResponse.guess,
           solution
         );

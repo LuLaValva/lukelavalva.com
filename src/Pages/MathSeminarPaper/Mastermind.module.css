@@ -43,7 +43,7 @@
   flex-direction: column;
   flex-wrap: wrap;
   gap: min(1vw, 5px);
-  width: 10rem;
+  margin-left: 4rem;
   align-content: center;
 }
 
@@ -85,6 +85,15 @@
   width: 8rem;
   margin: 0 1rem;
   transition: width 80ms, margin 80ms;
+}
+
+.row > .rowText {
+  font-size: 2em;
+  margin: 0 1rem;
+}
+
+.row.display {
+  justify-content: space-evenly;
 }
 
 .row > .guessButton:not([disabled]):hover {

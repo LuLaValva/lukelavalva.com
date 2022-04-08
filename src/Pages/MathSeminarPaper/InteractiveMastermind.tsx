@@ -45,7 +45,7 @@ const generatePegMessage = (pegs: PegSet) => {
   let presentMessage = pegs[INFORMATION_PEGS.WRONG_SPOT]
     ? `${pegs[INFORMATION_PEGS.WRONG_SPOT]} ${
         pegs[INFORMATION_PEGS.WRONG_SPOT] === 1 ? "peg is" : "pegs are"
-      } present in the code but not in the same location`
+      } present in the code but not in the right location`
     : null;
 
   if (presentMessage && correctMessage)
@@ -54,6 +54,40 @@ const generatePegMessage = (pegs: PegSet) => {
     return `${correctMessage || presentMessage}.`;
   else return "None of these pegs are present in the code.";
 };
+
+type PegsProps = {
+  pegSet: PegSet;
+};
+
+export const MastermindPegs: React.FC<PegsProps> = (props) => (
+  <div className={styles.pegs} title={generatePegMessage(props.pegSet)}>
+    {[...Array(props.pegSet[INFORMATION_PEGS.CORRECT_SPOT])].map((_, index) => (
+      <div
+        className={styles.peg}
+        style={{ backgroundColor: "red" }}
+        key={index}
+      />
+    ))}
+    {[...Array(props.pegSet[INFORMATION_PEGS.WRONG_SPOT])].map((_, index) => (
+      <div
+        className={styles.peg}
+        style={{ backgroundColor: "white" }}
+        key={index + props.pegSet[INFORMATION_PEGS.CORRECT_SPOT]}
+      />
+    ))}
+    {[...Array(props.pegSet[INFORMATION_PEGS.NOWHERE])].map((_, index) => (
+      <div
+        className={styles.peg}
+        style={{ backgroundColor: "black" }}
+        key={
+          index +
+          props.pegSet[INFORMATION_PEGS.CORRECT_SPOT] +
+          props.pegSet[INFORMATION_PEGS.WRONG_SPOT]
+        }
+      />
+    ))}
+  </div>
+);
 
 type RowProps = {
   guesses: number[];
@@ -79,24 +113,7 @@ const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
         />
       ))}
       {solutions ? (
-        <div className={styles.pegs} title={generatePegMessage(solutions)}>
-          {[...Array(props.guesses.length)].map((_val, index) => (
-            <div
-              className={styles.peg}
-              style={{
-                backgroundColor:
-                  index < solutions[INFORMATION_PEGS.CORRECT_SPOT]
-                    ? "red"
-                    : index <
-                      solutions[INFORMATION_PEGS.CORRECT_SPOT] +
-                        solutions[INFORMATION_PEGS.WRONG_SPOT]
-                    ? "white"
-                    : "black",
-              }}
-              key={index}
-            />
-          ))}
-        </div>
+        <MastermindPegs pegSet={solutions} />
       ) : (
         <button
           className={styles.guessButton}
@@ -110,7 +127,7 @@ const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
   );
 };
 
-export const calculateInformationPegs: (
+export const calculateDistanceVector: (
   guesses: number[],
   solution: number[]
 ) => PegSet = (guesses: number[], solution: number[]) => {
@@ -191,7 +208,7 @@ const InteractiveMastermind: React.FC<Props> = ({
 
   const submitGuess = () => {
     const guess = board[board.length - 1];
-    const pegs = calculateInformationPegs(board[board.length - 1], solution);
+    const pegs = calculateDistanceVector(board[board.length - 1], solution);
 
     props.setParentGuessResponse &&
       props.setParentGuessResponse({ guess: guess, pegs: pegs });
