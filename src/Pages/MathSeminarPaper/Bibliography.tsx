@@ -36,13 +36,20 @@ const Bibliography = (props: Props) => {
   return (
     <>
       <h2>Bibliography</h2>
-      {Object.values(props.citations).map((citation, index) => (
-        <div className={styles.citation} key={index}>
-          {stringifyAuthors(citation.authors)} <i>{citation.title}</i>{" "}
-          {citation.year && `(${citation.year})`}{" "}
-          {citation.url && <a href={citation.url}>{citation.url}</a>}
-        </div>
-      ))}
+      {Object.values(props.citations)
+        .sort((a, b) =>
+          stringifyAuthors(a.authors) + a.title <
+          stringifyAuthors(b.authors) + b.title
+            ? -1
+            : 1
+        )
+        .map((citation, index) => (
+          <div className={styles.citation} key={index}>
+            {stringifyAuthors(citation.authors)} <i>{citation.title}</i>{" "}
+            {citation.year && `(${citation.year})`}{" "}
+            {citation.url && <a href={citation.url}>{citation.url}</a>}
+          </div>
+        ))}
     </>
   );
 };
