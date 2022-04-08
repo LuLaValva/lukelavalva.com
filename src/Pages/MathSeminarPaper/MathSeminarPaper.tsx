@@ -8,8 +8,9 @@ import InteractiveMastermind from "./InteractiveMastermind";
 import MastermindWithSolutionSpace from "./MastermindWithSolutionSpace";
 import Bibliography from "./Bibliography";
 import NumberScrubber from "./NumberScrubber";
+import MastermindDistanceVector from "./MastermindDistanceVector";
 
-const bibliography = {
+const references = {
   knuth77: {
     title: "The Computer as Master Mind",
     authors: ["Donald Knuth"],
@@ -50,6 +51,11 @@ const MathSeminarPaper: React.FC = () => {
 
   const [solSpace1_numColors, updateSolSpace1_numColors] = useState(4);
   const [solSpace1_wordLength, updateSolSpace1_wordLength] = useState(2);
+
+  const [distanceMetric_numColors, updateDistanceMetric_numColors] =
+    useState(6);
+  const [distanceMetric_wordLength, updateDistanceMetric_wordLength] =
+    useState(4);
 
   return (
     <div className={styles.paper}>
@@ -96,7 +102,7 @@ const MathSeminarPaper: React.FC = () => {
         guesses until one or both of them were able to guess their competitor's
         code. The best players of <i>Cows and Bulls</i> usually figured out the
         secret code in about 5-6 turns, as was{" "}
-        <a href={bibliography.solvesnov.url} target="_blank" rel="noreferrer">
+        <a href={references.solvesnov.url} target="_blank" rel="noreferrer">
           shown algorithmically by Alexey Slovesnov
         </a>
         .
@@ -150,10 +156,11 @@ const MathSeminarPaper: React.FC = () => {
         possible solutions. Let us call this set the <em>solution space</em>,
         and label the solution space of each <TeX math="M_{n, k}" /> as{" "}
         <TeX math="S_{n, k}." /> If we choose to represent each color as a
-        digit, then we can quickly find all values in <TeX math="S_{n, k}." />{" "}
-        by listing all <TeX>n</TeX>-digit integers with a base of <TeX>k.</TeX>{" "}
-        Because there are <TeX>k</TeX> choices for each of the <TeX>n</TeX>{" "}
-        positions, the size of this set can be found using
+        digit, then we can quickly find all values in <TeX math="S_{n, k}" /> by
+        listing all <TeX>n</TeX>-digit integers with a base of <TeX>k</TeX> and
+        replacing each digit with a color. Because there are <TeX>k</TeX>{" "}
+        choices for each of the <TeX>n</TeX> positions, the size of this set can
+        be found using
         <TeX
           block
           math={String.raw`
@@ -198,30 +205,120 @@ const MathSeminarPaper: React.FC = () => {
           that can no longer be a possible solution.
         </div>
       </MastermindWithSolutionSpace>
+
+      {sectionBreak}
+
+      <div className={styles.paragraph}>
+        To determine whether each individual solution may be eliminated after
+        the response to a guess has been revealed, it is useful to represent
+        each code as a mathematical object that has a <i>distance</i> from other
+        codes which may be displayed as either a set of red and white pins or as
+        a vector. Since the length of the code is known at the beginning of the
+        game, each distance vector can be represented with two numbers-- the
+        number of red pins and the number of white pins. However, elimination of
+        potential solutions is much more straightforward to calculate if the
+        vector is instead reprsented as three numbers that sum to the code
+        length-- the number of red pins, the number of white pins, and the
+        number of empty slots.
+      </div>
+      <div className={styles.paragraph}>
+        One useful attribute of this metric is that the distance between any two
+        objects is always the same, regardless of which of them is the guess and
+        which is the solution. To acquire a better understanding of this metric,
+        experiment with these two codes of length{" "}
+        <NumberScrubber
+          value={distanceMetric_wordLength}
+          updateValue={updateDistanceMetric_wordLength}
+          min={1}
+          max={9}
+        />{" "}
+        with{" "}
+        <NumberScrubber
+          value={distanceMetric_numColors}
+          updateValue={updateDistanceMetric_numColors}
+          min={1}
+          max={9}
+        />{" "}
+        colors available.
+      </div>
+
+      <MastermindDistanceVector
+        wordLength={distanceMetric_wordLength}
+        numColors={distanceMetric_numColors}
+      />
+
+      <div className={styles.paragraph}>
+        In order to determine if a potential solution may be eliminated after
+        the response has been given for a word, we can simply determine whether{" "}
+        <i>any</i> of its three values in vector form is greater than that of
+        the distance vector between the guessed word and the potential solution.
+      </div>
+
+      {sectionBreak}
+
       <div className={styles.paragraph}>
         Most computational {mastermind} strategies are based on the idea of
-        choosing each guess based on the expected resulting reduction of the
-        solution space. In{" "}
-        <a href={bibliography.gur21.url} target="_blank" rel="noreferrer">
+        choosing each guess based on its expected reduction of the solution
+        space. In{" "}
+        <a href={references.gur21.url} target="_blank" rel="noreferrer">
           Serkan Gur's 2016 analysis of {mastermind}
         </a>
         , he labels these as <em>heuristic strategies</em>.
       </div>
-
-      {sectionBreak}
 
       <div className={styles.paragraph}>
         The first person who publicly documented knowledge of their
         computational solution to {mastermind} was the computing legend and
         oft-proclaimed "father of algorithm analysis" Donald Knuth, in his short
         work entitled{" "}
-        <a href={bibliography.knuth77.url} target="_blank" rel="noreferrer">
+        <a href={references.knuth77.url} target="_blank" rel="noreferrer">
           The Computer As Master Mind
         </a>
         . In this work, he applied what is known as the <em>minimax</em>{" "}
-        algorithm in information theory.
+        algorithm in information theory to {mastermind}. The naive application
+        of this algorithm is as follows (in pseudocode):
+        <ul className={styles.pseudocode}>
+          <li>
+            For every possible guess
+            <ul>
+              <li>
+                For all possible responses to the guess
+                <ul>
+                  <li>
+                    Consider the size of the solution space after the response
+                    acts on it
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Select the <i>maximum</i> solution space size after a response
+                has been applied
+              </li>
+            </ul>
+          </li>
+          <li>
+            Select the guess that results <i>minimum</i> size of the solution
+            space
+          </li>
+        </ul>
+        In effect, this algorithm chooses a guess every time that{" "}
+        <i>minimizes risk</i>. It is guaranteed that even in the worst case
+        scenario, after every guess is made the solution space has been reduced
+        as much as possible. As such, this algorithm is very effective at
+        solving the puzzle with a guaranteed maximum number of moves. As Serkan
+        Gur outlined in{" "}
+        <a href={references.gur21.url} target="_blank" rel="noreferrer">
+          his analysis
+        </a>
+        , this strategy guarantees that the classic <TeX math="M_{4, 6}" /> is
+        solved in 5 or fewer moves, which is provably the best that any strategy
+        can possibly do. However, since this strategy is based solely on the
+        worst case scenario it does not perform as well as many of the other
+        strategies in the <i>average case</i>. Gur's analysis found that this
+        algorithm solved <TeX math="M_{4, 6}" /> in an average of{" "}
+        <TeX>4.4761</TeX> moves.
       </div>
-      <Bibliography citations={bibliography} />
+      <Bibliography citations={references} />
     </div>
   );
 };

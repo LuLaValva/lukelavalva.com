@@ -60,3 +60,11 @@
   border-width: 3px;
   padding: calc(0.1em - 2px) calc(0.3em - 2px);
 }
+
+.pseudocode {
+  font-family: monospace;
+  list-style-type: none;
+}
+.pseudocode ul {
+  list-style-type: none;
+}
