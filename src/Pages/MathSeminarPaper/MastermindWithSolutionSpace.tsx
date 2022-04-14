@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./Mastermind.module.css";
-import InteractiveMastermind, {
-  INFORMATION_PEGS,
-  calculateDistanceVector,
-  COLORS,
+import InteractiveMastermind, { COLORS } from "./InteractiveMastermind";
+import {
   GuessResponse,
-} from "./InteractiveMastermind";
+  getCodeFromIndex,
+  shouldEliminatePotentialSolution,
+} from "./MastermindUtilities";
 
 type PotentialSolutionProps = {
   numColors: number;
@@ -19,35 +19,21 @@ const PotentialSolution: React.FC<PotentialSolutionProps> = (props) => {
   const [ruledOut, setRuledOut] = useState(false);
 
   const solution = useMemo(() => {
-    const word = [];
-    for (
-      let i = 0, currSolution = props.solutionIndex;
-      i < props.wordLength;
-      i++, currSolution = Math.floor(currSolution / props.numColors)
-    )
-      word.push((currSolution % props.numColors) + 1);
-    return word;
+    return getCodeFromIndex(
+      props.wordLength,
+      props.numColors,
+      props.solutionIndex
+    );
   }, [props.numColors, props.solutionIndex, props.wordLength]);
 
   useEffect(() => {
-    if (props.latestGuessResponse !== undefined) {
-      if (!ruledOut) {
-        let pegsIfCorrect = calculateDistanceVector(
-          props.latestGuessResponse.guess,
-          solution
-        );
-        if (
-          pegsIfCorrect[INFORMATION_PEGS.CORRECT_SPOT] >
-            props.latestGuessResponse.pegs[INFORMATION_PEGS.CORRECT_SPOT] ||
-          pegsIfCorrect[INFORMATION_PEGS.WRONG_SPOT] >
-            props.latestGuessResponse.pegs[INFORMATION_PEGS.WRONG_SPOT] ||
-          pegsIfCorrect[INFORMATION_PEGS.NOWHERE] >
-            props.latestGuessResponse.pegs[INFORMATION_PEGS.NOWHERE]
-        )
-          setRuledOut(true);
-      }
-    } else {
+    if (props.latestGuessResponse === undefined) {
       setRuledOut(false);
+    } else if (
+      !ruledOut &&
+      shouldEliminatePotentialSolution(props.latestGuessResponse, solution)
+    ) {
+      setRuledOut(true);
     }
   }, [props.latestGuessResponse, ruledOut, solution]);
 

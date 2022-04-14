@@ -1,10 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  calculateDistanceVector,
-  COLORS,
-  INFORMATION_PEGS,
-  MastermindPegs,
-} from "./InteractiveMastermind";
+import { COLORS, MastermindPegs } from "./InteractiveMastermind";
+import { calculateDistanceVector, PEG } from "./MastermindUtilities";
 import styles from "./Mastermind.module.css";
 
 type Props = {
@@ -65,9 +61,8 @@ const MastermindDistanceVector: React.FC<Props> = ({
         <div className={`${styles.row} ${styles.display}`}>
           <MastermindPegs pegSet={distanceVector} />
           <div className={styles.rowText}>
-            ⟨{distanceVector[INFORMATION_PEGS.CORRECT_SPOT]},{" "}
-            {distanceVector[INFORMATION_PEGS.WRONG_SPOT]},{" "}
-            {distanceVector[INFORMATION_PEGS.NOWHERE]}⟩
+            ⟨{distanceVector[PEG.BULLS]}, {distanceVector[PEG.COWS]},{" "}
+            {distanceVector[PEG.EMPTY]}⟩
           </div>
         </div>
         <div className={styles.row}>

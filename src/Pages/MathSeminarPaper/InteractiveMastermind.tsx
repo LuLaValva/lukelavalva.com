@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./Mastermind.module.css";
+import {
+  PegSet,
+  PEG,
+  GuessResponse,
+  calculateDistanceVector,
+} from "./MastermindUtilities";
 
 export const COLORS = [
   "red",
@@ -16,35 +22,18 @@ export const COLORS = [
   "teal",
 ];
 
-export enum INFORMATION_PEGS {
-  NOWHERE,
-  WRONG_SPOT,
-  CORRECT_SPOT,
-}
-
-export type PegSet = {
-  [INFORMATION_PEGS.NOWHERE]: number;
-  [INFORMATION_PEGS.WRONG_SPOT]: number;
-  [INFORMATION_PEGS.CORRECT_SPOT]: number;
-};
-
-export type GuessResponse = {
-  guess: number[];
-  pegs: PegSet;
-};
-
 const generateRandomRow = (wordLength: number, numColors: number) =>
   [...Array(wordLength)].map(() => Math.floor(Math.random() * numColors) + 1);
 
 const generatePegMessage = (pegs: PegSet) => {
-  let correctMessage = pegs[INFORMATION_PEGS.CORRECT_SPOT]
-    ? `${pegs[INFORMATION_PEGS.CORRECT_SPOT]} ${
-        pegs[INFORMATION_PEGS.CORRECT_SPOT] === 1 ? "peg is" : "pegs are"
+  let correctMessage = pegs[PEG.BULLS]
+    ? `${pegs[PEG.BULLS]} ${
+        pegs[PEG.BULLS] === 1 ? "peg is" : "pegs are"
       } in the correct spot`
     : null;
-  let presentMessage = pegs[INFORMATION_PEGS.WRONG_SPOT]
-    ? `${pegs[INFORMATION_PEGS.WRONG_SPOT]} ${
-        pegs[INFORMATION_PEGS.WRONG_SPOT] === 1 ? "peg is" : "pegs are"
+  let presentMessage = pegs[PEG.COWS]
+    ? `${pegs[PEG.COWS]} ${
+        pegs[PEG.COWS] === 1 ? "peg is" : "pegs are"
       } present in the code but not in the right location`
     : null;
 
@@ -61,29 +50,25 @@ type PegsProps = {
 
 export const MastermindPegs: React.FC<PegsProps> = (props) => (
   <div className={styles.pegs} title={generatePegMessage(props.pegSet)}>
-    {[...Array(props.pegSet[INFORMATION_PEGS.CORRECT_SPOT])].map((_, index) => (
+    {[...Array(props.pegSet[PEG.BULLS])].map((_, index) => (
       <div
         className={styles.peg}
         style={{ backgroundColor: "red" }}
         key={index}
       />
     ))}
-    {[...Array(props.pegSet[INFORMATION_PEGS.WRONG_SPOT])].map((_, index) => (
+    {[...Array(props.pegSet[PEG.COWS])].map((_, index) => (
       <div
         className={styles.peg}
         style={{ backgroundColor: "white" }}
-        key={index + props.pegSet[INFORMATION_PEGS.CORRECT_SPOT]}
+        key={index + props.pegSet[PEG.BULLS]}
       />
     ))}
-    {[...Array(props.pegSet[INFORMATION_PEGS.NOWHERE])].map((_, index) => (
+    {[...Array(props.pegSet[PEG.EMPTY])].map((_, index) => (
       <div
         className={styles.peg}
         style={{ backgroundColor: "black" }}
-        key={
-          index +
-          props.pegSet[INFORMATION_PEGS.CORRECT_SPOT] +
-          props.pegSet[INFORMATION_PEGS.WRONG_SPOT]
-        }
+        key={index + props.pegSet[PEG.BULLS] + props.pegSet[PEG.COWS]}
       />
     ))}
   </div>
@@ -125,36 +110,6 @@ const MastermindRow: React.FC<RowProps> = (props: RowProps) => {
       )}
     </div>
   );
-};
-
-export const calculateDistanceVector: (
-  guesses: number[],
-  solution: number[]
-) => PegSet = (guesses: number[], solution: number[]) => {
-  const solutionCopy = [...solution];
-  let numCorrect = 0,
-    numPresent = 0;
-  let impreciseGuesses = guesses.filter((guess, index) => {
-    if (solutionCopy[index] === guess) {
-      solutionCopy[index] = -1;
-      numCorrect++;
-      return false;
-    }
-    return true;
-  });
-  impreciseGuesses.forEach((guess) => {
-    let found = solutionCopy.indexOf(guess);
-    if (found !== -1) {
-      solutionCopy[found] = -1;
-      numPresent++;
-    }
-  });
-
-  return {
-    [INFORMATION_PEGS.NOWHERE]: solution.length - numPresent - numCorrect,
-    [INFORMATION_PEGS.WRONG_SPOT]: numPresent,
-    [INFORMATION_PEGS.CORRECT_SPOT]: numCorrect,
-  };
 };
 
 type Props = {
@@ -213,7 +168,7 @@ const InteractiveMastermind: React.FC<Props> = ({
     props.setParentGuessResponse &&
       props.setParentGuessResponse({ guess: guess, pegs: pegs });
 
-    if (pegs[INFORMATION_PEGS.CORRECT_SPOT] === wordLength) {
+    if (pegs[PEG.BULLS] === wordLength) {
       setSuccess(true);
     } else {
       // Add empty row
