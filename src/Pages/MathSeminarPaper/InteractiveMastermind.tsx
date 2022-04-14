@@ -119,6 +119,7 @@ type Props = {
     React.SetStateAction<GuessResponse | undefined>
   >;
   externalGuess?: number[];
+  externalSolution?: number[];
 };
 
 const InteractiveMastermind: React.FC<Props> = ({
@@ -127,7 +128,7 @@ const InteractiveMastermind: React.FC<Props> = ({
   ...props
 }) => {
   const [board, setBoard] = useState([Array<number>(wordLength).fill(0)]);
-  const [solution, setAnswer] = useState(
+  const [solution, setSolution] = useState(
     generateRandomRow(wordLength, numColors)
   );
   const [success, setSuccess] = useState(false);
@@ -141,13 +142,18 @@ const InteractiveMastermind: React.FC<Props> = ({
   const restartGame = useCallback(() => {
     setGameLengthHistory([...gameLengthHistory, board.length]);
     setBoard([Array(wordLength).fill(0)]);
-    setAnswer(generateRandomRow(wordLength, numColors));
+    setSolution(
+      props.externalSolution || generateRandomRow(wordLength, numColors)
+    );
     setSuccess(false);
     props.setParentGuessResponse && props.setParentGuessResponse(undefined);
   }, [board.length, gameLengthHistory, numColors, wordLength, props]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => restartGame(), [numColors, wordLength]);
+  useEffect(
+    () => restartGame(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [numColors, wordLength, props.externalSolution]
+  );
 
   const updateColor = (guessIndex: number, value?: number) => {
     success ||

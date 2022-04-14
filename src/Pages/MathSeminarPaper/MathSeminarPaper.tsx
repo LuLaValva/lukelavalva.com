@@ -9,6 +9,7 @@ import MastermindWithSolutionSpace from "./MastermindWithSolutionSpace";
 import Bibliography from "./Bibliography";
 import NumberScrubber from "./NumberScrubber";
 import MastermindDistanceVector from "./MastermindDistanceVector";
+import MastermindWithUserSolution from "./MastermindWithUserSolution";
 
 const references = {
   knuth77: {
@@ -318,6 +319,9 @@ const MathSeminarPaper: React.FC = () => {
         algorithm solved <TeX math="M_{4, 6}" /> in an average of{" "}
         <TeX>4.4761</TeX> moves.
       </div>
+
+      <MastermindWithUserSolution wordLength={3} numColors={4} />
+
       <Bibliography citations={references} />
     </div>
   );

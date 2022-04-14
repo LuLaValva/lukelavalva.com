@@ -120,6 +120,14 @@ const SolutionSet: React.FC<SolutionSetProps> = ({
   );
 };
 
+export const SolutionSpace: React.FC<SolutionSetProps> = (props) => {
+  return (
+    <div className={styles.solutionSpaceGridContainer}>
+      <SolutionSet {...props} />
+    </div>
+  );
+};
+
 type Props = {
   numColors?: number;
   wordLength?: number;
@@ -133,19 +141,16 @@ const MastermindWithSolutionSpace: React.FC<Props> = ({
 }) => {
   const [latestGuessResponse, setLatestGuessResponse] =
     useState<GuessResponse>();
-
-  const [presetGuess, setPresetGuess] = useState<number[]>();
+  const [presetGuess, setPresetGuess] = useState<number[] | undefined>();
 
   return (
     <>
-      <div className={styles.solutionSpaceGridContainer}>
-        <SolutionSet
-          numColors={numColors}
-          wordLength={wordLength}
-          latestGuessResponse={latestGuessResponse}
-          setGuess={setPresetGuess}
-        />
-      </div>
+      <SolutionSpace
+        numColors={numColors}
+        wordLength={wordLength}
+        latestGuessResponse={latestGuessResponse}
+        setGuess={setPresetGuess}
+      />
       {props.children}
       <InteractiveMastermind
         numColors={numColors}

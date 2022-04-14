@@ -44,6 +44,7 @@
   flex-wrap: wrap;
   gap: min(1vw, 5px);
   margin-left: 4rem;
+  margin-right: 2em;
   align-content: center;
 }
 
