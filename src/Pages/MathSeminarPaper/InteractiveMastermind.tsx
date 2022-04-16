@@ -120,6 +120,7 @@ type Props = {
   >;
   externalGuess?: number[];
   externalSolution?: number[];
+  onRestart?: () => void;
 };
 
 const InteractiveMastermind: React.FC<Props> = ({
@@ -141,12 +142,13 @@ const InteractiveMastermind: React.FC<Props> = ({
 
   const restartGame = useCallback(() => {
     setGameLengthHistory([...gameLengthHistory, board.length]);
-    setBoard([Array(wordLength).fill(0)]);
+    setBoard([props.externalGuess || Array(wordLength).fill(0)]);
     setSolution(
       props.externalSolution || generateRandomRow(wordLength, numColors)
     );
     setSuccess(false);
     props.setParentGuessResponse && props.setParentGuessResponse(undefined);
+    props.onRestart && props.onRestart();
   }, [board.length, gameLengthHistory, numColors, wordLength, props]);
 
   useEffect(

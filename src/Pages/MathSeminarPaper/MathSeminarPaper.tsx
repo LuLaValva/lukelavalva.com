@@ -9,7 +9,8 @@ import MastermindWithSolutionSpace from "./MastermindWithSolutionSpace";
 import Bibliography from "./Bibliography";
 import NumberScrubber from "./NumberScrubber";
 import MastermindDistanceVector from "./MastermindDistanceVector";
-import MastermindWithUserSolution from "./MastermindWithUserSolution";
+import MastermindWithHeuristic from "./MastermindWithHeuristic";
+import { minimax } from "./MastermindHeuristicAlgorithms";
 
 const references = {
   knuth77: {
@@ -57,6 +58,12 @@ const MathSeminarPaper: React.FC = () => {
     useState(6);
   const [distanceMetric_wordLength, updateDistanceMetric_wordLength] =
     useState(4);
+
+  const [bigO_numColors, setBigO_numColors] = useState(6);
+  const [bigO_wordLength, setBigO_wordLength] = useState(4);
+
+  const [minimax_numColors, setMinimax_numColors] = useState(3);
+  const [minimax_wordLength, setMinimax_wordLength] = useState(3);
 
   return (
     <div className={styles.paper}>
@@ -313,14 +320,77 @@ const MathSeminarPaper: React.FC = () => {
         </a>
         , this strategy guarantees that the classic <TeX math="M_{4, 6}" /> is
         solved in 5 or fewer moves, which is provably the best that any strategy
-        can possibly do. However, since this strategy is based solely on the
-        worst case scenario it does not perform as well as many of the other
-        strategies in the <i>average case</i>. Gur's analysis found that this
-        algorithm solved <TeX math="M_{4, 6}" /> in an average of{" "}
-        <TeX>4.4761</TeX> moves.
+        can perform. Gur also found that the minimax algorithm solved{" "}
+        <TeX math="M_{4, 6}" /> in an average of <TeX>4.4761</TeX> moves across
+        all possible games.
       </div>
 
-      <MastermindWithUserSolution wordLength={3} numColors={4} />
+      <div className={styles.paragraph}>
+        For each guess in a <TeX math="M_{n, k}" /> {mastermind} board, there
+        are <TeX math="\binom{n+2}{2}=\frac{(n+2)(n+1)}{2}" /> possible
+        responses. This means that, without any pruning or other advanced
+        optimization techniques, the number of comparisons required to find an
+        optimal solution is <TeX math="(k^n)\binom{n+2}{2}(k^n)." /> Thus, for a{" "}
+        {mastermind} board with{" "}
+        <NumberScrubber
+          value={bigO_numColors}
+          updateValue={setBigO_numColors}
+          min={1}
+        />{" "}
+        colors and codes of length{" "}
+        <NumberScrubber
+          value={bigO_wordLength}
+          updateValue={setBigO_wordLength}
+          min={1}
+        />
+        , the computer must make{" "}
+        <TeX
+          math={`(${bigO_numColors}^{${bigO_wordLength}})^2\\binom{${
+            bigO_wordLength + 2
+          }}{2}=${
+            (bigO_numColors ** (2 * bigO_wordLength) *
+              (bigO_wordLength + 1) *
+              (bigO_wordLength + 2)) /
+            2
+          }`}
+        />{" "}
+        comparisons before deciding on a guess. Clearly, as the size of the
+        board and the number of available colors grows this algorithm rapidly
+        increases in compute time. Thus, the size of the board below is capped
+        due to the limitations your web browser's single-threaded JavaScript. To
+        explore the minimax algorithm and learn some of its limitations, try
+        testing a few secret codes against it with this board of length{" "}
+        <NumberScrubber
+          value={minimax_wordLength}
+          updateValue={setMinimax_wordLength}
+          min={1}
+          max={4}
+        />{" "}
+        with{" "}
+        <NumberScrubber
+          value={minimax_numColors}
+          updateValue={setMinimax_numColors}
+          min={1}
+          max={5}
+        />{" "}
+        colors.
+      </div>
+
+      <MastermindWithHeuristic
+        wordLength={minimax_wordLength}
+        numColors={minimax_numColors}
+        heuristic={minimax}
+      />
+
+      <div className={styles.paragraph}>
+        Since the minimax strategy focuses on the <i>worst case</i>, it is very
+        effective at lowering the ceiling for the number of moves required to
+        find the secret code. However, since only the worst case scenario is
+        considered this strategy has an average case that is often higher than
+        that of other strategies. As such, various other mathematicians and
+        computer scientists have considered alternative strategies which focus
+        on minimizing average case at the expense of the worst case.
+      </div>
 
       <Bibliography citations={references} />
     </div>

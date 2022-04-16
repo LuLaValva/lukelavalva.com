@@ -13,6 +13,7 @@ type Props = {
   setParentGuessResponse?: React.Dispatch<
     React.SetStateAction<GuessResponse | undefined>
   >;
+  onRestart?: () => void;
   children?: React.ReactNode;
 };
 
@@ -65,6 +66,7 @@ const MastermindWithUserSolution: React.FC<Props> = ({
         numColors={numColors}
         wordLength={wordLength}
         setParentGuessResponse={setGuessResponse}
+        onRestart={props.onRestart}
         externalSolution={solutionPlusOne}
         externalGuess={presetGuess}
       />
