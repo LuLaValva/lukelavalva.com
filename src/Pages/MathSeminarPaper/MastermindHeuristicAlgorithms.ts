@@ -25,6 +25,23 @@ const getPossiblePegSets: (wordLength: number) => PegSet[] = (
   return possibleResponses;
 };
 
+const getSolSpaceSizeAfterResponse = (
+  solSpace: number[][],
+  guess: number[],
+  response: PegSet
+) => {
+  return solSpace.reduce(
+    (count, solution) =>
+      shouldEliminatePotentialSolution(
+        { guess: guess, pegs: response },
+        solution
+      )
+        ? count
+        : count + 1,
+    0
+  );
+};
+
 const applyHeuristic = (
   possibleGuesses: number[][],
   solSpace: number[][],
@@ -36,11 +53,11 @@ const applyHeuristic = (
 ) => {
   if (solSpace.length === 1) return solSpace[0];
   let bestGuess = possibleGuesses[0];
-  let bestScore = 0;
+  let bestScore = undefined;
   let pegResponses = getPossiblePegSets(possibleGuesses[0].length);
   for (let guess of possibleGuesses) {
     const currScore = heuristic(guess, pegResponses, solSpace);
-    if (currScore > bestScore) {
+    if (bestScore === undefined || currScore < bestScore) {
       bestScore = currScore;
       bestGuess = guess;
     }
@@ -55,19 +72,31 @@ export const minimax: HeuristicFunction = async (possibleGuesses, solSpace) => {
     (guess, pegResponses, solSpace) => {
       let worstCase = 0;
       for (let pegSet of pegResponses) {
-        const solSpaceReducedSize = solSpace.reduce(
-          (count, solution) =>
-            shouldEliminatePotentialSolution(
-              { guess: guess, pegs: pegSet },
-              solution
-            )
-              ? count
-              : count + 1,
-          0
+        const solSpaceReducedSize = getSolSpaceSizeAfterResponse(
+          solSpace,
+          guess,
+          pegSet
         );
         if (solSpaceReducedSize > worstCase) worstCase = solSpaceReducedSize;
       }
-      return solSpace.length - worstCase;
+      return worstCase;
     }
+  );
+};
+
+export const expectedValue: HeuristicFunction = async (
+  possibleGuesses,
+  solSpace
+) => {
+  return applyHeuristic(
+    possibleGuesses,
+    solSpace,
+    (guess, pegResponses, solSpace) =>
+      pegResponses.reduce(
+        (score, pegResponse) =>
+          score +
+          getSolSpaceSizeAfterResponse(solSpace, guess, pegResponse) ** 2,
+        0
+      )
   );
 };

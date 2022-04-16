@@ -10,12 +10,13 @@ import Bibliography from "./Bibliography";
 import NumberScrubber from "./NumberScrubber";
 import MastermindDistanceVector from "./MastermindDistanceVector";
 import MastermindWithHeuristic from "./MastermindWithHeuristic";
-import { minimax } from "./MastermindHeuristicAlgorithms";
+import { expectedValue, minimax } from "./MastermindHeuristicAlgorithms";
 
 const references = {
   knuth77: {
     title: "The Computer as Master Mind",
     authors: ["Donald Knuth"],
+    published: "Journal of Recreational Mathematics, 9(1), 1-6",
     year: 1977,
     url: "http://www.cs.uni.edu/~wallingf/teaching/cs3530/resources/knuth-mastermind.pdf",
   },
@@ -42,6 +43,12 @@ const references = {
     year: 2016,
     url: "https://www.amazon.com/Optimal-Mastermind-Solutions-comprehensive-programming-ebook/dp/B01M17PMIQ",
   },
+  irving: {
+    title: "Towards an optimum Mastermind strategy",
+    authors: ["Robert W. Irving"],
+    published: "Journal of Recreational Mathematics, 11(2), 81-87",
+    year: 1978,
+  },
 };
 
 const mastermind = <i>Mastermind®</i>;
@@ -64,6 +71,9 @@ const MathSeminarPaper: React.FC = () => {
 
   const [minimax_numColors, setMinimax_numColors] = useState(3);
   const [minimax_wordLength, setMinimax_wordLength] = useState(3);
+
+  const [expectedValue_numColors, setExpectedValue_numColors] = useState(3);
+  const [expectedValue_wordLength, setExpectedValue_wordLength] = useState(3);
 
   return (
     <div className={styles.paper}>
@@ -391,6 +401,54 @@ const MathSeminarPaper: React.FC = () => {
         computer scientists have considered alternative strategies which focus
         on minimizing average case at the expense of the worst case.
       </div>
+
+      <div className={styles.paragraph}>
+        Two years after Knuth's article about the minimax strategy, a fellow
+        writer for the same journal named Robert W. Irving took a crack at
+        solving {mastermind} with a smaller number of average moves. In order to
+        do this, he explored the idea of using <em>expected size</em> to measure
+        the effectiveness of a guess. Using this strategy, he was able to bring
+        down the average number of moves for <TeX math="M_{4, 6}" /> from{" "}
+        <TeX>4.4761</TeX> to <TeX>4.3951.</TeX> This strategy assumes that the
+        probability of a response is the same as that of its reduction of the
+        solution space. Thus, for the set of possilbe responses <TeX>R</TeX>,
+        the expected value of a guess <TeX>g</TeX> can be calculated with
+        <TeX
+          block
+          math={String.raw`
+          \begin{equation}
+            E(g)
+              = \sum_{r\in R}\left(s_r\cdot\frac{s_r}{s_o}\right)
+              = \frac{\sum s_r^2}{s_o},
+          \end{equation}
+        `}
+        />
+        where <TeX>s_o</TeX> represents the original size of the solution space
+        and <TeX>s_r</TeX> represents its size after <TeX>r</TeX> has been given
+        in response to <TeX>g</TeX>. In the worst case, this algorithm may take
+        more guesses before finding the secret code. You may experiment with
+        this algorithm in the following demonstration, which has{" "}
+        <NumberScrubber
+          value={expectedValue_numColors}
+          updateValue={setExpectedValue_numColors}
+          min={1}
+          max={5}
+        />{" "}
+        colors and a code of length{" "}
+        <NumberScrubber
+          value={expectedValue_wordLength}
+          updateValue={setExpectedValue_wordLength}
+          min={1}
+          max={4}
+        />
+        .
+      </div>
+
+      <MastermindWithHeuristic
+        wordLength={expectedValue_wordLength}
+        numColors={expectedValue_numColors}
+        heuristic={expectedValue}
+      />
 
       <Bibliography citations={references} />
     </div>

@@ -5,6 +5,7 @@ export type Citation = {
   title: string;
   authors?: string[];
   year?: number;
+  published?: string;
   url?: string;
 };
 
@@ -26,8 +27,7 @@ const stringifyAuthors = (authors?: string[]) => {
       formatLastNameFirst(authors[0]) +
       authors
         .slice(1)
-        .reduce((fullString, nextName) => fullString + " and " + nextName, "") +
-      "."
+        .reduce((fullString, nextName) => fullString + " and " + nextName, "")
     );
   else return `${formatLastNameFirst(authors[0])} et. al.`;
 };
@@ -45,8 +45,10 @@ const Bibliography = (props: Props) => {
         )
         .map((citation, index) => (
           <div className={styles.citation} key={index}>
-            {stringifyAuthors(citation.authors)} <i>{citation.title}</i>{" "}
-            {citation.year && `(${citation.year})`}{" "}
+            {stringifyAuthors(citation.authors)}
+            {citation.year && ` (${citation.year})`}. <i>{citation.title}</i>.{" "}
+            {citation.published}
+            {citation.published && ". "}
             {citation.url && <a href={citation.url}>{citation.url}</a>}
           </div>
         ))}
