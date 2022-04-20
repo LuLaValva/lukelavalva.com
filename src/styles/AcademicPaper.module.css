@@ -10,6 +10,18 @@
   line-height: 1.5em;
 }
 
+.paper div.paragraph select {
+  background-color: inherit;
+  font-family: inherit;
+  color: inherit;
+  border: 1px solid white;
+  border-radius: 0.2em;
+  font-size: inherit;
+}
+.paper div.paragraph select option {
+  background-color: #242424;
+}
+
 .paper div.aside {
   max-width: 550px;
   text-align: justify;

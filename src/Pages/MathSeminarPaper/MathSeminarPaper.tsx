@@ -4,7 +4,7 @@ import styles from "../../styles/AcademicPaper.module.css";
 import "katex/dist/katex.min.css";
 import TeX from "@matejmazur/react-katex";
 
-import InteractiveMastermind from "./InteractiveMastermind";
+import InteractiveMastermind, { InlineSolution } from "./InteractiveMastermind";
 import MastermindWithSolutionSpace from "./MastermindWithSolutionSpace";
 import Bibliography from "./Bibliography";
 import NumberScrubber from "./NumberScrubber";
@@ -16,6 +16,7 @@ import {
   minimax,
 } from "./MastermindHeuristicAlgorithms";
 import { Link } from "react-router-dom";
+import GeneralSelector from "./GeneralSelector";
 
 const references = {
   knuth77: {
@@ -86,10 +87,16 @@ const MathSeminarPaper: React.FC = () => {
   const [entropy_numColors, setEntropy_numColors] = useState(4);
   const [entropy_wordLength, setEntropy_wordLength] = useState(3);
 
+  const [consistent_numColors, setConsistent_numColors] = useState(4);
+  const [consistent_wordLength, setConsistent_wordLength] = useState(3);
+  const [consistent_heuristic, setConsistent_heuristic] = useState(
+    () => minimax
+  );
+
   return (
     <div className={styles.paper}>
       <h1>Cows, Bulls, and Beyond</h1>
-      <h2>Solving Code-Breaking Games with Information Theory</h2>
+      <h3>Cracking Code-Breaking Games with Mathematics</h3>
 
       {sectionBreak}
 
@@ -524,9 +531,11 @@ const MathSeminarPaper: React.FC = () => {
           block
           math={String.raw`
           \begin{equation}
-            \mathcal{E}(g)
-              = \sum_{r\in R}\left(\frac{s_r}{s_o}\cdot \log_2\left(\frac{s_o}{s_r}\right)\right)
-              = -\frac{\sum s_r\log_2(p)}{s_o}.
+            \begin{aligned}
+              \mathcal{E}(g)
+                & = \sum_{r\in R}\left(\frac{s_r}{s_o}\cdot \log_2\left(\frac{s_o}{s_r}\right)\right) \\
+                & = -\frac{\sum s_r\log_2(p)}{s_o}.
+            \end{aligned}
           \end{equation}
         `}
         />
@@ -554,6 +563,68 @@ const MathSeminarPaper: React.FC = () => {
         wordLength={entropy_wordLength}
         numColors={entropy_numColors}
         heuristic={entropy}
+      />
+
+      {sectionBreak}
+
+      <div className={styles.paragraph}>
+        You may have noticed that in many cases, these algorithms will select
+        codes that are not actually possible solutions. This is because in
+        certain cases, it makes more probabilistic sense to sacrifice chances of
+        winning on the current turn to increase the amount of information that
+        is known in the next turn. As a simple example, suppose that the
+        solution space consists of the codes <InlineSolution code={[0, 0, 0]} />
+        , <InlineSolution code={[1, 1, 1]} />, and{" "}
+        <InlineSolution code={[2, 2, 2]} />. Then guessing only from the
+        solution space results in a <TeX>66\%</TeX> chance of finding the secret
+        code within two guesses. However, if instead{" "}
+        <InlineSolution code={[0, 0, 1]} /> is supplied as a first guess then
+        its response will guarantee that the code is known for the next one.
+      </div>
+
+      <div className={styles.paragraph}>
+        Some people who have been thinking about {mastermind} for a while and
+        discovering methods for solving it have deemed it boring to guess a code
+        that is known to not be in the solution space, because it feels a little
+        bit <i>too</i> calculated for their taste. As such, a separate branch of
+        the game has been discussed among code-breakers called{" "}
+        <em>Consistent {mastermind}</em>, in which it is illegal to make a guess
+        that is not a part of the known solution space. Under this restriction,
+        it is impossible to guarantee that <TeX math="M_{4, 6}" /> is solved
+        within 5 moves using any strategy. However, the performance of the
+        previous heuristic algorithms is improved in certain cases due to random
+        chance. Below, you can experiment with a consistent {mastermind} solver
+        for a board that has{" "}
+        <NumberScrubber
+          value={consistent_numColors}
+          updateValue={setConsistent_numColors}
+          min={1}
+          max={6}
+        />{" "}
+        colors and a code of length{" "}
+        <NumberScrubber
+          value={consistent_wordLength}
+          updateValue={setConsistent_wordLength}
+          min={1}
+          max={4}
+        />
+        , which uses the{" "}
+        <GeneralSelector
+          options={{
+            minimax: minimax,
+            "expected value": expectedValue,
+            entropy: entropy,
+          }}
+          setValue={setConsistent_heuristic}
+        />{" "}
+        heuristic.
+      </div>
+
+      <MastermindWithHeuristic
+        wordLength={consistent_wordLength}
+        numColors={consistent_numColors}
+        heuristic={consistent_heuristic}
+        isConsistent={true}
       />
 
       <Bibliography citations={references} />

@@ -44,6 +44,18 @@ const generatePegMessage = (pegs: PegSet) => {
   else return "None of these pegs are present in the code.";
 };
 
+export const InlineSolution: React.FC<{ code: number[] }> = ({ code }) => (
+  <div className={styles.inlineSolution}>
+    {code.map((color, index) => (
+      <div
+        className={styles.peg}
+        style={{ backgroundColor: COLORS[color] }}
+        key={index}
+      />
+    ))}
+  </div>
+);
+
 type PegsProps = {
   pegSet: PegSet;
 };
