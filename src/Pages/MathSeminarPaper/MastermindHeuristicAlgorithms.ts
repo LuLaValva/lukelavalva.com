@@ -72,12 +72,8 @@ export const minimax: HeuristicFunction = async (possibleGuesses, solSpace) => {
     (guess, pegResponses, solSpace) => {
       let worstCase = 0;
       for (let pegSet of pegResponses) {
-        const solSpaceReducedSize = getSolSpaceSizeAfterResponse(
-          solSpace,
-          guess,
-          pegSet
-        );
-        if (solSpaceReducedSize > worstCase) worstCase = solSpaceReducedSize;
+        const size = getSolSpaceSizeAfterResponse(solSpace, guess, pegSet);
+        if (size > worstCase) worstCase = size;
       }
       return worstCase;
     }
@@ -98,5 +94,18 @@ export const expectedValue: HeuristicFunction = async (
           getSolSpaceSizeAfterResponse(solSpace, guess, pegResponse) ** 2,
         0
       )
+  );
+};
+
+export const entropy: HeuristicFunction = async (possibleGuesses, solSpace) => {
+  return applyHeuristic(
+    possibleGuesses,
+    solSpace,
+    (guess, pegResponses, solSpace) =>
+      pegResponses.reduce((score, pegResponse) => {
+        const size = getSolSpaceSizeAfterResponse(solSpace, guess, pegResponse);
+        // Skip responses that remove the entire solution space
+        return size ? score - size * Math.log2(solSpace.length / size) : score;
+      }, 0)
   );
 };

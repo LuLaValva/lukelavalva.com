@@ -27,9 +27,9 @@ const Home = (props: Props) => {
           My Resume
         </BoxInSky>
       </a>
-      <Link to="/informationtheory" className={styles.boxLink}>
+      <Link to="/cowsandbulls" className={styles.boxLink}>
         <BoxInSky width={20} left={67} top={60}>
-          Math Seminar Paper (WIP)
+          Cows, Bulls, and Beyond
         </BoxInSky>
       </Link>
       <Link to="/greedygorillas" className={styles.boxLink}>

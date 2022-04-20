@@ -10,7 +10,12 @@ import Bibliography from "./Bibliography";
 import NumberScrubber from "./NumberScrubber";
 import MastermindDistanceVector from "./MastermindDistanceVector";
 import MastermindWithHeuristic from "./MastermindWithHeuristic";
-import { expectedValue, minimax } from "./MastermindHeuristicAlgorithms";
+import {
+  entropy,
+  expectedValue,
+  minimax,
+} from "./MastermindHeuristicAlgorithms";
+import { Link } from "react-router-dom";
 
 const references = {
   knuth77: {
@@ -53,6 +58,9 @@ const references = {
 
 const mastermind = <i>Mastermind®</i>;
 const sectionBreak = <div className={styles.sectionBreak} />;
+const Code: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <span className={styles.code}>{children}</span>
+);
 
 const MathSeminarPaper: React.FC = () => {
   const [mastermind1_numColors, updateMastermind1_numColors] = useState(6);
@@ -69,11 +77,14 @@ const MathSeminarPaper: React.FC = () => {
   const [bigO_numColors, setBigO_numColors] = useState(6);
   const [bigO_wordLength, setBigO_wordLength] = useState(4);
 
-  const [minimax_numColors, setMinimax_numColors] = useState(3);
+  const [minimax_numColors, setMinimax_numColors] = useState(4);
   const [minimax_wordLength, setMinimax_wordLength] = useState(3);
 
-  const [expectedValue_numColors, setExpectedValue_numColors] = useState(3);
+  const [expectedValue_numColors, setExpectedValue_numColors] = useState(4);
   const [expectedValue_wordLength, setExpectedValue_wordLength] = useState(3);
+
+  const [entropy_numColors, setEntropy_numColors] = useState(4);
+  const [entropy_wordLength, setEntropy_wordLength] = useState(3);
 
   return (
     <div className={styles.paper}>
@@ -85,8 +96,8 @@ const MathSeminarPaper: React.FC = () => {
       <div className={styles.aside}>
         Disclaimer: almost every part of this article is interactive and
         designed to be played with by you, the reader. To get the most out of
-        your experience, please nudge numbers and play code-breaking games to
-        your heart's content.
+        your experience, please nudge numbers and crack codes until you feel
+        satisfied.
       </div>
       <div className={styles.paragraph}>
         For hundreds of years, pairs of people all over England have resigned to
@@ -381,7 +392,7 @@ const MathSeminarPaper: React.FC = () => {
           value={minimax_numColors}
           updateValue={setMinimax_numColors}
           min={1}
-          max={5}
+          max={6}
         />{" "}
         colors.
       </div>
@@ -418,21 +429,24 @@ const MathSeminarPaper: React.FC = () => {
           math={String.raw`
           \begin{equation}
             E(g)
-              = \sum_{r\in R}\left(s_r\cdot\frac{s_r}{s_o}\right)
+              = \sum_{r\in R}\left(\frac{s_r}{s_o}\cdot s_r\right)
               = \frac{\sum s_r^2}{s_o},
           \end{equation}
         `}
         />
         where <TeX>s_o</TeX> represents the original size of the solution space
         and <TeX>s_r</TeX> represents its size after <TeX>r</TeX> has been given
-        in response to <TeX>g</TeX>. In the worst case, this algorithm may take
-        more guesses before finding the secret code. You may experiment with
-        this algorithm in the following demonstration, which has{" "}
+        in response to <TeX>g</TeX>. Because this is also a heuristic strategy,
+        the algorithm takes almost exactly the same amout of compute power as
+        the minimax strategy. It may take more guesses before finding the secret
+        code in the worst case, but on average it has been foud to perform
+        slightly better. You may experiment with this algorithm in the following
+        demonstration, which has{" "}
         <NumberScrubber
           value={expectedValue_numColors}
           updateValue={setExpectedValue_numColors}
           min={1}
-          max={5}
+          max={6}
         />{" "}
         colors and a code of length{" "}
         <NumberScrubber
@@ -450,7 +464,105 @@ const MathSeminarPaper: React.FC = () => {
         heuristic={expectedValue}
       />
 
+      <div className={styles.paragraph}>
+        The strategy that we have been using thus far, in which each guess is
+        selected based on its anticipated reduction of the solution space, is
+        not unique to code-breaking games like {mastermind}. In fact,{" "}
+        <em>information theory</em> is an entire field of mathematics that
+        focuses on studying this type of problem. One of the key concepts of
+        this field is a unit called the <em>bit</em>, which measures the value
+        of a piece of information that we will call an observation. The name of
+        this term comes from the binary bit in computer science, which can have
+        one of two values (0 or 1, <Code>true</Code> or <Code>false</Code>). If
+        an observation holds one bit of information, then it reduces the
+        solution space to half of its original size. If it holds two bits of
+        information, then it reduces it to a quarter. Thus, the information{" "}
+        <TeX>I</TeX> gained from a guess after response <TeX>r</TeX> can be
+        found with
+        <TeX
+          block
+          math={String.raw`
+          \begin{aligned}
+            \left(\frac{1}{2}\right)^I & = \frac{s_r}{s_o} \\
+            2^I                        & = \frac{s_o}{s_r} \\
+            I                          & = \log_2\left(\frac{s_o}{s_r}\right).
+          \end{aligned}
+        `}
+        />
+        Most works on information theory define <TeX>p</TeX> as the proportion
+        between the original size of the solution space and the reduced size{" "}
+        <TeX math="p=(s_r/s_o)" />, as a number between 0 and 1 is preferred.
+        Thus, <TeX>I</TeX> is typically defined as
+        <TeX
+          block
+          math={String.raw`
+          \begin{equation}
+            I = \log_2\left(\frac{s_o}{s_r}\right)
+              = \log_2\left(\frac{1}{p}\right)
+              = -\log_2(p).
+          \end{equation}
+        `}
+        />
+        Because of the logarithm in this formula, information is naturally
+        additive instead of multiplicative. This means that, with observation
+        that has <TeX>5</TeX> bits of information and another independent
+        observation that has <TeX>3</TeX> bits, it is easy to calculate that the
+        total amount of information is <TeX>5+3=8</TeX> bits.
+      </div>
+
+      <div className={styles.paragraph}>
+        In the last strategy, we found the expected value of the size of the
+        solution space after a piece of information has been revealed. This is
+        an intuitive method for evaluating the effectiveness of a code, but we
+        can do better if we recognize that the size of the solution space is a
+        naive approach at measuring information. In fact, the expected value of
+        information gained by an observation is so commonly used that
+        information theorists decided that it was worth giving a name to. For
+        our specific use case, the <em>entropy</em> of a guess <TeX>g</TeX> is
+        determined by
+        <TeX
+          block
+          math={String.raw`
+          \begin{equation}
+            \mathcal{E}(g)
+              = \sum_{r\in R}\left(\frac{s_r}{s_o}\cdot \log_2\left(\frac{s_o}{s_r}\right)\right)
+              = -\frac{\sum s_r\log_2(p)}{s_o}.
+          \end{equation}
+        `}
+        />
+        Based on Gur's analysis, this strategy finds the secret code in an
+        average of <TeX>4.4151</TeX> guesses. Of course, you are welcome to
+        experiment with this strategy using the following {mastermind} game,
+        which has{" "}
+        <NumberScrubber
+          value={entropy_numColors}
+          updateValue={setEntropy_numColors}
+          min={1}
+          max={6}
+        />{" "}
+        colors and a code of length{" "}
+        <NumberScrubber
+          value={entropy_wordLength}
+          updateValue={setEntropy_wordLength}
+          min={1}
+          max={4}
+        />
+        .
+      </div>
+
+      <MastermindWithHeuristic
+        wordLength={entropy_wordLength}
+        numColors={entropy_numColors}
+        heuristic={entropy}
+      />
+
       <Bibliography citations={references} />
+
+      {sectionBreak}
+
+      <div className={styles.aside} style={{ textAlign: "center" }}>
+        For more shenanigans, check out <Link to="/">my website</Link>.
+      </div>
     </div>
   );
 };

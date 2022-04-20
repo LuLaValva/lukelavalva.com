@@ -1,5 +1,11 @@
 import React, { Suspense, useEffect } from "react";
-import { BrowserRouter, Route, Switch, RouteProps } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Switch,
+  RouteProps,
+  Redirect,
+} from "react-router-dom";
 
 import NavigationHandler from "./NavigationHandler";
 import Home from "./Pages/Home";
@@ -52,8 +58,12 @@ let App: React.FC = () => {
                 component={GreedyGorillasPage}
                 title="Greedy Gorillas"
               />
-              <Page
+              <Route
                 path="/informationtheory"
+                component={() => <Redirect to="/cowsandbulls" />}
+              />
+              <Page
+                path="/cowsandbulls"
                 component={MathSeminarPaper}
                 title="Cows, Bulls, and Beyond"
               />

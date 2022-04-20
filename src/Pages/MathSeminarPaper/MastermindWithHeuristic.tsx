@@ -3,6 +3,7 @@ import { HeuristicFunction } from "./MastermindHeuristicAlgorithms";
 import {
   getCodeFromIndex,
   GuessResponse,
+  isPrimitiveCode,
   shouldEliminatePotentialSolution,
 } from "./MastermindUtilities";
 import MastermindWithUserSolution from "./MastermindWithUserSolution";
@@ -12,6 +13,7 @@ type Props = {
   wordLength: number;
   heuristic: HeuristicFunction;
   showSolutionSpace?: boolean;
+  isConsistent?: boolean;
 };
 
 const MastermindWithHeuristic: React.FC<Props> = ({
@@ -46,20 +48,23 @@ const MastermindWithHeuristic: React.FC<Props> = ({
   useEffect(() => {
     if (guessResponse) {
       setSolSpace((currSpace) => {
-        const newSpace = currSpace.filter(
+        const newSolSpace = currSpace.filter(
           (sol) => !shouldEliminatePotentialSolution(guessResponse, sol)
         );
-        heuristic(possibleGuesses, newSpace).then((guess) =>
-          setHeuristicGuess(guess)
-        );
-        return newSpace;
+        heuristic(
+          props.isConsistent ? newSolSpace : possibleGuesses,
+          newSolSpace
+        ).then((guess) => setHeuristicGuess(guess));
+        return newSolSpace;
       });
     } else {
-      heuristic(possibleGuesses, possibleGuesses).then((guess) => {
-        setHeuristicGuess(guess);
-      });
+      heuristic(possibleGuesses.filter(isPrimitiveCode), possibleGuesses).then(
+        (guess) => {
+          setHeuristicGuess(guess);
+        }
+      );
     }
-  }, [guessResponse, heuristic, possibleGuesses]);
+  }, [guessResponse, heuristic, possibleGuesses, props.isConsistent]);
 
   return (
     <MastermindWithUserSolution

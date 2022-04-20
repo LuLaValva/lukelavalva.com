@@ -19,6 +19,11 @@
   font-family: "Courier New", Courier, monospace;
 }
 
+.paper .code {
+  color: lightgray;
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .paper a {
   color: inherit;
 }

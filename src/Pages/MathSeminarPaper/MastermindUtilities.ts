@@ -61,16 +61,22 @@ export const getCodeFromIndex = (
 };
 
 export const shouldEliminatePotentialSolution = (
-  response: GuessResponse,
+  { guess, pegs }: GuessResponse,
   potentialSolution: number[]
 ) => {
-  let pegsIfCorrect = calculateDistanceVector(
-    response.guess,
-    potentialSolution
-  );
+  let pegsIfCorrect = calculateDistanceVector(guess, potentialSolution);
   return (
-    pegsIfCorrect[PEG.BULLS] > response.pegs[PEG.BULLS] ||
-    pegsIfCorrect[PEG.COWS] > response.pegs[PEG.COWS] ||
-    pegsIfCorrect[PEG.EMPTY] > response.pegs[PEG.EMPTY]
+    pegsIfCorrect[PEG.BULLS] > pegs[PEG.BULLS] ||
+    pegsIfCorrect[PEG.COWS] > pegs[PEG.COWS] ||
+    pegsIfCorrect[PEG.EMPTY] > pegs[PEG.EMPTY]
   );
+};
+
+export const isPrimitiveCode = (code: number[]) => {
+  // A primitive code is one that begins with 1 and is nondecreasing, with sequential increases
+  if (code[0] !== 1) return false;
+  for (let i = 1; i < code.length; i++) {
+    if (!(code[i] === code[i - 1] || code[i] === code[i - 1] + 1)) return false;
+  }
+  return true;
 };
