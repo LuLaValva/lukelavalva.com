@@ -73,10 +73,19 @@ export const shouldEliminatePotentialSolution = (
 };
 
 export const isPrimitiveCode = (code: number[]) => {
-  // A primitive code is one that begins with 1 and is nondecreasing, with sequential increases
+  // A primitive code is one that begins with 1 and has incremental increases, with decreasing group sizes
   if (code[0] !== 1) return false;
+  let groupLength = 1;
+  let minGroupLength = code.length;
+
   for (let i = 1; i < code.length; i++) {
-    if (!(code[i] === code[i - 1] || code[i] === code[i - 1] + 1)) return false;
+    if (code[i] === code[i - 1]) groupLength++;
+    else if (code[i] === code[i - 1] + 1) {
+      minGroupLength = groupLength;
+      groupLength = 1;
+    } else return false;
+
+    if (groupLength > minGroupLength) return false;
   }
   return true;
 };

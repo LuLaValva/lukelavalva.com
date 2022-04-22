@@ -80,6 +80,13 @@
 
 .board > .actionButton {
   height: 4rem;
+  width: 90%;
+  margin: auto;
+  transition: width 80ms;
+}
+
+.board > .actionButton:hover {
+  width: 100%;
 }
 
 .row > .guessButton {
@@ -170,4 +177,29 @@
   width: 0.8em;
   border: 1px solid #ccf;
   border-radius: 50%;
+}
+
+.heuristicButtonsGrid {
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 50rem);
+  margin: auto;
+}
+
+.heuristicButtonsGrid .heuristicButton {
+  border-radius: 10vw;
+  font-family: inherit;
+  font-size: large;
+  border: 2px solid #eef;
+  background-color: #44a;
+  color: #eef;
+  transition: all 80ms;
+  padding: 0.5rem 2rem;
+  width: calc(100% - 2rem);
+  margin: auto;
+}
+
+.heuristicButtonsGrid .heuristicButton:hover {
+  width: 100%;
+  padding: 0.5rem 3rem;
 }
