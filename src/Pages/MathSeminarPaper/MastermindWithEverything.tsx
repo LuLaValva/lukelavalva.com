@@ -26,11 +26,6 @@ const MastermindWithEverything: React.FC<Props> = ({
   wordLength = 4,
   heuristics,
 }) => {
-  const numHeuristics = useMemo(
-    () => Object.keys(heuristics).length,
-    [heuristics]
-  );
-
   const possibleGuesses = useMemo(
     () =>
       [...Array(numColors ** wordLength)].map((_, index) =>
@@ -78,42 +73,43 @@ const MastermindWithEverything: React.FC<Props> = ({
       onRestart={onRestart}
       setParentGuessResponse={setGuessResponse}
     >
-      <div
-        className={styles.heuristicButtonsGrid}
-        style={{ gridTemplateColumns: `repeat(${numHeuristics}, 1fr)` }}
-      >
-        {Object.entries(heuristics).map(([name, heuristic], index) => (
-          <button
-            className={styles.heuristicButton}
-            onClick={() =>
-              heuristic(
-                isFirstGuess
-                  ? possibleGuesses.filter(isPrimitiveCode)
-                  : possibleGuesses,
-                solSpace
-              ).then((guess) => setHeuristicGuess(guess))
-            }
-            key={index}
-          >
-            {name}
-          </button>
-        ))}
-        {Object.entries(heuristics).map(([name, heuristic], index) => (
-          <button
-            className={styles.heuristicButton}
-            onClick={() =>
-              heuristic(
-                isFirstGuess
-                  ? possibleGuesses.filter(isPrimitiveCode)
-                  : solSpace,
-                solSpace
-              ).then((guess) => setHeuristicGuess(guess))
-            }
-            key={numHeuristics + index}
-          >
-            consistent {name}
-          </button>
-        ))}
+      <div className={styles.heuristicButtonsGrid}>
+        <div className={styles.heuristicButtonRow}>
+          {Object.entries(heuristics).map(([name, heuristic], index) => (
+            <button
+              className={styles.heuristicButton}
+              onClick={() =>
+                heuristic(
+                  isFirstGuess
+                    ? possibleGuesses.filter(isPrimitiveCode)
+                    : possibleGuesses,
+                  solSpace
+                ).then((guess) => setHeuristicGuess(guess))
+              }
+              key={index}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+        <div className={styles.heuristicButtonRow}>
+          {Object.entries(heuristics).map(([name, heuristic], index) => (
+            <button
+              className={styles.heuristicButton}
+              onClick={() =>
+                heuristic(
+                  isFirstGuess
+                    ? possibleGuesses.filter(isPrimitiveCode)
+                    : solSpace,
+                  solSpace
+                ).then((guess) => setHeuristicGuess(guess))
+              }
+              key={index}
+            >
+              consistent {name}
+            </button>
+          ))}
+        </div>
       </div>
     </MastermindWithUserSolution>
   );

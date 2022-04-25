@@ -180,10 +180,19 @@
 }
 
 .heuristicButtonsGrid {
-  display: grid;
+  display: flex;
   gap: 1rem;
   width: min(100%, 50rem);
   margin: auto;
+  flex-direction: column;
+}
+
+.heuristicButtonRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-around;
 }
 
 .heuristicButtonsGrid .heuristicButton {
@@ -195,11 +204,12 @@
   color: #eef;
   transition: all 80ms;
   padding: 0.5rem 2rem;
-  width: calc(100% - 2rem);
   margin: auto;
+  width: 12rem;
+  max-width: 100%;
 }
 
 .heuristicButtonsGrid .heuristicButton:hover {
-  width: 100%;
+  width: 13rem;
   padding: 0.5rem 3rem;
 }
