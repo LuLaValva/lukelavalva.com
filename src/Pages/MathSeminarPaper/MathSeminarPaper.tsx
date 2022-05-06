@@ -848,8 +848,8 @@ const MathSeminarPaper: React.FC = () => {
           min={1}
           max={6}
         />
-        . I can't promise that your browser won't crash with max settings,
-        though.
+        . I can't promise that your browser won't crash with the maximum
+        settings, though.
       </div>
 
       <MastermindWithEverything
