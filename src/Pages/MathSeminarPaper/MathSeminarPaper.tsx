@@ -749,7 +749,7 @@ const MathSeminarPaper: React.FC = () => {
           block
           math={`
           \\begin{equation}
-            \\left(k^n\\right)^{\\underline m}
+            \\left(k^{\\underline {nm}}\\right)
             \\left(\\binom{n+2}{2}-1\\right)^m,
           \\end{equation}
         `}
@@ -770,7 +770,7 @@ const MathSeminarPaper: React.FC = () => {
           math={`
           \\begin{equation}
             a(n)
-            \\left(k^n-1\\right)^{\\underline {m-1}}
+            \\left(k^{\\underline{(n)(m-1)-1}}\\right)
             \\left(\\binom{n+2}{2}-1\\right)^m.
           \\end{equation}
         `}

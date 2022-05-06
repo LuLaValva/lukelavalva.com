@@ -154,7 +154,9 @@ const InteractiveMastermind: React.FC<Props> = ({
 
   const restartGame = useCallback(() => {
     setGameLengthHistory([...gameLengthHistory, board.length]);
-    setBoard([props.externalGuess || Array(wordLength).fill(0)]);
+    setBoard([
+      (board.length === 1 && props.externalGuess) || Array(wordLength).fill(0),
+    ]);
     setSolution(
       props.externalSolution || generateRandomRow(wordLength, numColors)
     );

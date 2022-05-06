@@ -41,6 +41,7 @@
   height: min(10vw, 50px);
   display: flex;
   flex-direction: column;
+  justify-content: center;
   flex-wrap: wrap;
   gap: min(1vw, 5px);
   margin-left: 4rem;
