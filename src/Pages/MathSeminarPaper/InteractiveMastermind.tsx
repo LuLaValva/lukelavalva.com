@@ -152,23 +152,31 @@ const InteractiveMastermind: React.FC<Props> = ({
     [gameLengthHistory]
   );
 
-  const restartGame = useCallback(() => {
-    setGameLengthHistory([...gameLengthHistory, board.length]);
-    setBoard([
-      (board.length === 1 && props.externalGuess) || Array(wordLength).fill(0),
-    ]);
-    setSolution(
-      props.externalSolution || generateRandomRow(wordLength, numColors)
-    );
-    setSuccess(false);
-    props.setParentGuessResponse && props.setParentGuessResponse(undefined);
-    props.onRestart && props.onRestart();
-  }, [board.length, gameLengthHistory, numColors, wordLength, props]);
+  const restartGame = useCallback(
+    (clearBoard: boolean = true) => {
+      setGameLengthHistory([...gameLengthHistory, board.length]);
+      setBoard([
+        (!clearBoard && props.externalGuess) || Array(wordLength).fill(0),
+      ]);
+      setSolution(
+        props.externalSolution || generateRandomRow(wordLength, numColors)
+      );
+      setSuccess(false);
+      props.setParentGuessResponse && props.setParentGuessResponse(undefined);
+      props.onRestart && props.onRestart();
+    },
+    [board.length, gameLengthHistory, numColors, wordLength, props]
+  );
 
   useEffect(
     () => restartGame(),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [numColors, wordLength, props.externalSolution]
+    [numColors, wordLength]
+  );
+  useEffect(
+    () => restartGame(false),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [props.externalSolution]
   );
 
   const updateColor = (guessIndex: number, value?: number) => {
@@ -223,7 +231,10 @@ const InteractiveMastermind: React.FC<Props> = ({
         {success && (
           <>
             <h2>Code found after {board.length} guesses</h2>
-            <button onClick={restartGame} className={styles.actionButton}>
+            <button
+              onClick={() => restartGame()}
+              className={styles.actionButton}
+            >
               Try Again
             </button>
           </>
