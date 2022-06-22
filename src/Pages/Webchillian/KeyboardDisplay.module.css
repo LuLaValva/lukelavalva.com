@@ -1,0 +1,45 @@
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1vmin;
+  width: 100vmin;
+  margin: auto;
+}
+
+.keyboardRow {
+  display: flex;
+  gap: 1vmin;
+  justify-content: center;
+}
+
+.key {
+  width: 8.5vmin;
+  height: 9vmin;
+  border-radius: 1vmin;
+  color: white;
+  background-color: #353535;
+  font-family: inherit;
+  border: 0.25vmin solid white;
+  font-size: 1.5vmin;
+  color: #bbb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.5s ease;
+  user-select: none;
+}
+
+.key:active {
+  transition: background-color 0.05s ease;
+  background-color: #888;
+}
+
+.spacebar {
+  width: 80vmin;
+  justify-content: center;
+}
+
+.mainKeyLabel {
+  font-size: 4vmin;
+  color: white;
+}

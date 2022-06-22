@@ -26,6 +26,9 @@ const PageNotFound = React.lazy(() => import("./Pages/PageNotFound"));
 const LasagnaFriendship = React.lazy(
   () => import("./Pages/LasagnaFriendship/LasagnaFriendship")
 );
+const WebchillianPage = React.lazy(
+  () => import("./Pages/Webchillian/WebchillianPage")
+);
 
 interface PageProps extends RouteProps {
   title: string;
@@ -80,6 +83,11 @@ let App: React.FC = () => {
                 path="/slide"
                 component={SlidePuzzlePage}
                 title="Slide Puzzle"
+              />
+              <Page
+                path="/webchillian"
+                component={WebchillianPage}
+                title="Webchillian Tip Tip Tip Cheeepeeeee"
               />
               <Page exact path="/" title="Luke LaValva" />
               <Page component={PageNotFound} title="Luke LaValva - Not Found" />

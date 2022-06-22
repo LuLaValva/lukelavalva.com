@@ -1,0 +1,40 @@
+.scaleInputs {
+  margin: auto;
+  width: fit-content;
+  display: flex;
+  gap: 0.2vmin;
+  margin-bottom: 2vmin;
+}
+
+.scaleInputs > select {
+  background-color: #353535;
+  color: white;
+  font-family: inherit;
+  font-size: large;
+  border: 0.2vmin solid #888;
+}
+
+.scaleInputs > select:first-child {
+  border-radius: 5vmin 0 0 5vmin;
+  text-align: right;
+}
+.scaleInputs > select:last-child {
+  border-radius: 0 5vmin 5vmin 0;
+}
+
+.startButton {
+  display: block;
+  margin: auto;
+  background-color: #353535;
+  font-size: xx-large;
+  font-family: inherit;
+  color: inherit;
+  padding: 3vmin 6vmin;
+  border: 0.2vmin solid #888;
+  border-radius: 2vmin;
+  transition: transform 0.5s ease;
+}
+
+.startButton:hover {
+  transform: scale(2) translateY(20%);
+}
