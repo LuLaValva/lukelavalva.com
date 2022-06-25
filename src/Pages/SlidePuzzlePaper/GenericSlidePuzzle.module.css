@@ -1,0 +1,43 @@
+.puzzle {
+  border: 1vmin solid #fff3;
+  background-color: #fff2;
+  border-radius: 1vmin;
+  margin: 1em auto;
+  transition: all 0.1s;
+  position: relative;
+}
+
+.puzzle > * {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border:1px solid white;
+  box-sizing: border-box;
+  background-color: #fff2;
+  color: inherit;
+  font-family: inherit;
+  transition: inherit;
+  user-select: none;
+}
+
+.actionButton {
+  font-family: inherit;
+  color: inherit;
+  box-shadow: inset white 0 0 0.5em;
+  border: 1px solid white;
+  font-size: larger;
+  padding: 1em 2em;
+  background-color: #fff2;
+  border-radius: 1em;
+  transition: all 0.2s;
+}
+
+.actionButton:hover {
+  box-shadow: inset white 0 0 1em;
+}
+
+.actionButton:active {
+  transition: all 0.05s;
+  box-shadow: inset white 0 0 2em;
+}
