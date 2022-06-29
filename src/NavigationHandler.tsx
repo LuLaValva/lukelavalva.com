@@ -1,13 +1,13 @@
 import React from "react";
 import styles from "./styles/App.module.css";
-import { useRouteMatch } from "react-router";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   children?: React.ReactNode;
 }
 
 const NavigationHandler: React.FC = (props: Props) => {
-  let isHomepage = useRouteMatch({ path: "/", exact: true });
+  let isHomepage = useLocation().pathname === "/";
 
   return (
     <div className={`${styles.fullWindow} ${!isHomepage && styles.subpage}`}>

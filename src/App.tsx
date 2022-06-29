@@ -2,9 +2,9 @@ import React, { Suspense, useEffect } from "react";
 import {
   BrowserRouter,
   Route,
-  Switch,
+  Routes,
   RouteProps,
-  Redirect,
+  Navigate,
 } from "react-router-dom";
 
 import NavigationHandler from "./NavigationHandler";
@@ -33,15 +33,14 @@ const SlidePuzzlePaper = React.lazy(
   () => import("./Pages/SlidePuzzlePaper/SlidePuzzlePaper")
 );
 
-interface PageProps extends RouteProps {
+const Page: React.FC<{
   title: string;
-}
-
-const Page: React.FC<PageProps> = ({ title, ...rest }) => {
+  children: React.ReactElement;
+}> = ({ title, children }) => {
   useEffect(() => {
     document.title = title;
   }, [title]);
-  return <Route {...rest} />;
+  return children;
 };
 
 let App: React.FC = () => {
@@ -51,55 +50,99 @@ let App: React.FC = () => {
         <Home />
         <SubPage>
           <Suspense fallback={<></>}>
-            <Switch>
-              <Page
+            <Routes>
+              <Route
                 path="/albums"
-                component={AlbumRatingPage}
-                title="Luke's Favorite Albums"
+                element={
+                  <Page title="Luke's Favorite Albums">
+                    <AlbumRatingPage />
+                  </Page>
+                }
               />
-              <Page
+              <Route
                 path="/resume"
-                component={ResumePage}
-                title="Luke's Resume"
+                element={
+                  <Page title="Luke's Resume">
+                    <ResumePage />
+                  </Page>
+                }
               />
-              <Page
+              <Route
                 path="/greedygorillas"
-                component={GreedyGorillasPage}
-                title="Greedy Gorillas"
+                element={
+                  <Page title="Greedy Gorillas">
+                    <GreedyGorillasPage />
+                  </Page>
+                }
               />
               <Route
                 path="/informationtheory"
-                component={() => <Redirect to="/cowsandbulls" />}
+                element={<Navigate to="/cowsandbulls" />}
               />
-              <Page
+              <Route
                 path="/cowsandbulls"
-                component={MathSeminarPaper}
-                title="Cows, Bulls, and Beyond"
+                element={
+                  <Page title="Cows, Bulls, and Beyond">
+                    <MathSeminarPaper />
+                  </Page>
+                }
               />
-              <Page path="/muchumme" component={Muchumme} title="Muchumme" />
-              <Page
+              <Route
+                path="/muchumme"
+                element={
+                  <Page title="Muchumme">
+                    <Muchumme />
+                  </Page>
+                }
+              />
+              <Route
                 path="/lasagna-friendship"
-                component={LasagnaFriendship}
-                title="Lasagna-Friendship"
+                element={
+                  <Page title="Lasagna-Friendship">
+                    <LasagnaFriendship />
+                  </Page>
+                }
               />
-              <Page
+              <Route
                 path="/slide"
-                component={SlidePuzzlePage}
-                title="Slide Puzzle"
+                element={
+                  <Page title="Slide Puzzle">
+                    <SlidePuzzlePage />
+                  </Page>
+                }
               />
-              <Page
+              <Route
                 path="/webchillian"
-                component={WebchillianPage}
-                title="Webchillian Tip Tip Tip Cheeepeeeee"
+                element={
+                  <Page title="Webchillian Tip Tip Tip Cheeepeeeee">
+                    <WebchillianPage />
+                  </Page>
+                }
               />
-              <Page
+              <Route
                 path="/slidepaper"
-                component={SlidePuzzlePaper}
-                title={"Optimization of Slides"}
+                element={
+                  <Page title="Optimization of Slides">
+                    <SlidePuzzlePaper />
+                  </Page>
+                }
               />
-              <Page exact path="/" title="Luke LaValva" />
-              <Page component={PageNotFound} title="Luke LaValva - Not Found" />
-            </Switch>
+              <Route
+                path="/"
+                element={
+                  <Page title="Luke LaValva">
+                    <></>
+                  </Page>
+                }
+              />
+              <Route
+                element={
+                  <Page title="Luke LaValva - Not Found">
+                    <PageNotFound />
+                  </Page>
+                }
+              />
+            </Routes>
           </Suspense>
         </SubPage>
       </NavigationHandler>
