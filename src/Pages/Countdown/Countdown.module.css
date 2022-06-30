@@ -1,0 +1,56 @@
+.countdown {
+  text-align: center;
+  color: #aaa;
+  padding-top: 5em;
+}
+
+.countdown > h1 {
+  color: yellow;
+}
+
+.countdown > h4 {
+  margin: -1em;
+}
+
+.countdown > h1:last-child {
+  font-size: 4em;
+  animation: rotate 1s linear infinite both alternate;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(20deg);
+  }
+  to {
+    transform: rotate(-20deg);
+  }
+}
+
+
+.editButton {
+  color: #888;
+  background: none;
+  border: none;
+  position: fixed;
+  right: 2vmin;
+  bottom: 2vmin;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  max-width: 30em;
+  margin: 3em auto;
+}
+
+.inputs > input, .inputs > button {
+  font-size: 1.5em;
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: 3px solid white;
+  padding: 0.5em;
+  border-radius: 1em;
+  color-scheme: dark;
+}

@@ -52,6 +52,11 @@ const Home = (props: Props) => {
           The Webchillian
         </BoxInSky>
       </Link>
+      <Link to="/countdown" className={styles.boxLink}>
+        <BoxInSky width={16} left={196} top={66}>
+          Countdown Generator
+        </BoxInSky>
+      </Link>
       <BoxInSky width={24} left={3400} top={2}>
         Haha you made it to the end
       </BoxInSky>

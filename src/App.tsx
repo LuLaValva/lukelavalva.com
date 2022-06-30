@@ -1,11 +1,5 @@
 import React, { Suspense, useEffect } from "react";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  RouteProps,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import NavigationHandler from "./NavigationHandler";
 import Home from "./Pages/Home";
@@ -31,6 +25,9 @@ const WebchillianPage = React.lazy(
 );
 const SlidePuzzlePaper = React.lazy(
   () => import("./Pages/SlidePuzzlePaper/SlidePuzzlePaper")
+);
+const CountdownPage = React.lazy(
+  () => import("./Pages/Countdown/CountdownPage")
 );
 
 const Page: React.FC<{
@@ -124,6 +121,14 @@ let App: React.FC = () => {
                 element={
                   <Page title="Optimization of Slides">
                     <SlidePuzzlePaper />
+                  </Page>
+                }
+              />
+              <Route
+                path="/countdown"
+                element={
+                  <Page title="Countdown to...">
+                    <CountdownPage />
                   </Page>
                 }
               />
