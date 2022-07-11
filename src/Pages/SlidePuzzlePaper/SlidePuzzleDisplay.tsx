@@ -4,21 +4,32 @@ import styles from "./GenericSlidePuzzle.module.css";
 /**
  * Must be a rectangular grid of **UNIQUE** digits from `0` to `rows*cols`.
  */
-export type SlidePuzzleBoard = number[][];
+export type SlidePuzzle = number[][];
 export type Coordinates = [number, number];
 
 const SlidePuzzleDisplay: React.FC<{
-  piecePositions: SlidePuzzleBoard;
+  piecePositions: SlidePuzzle;
   squareSize?: number;
   sizeUnit?: string;
   onSquareClick?: (coords: Coordinates) => void;
 }> = ({ piecePositions, squareSize = 5, sizeUnit = "vmin", onSquareClick }) => {
-  const piecePositionMap: { [k: number]: Coordinates } = useMemo(() => {
-    return Object.fromEntries(
-      piecePositions.flatMap((row, rowIndex) =>
-        row.map((value, colIndex) => [value, [rowIndex, colIndex]])
-      )
+  const [isSolved, piecePositionMap]: [boolean, Coordinates[]] = useMemo(() => {
+    const [nRows, nCols] = [piecePositions.length, piecePositions[0].length];
+    const positions = [...Array(nRows * nCols)];
+    let isSolved = true;
+
+    piecePositions.forEach((row, rowIndex) =>
+      row.forEach((value, colIndex) => {
+        if (
+          isSolved &&
+          value !== 0 &&
+          value !== rowIndex * nCols + colIndex + 1
+        )
+          isSolved = false;
+        positions[value] = [rowIndex, colIndex];
+      })
     );
+    return [isSolved, positions];
   }, [piecePositions]);
 
   const squareBaseStyles = {
@@ -30,34 +41,30 @@ const SlidePuzzleDisplay: React.FC<{
 
   return (
     <div
-      className={styles.puzzle}
+      className={`${styles.puzzle} ${isSolved ? styles.solved : ""}`}
       style={{
         width: `${squareSize * piecePositions[0].length}${sizeUnit}`,
         height: `${squareSize * piecePositions.length}${sizeUnit}`,
+        borderWidth: `${squareSize / 5}${sizeUnit}`,
+        borderRadius: `${squareSize / 5}${sizeUnit}`,
       }}
     >
-      {[...new Array(piecePositions.length * piecePositions[0].length - 1)].map(
-        (_, i) => {
-          i++;
-          return (
+      {piecePositionMap.map(
+        ([row, col], i) =>
+          i !== 0 && (
             <button
               key={i}
               style={{
                 ...squareBaseStyles,
-                transform: `translate(${
-                  piecePositionMap[i][1] * squareSize
-                }${sizeUnit}, ${
-                  piecePositionMap[i][0] * squareSize
+                transform: `translate(${col * squareSize}${sizeUnit}, ${
+                  row * squareSize
                 }${sizeUnit})`,
               }}
-              onClick={
-                onSquareClick && (() => onSquareClick(piecePositionMap[i]))
-              }
+              onClick={onSquareClick && (() => onSquareClick([row, col]))}
             >
               {i}
             </button>
-          );
-        }
+          )
       )}
     </div>
   );

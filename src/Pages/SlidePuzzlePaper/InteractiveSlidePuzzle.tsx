@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import SlidePuzzleDisplay, {
   Coordinates,
-  SlidePuzzleBoard,
+  SlidePuzzle,
 } from "./SlidePuzzleDisplay";
 import styles from "./GenericSlidePuzzle.module.css";
 
@@ -9,7 +9,7 @@ function initialHolePosition(nRows: number, nCols: number): Coordinates {
   return [nRows - 1, nCols - 1];
 }
 
-function generateBoard(nRows: number, nCols: number): SlidePuzzleBoard {
+function generateBoard(nRows: number, nCols: number): SlidePuzzle {
   const board = [...Array(nRows)].map((_, row) =>
     [...Array(nCols)].map((_, col) => row * nCols + col + 1)
   );
@@ -22,16 +22,28 @@ const InteractiveSlidePuzzle: React.FC<{
   dimensions: [rows: number, cols: number];
   squareSize?: number;
   sizeUnit?: string;
-  onUpdate?: (newBoard: SlidePuzzleBoard) => void;
-}> = ({ dimensions: [nRows, nCols], squareSize, sizeUnit }) => {
-  const [board, setBoard] = useState(generateBoard(nRows, nCols));
-  const [[holeRow, holeCol], setHole] = useState(
+  includeShuffleButton?: boolean;
+  shuffleImmediately?: boolean;
+  onUpdate?: (newBoard: SlidePuzzle) => void;
+}> = ({
+  dimensions: [nRows, nCols],
+  squareSize,
+  sizeUnit,
+  includeShuffleButton = false,
+  shuffleImmediately = false,
+  onUpdate,
+}) => {
+  const [board, setBoard] = useState(() => generateBoard(nRows, nCols));
+  const [[holeRow, holeCol], setHole] = useState(() =>
     initialHolePosition(nRows, nCols)
   );
 
   useEffect(() => {
-    setBoard(generateBoard(nRows, nCols));
+    const board = generateBoard(nRows, nCols);
+    setBoard(board);
     setHole(initialHolePosition(nRows, nCols));
+    onUpdate && onUpdate(board);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nRows, nCols]);
 
   const attemptSquareSlide = ([row, col]: Coordinates) => {
@@ -57,6 +69,8 @@ const InteractiveSlidePuzzle: React.FC<{
     newBoard[row][col] = 0;
     setBoard(newBoard);
     setHole([row, col]);
+
+    onUpdate && onUpdate(newBoard);
   };
 
   const [lastRandomMove, setLastRandomMove] = useState({ axis: true, dir: 1 });
@@ -107,6 +121,11 @@ const InteractiveSlidePuzzle: React.FC<{
     }
   };
 
+  useEffect(() => {
+    shuffleImmediately && setTimeout(shuffle, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shuffleImmediately]);
+
   return (
     <>
       <SlidePuzzleDisplay
@@ -115,9 +134,11 @@ const InteractiveSlidePuzzle: React.FC<{
         sizeUnit={sizeUnit}
         onSquareClick={attemptSquareSlide}
       />
-      <button onClick={shuffle} className={styles.actionButton}>
-        Shuffle
-      </button>
+      {includeShuffleButton && (
+        <button onClick={shuffle} className={styles.actionButton}>
+          Shuffle
+        </button>
+      )}
     </>
   );
 };

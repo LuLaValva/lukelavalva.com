@@ -1,10 +1,13 @@
 .puzzle {
-  border: 1vmin solid #fff3;
+  border: solid #fff3;
   background-color: #fff2;
-  border-radius: 1vmin;
   margin: 1em auto;
-  transition: all 0.1s;
+  transition: all 0.1s, background-color 0.5s;
   position: relative;
+}
+
+.solved {
+  background-color: #4f43;
 }
 
 .puzzle > * {
@@ -40,4 +43,15 @@
 .actionButton:active {
   transition: all 0.05s;
   box-shadow: inset white 0 0 2em;
+}
+
+.puzzleGraph {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1vmin;
+  justify-content: center;
+}
+
+.puzzleGraph .puzzle {
+  margin: 0;
 }
