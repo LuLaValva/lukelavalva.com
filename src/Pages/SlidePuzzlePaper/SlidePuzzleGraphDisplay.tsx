@@ -1,7 +1,6 @@
-import React from "react";
-import SlidePuzzleDisplay from "./SlidePuzzleDisplay";
-import { getCachedPuzzle } from "./SlidePuzzleUtilities";
-import styles from "./GenericSlidePuzzle.module.css";
+import React, { useMemo } from "react";
+import { breakCompositeKey } from "./SlidePuzzleUtilities";
+import VisGraph from "./VisGraph";
 
 export type SlidePuzzleGraph = {
   nodes: { [puzzleKey: string]: boolean };
@@ -11,17 +10,23 @@ export type SlidePuzzleGraph = {
 const SlidePuzzleGraphDisplay: React.FC<{
   readonly graph: SlidePuzzleGraph;
 }> = ({ graph }) => {
-  return (
-    <div className={styles.puzzleGraph}>
-      {Object.keys(graph.nodes).map((encodedPuzzle) => (
-        <SlidePuzzleDisplay
-          key={encodedPuzzle}
-          piecePositions={getCachedPuzzle(encodedPuzzle)}
-          squareSize={2.5}
-        />
-      ))}
-    </div>
+  const visNodes = useMemo(
+    () =>
+      Object.keys(graph.nodes).map((id) => {
+        return { id };
+      }),
+    [graph.nodes]
   );
+  const visEdges = useMemo(
+    () =>
+      Object.keys(graph.connections).map((compositeKey) => {
+        const [from, to] = breakCompositeKey(compositeKey);
+        return { from, to, id: compositeKey };
+      }),
+    [graph.connections]
+  );
+
+  return <VisGraph nodes={visNodes} edges={visEdges} />;
 };
 
 export default SlidePuzzleGraphDisplay;

@@ -22,7 +22,7 @@ const puzzleCache: { [code: string]: SlidePuzzle } = {};
 
 export function cachePuzzle(puzzle: SlidePuzzle): string {
   const encoded = encodePuzzle(puzzle);
-  puzzleCache[encoded] ??= puzzle;
+  puzzleCache[encoded] ??= puzzle.map((row) => [...row]);
   return encoded;
 }
 
