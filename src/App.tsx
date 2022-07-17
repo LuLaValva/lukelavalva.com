@@ -10,7 +10,7 @@ const GreedyGorillasPage = React.lazy(
   () => import("./GreedyGorillas/GreedyGorillasPage")
 );
 const MathSeminarPaper = React.lazy(
-  () => import("./Pages/MathSeminarPaper/MathSeminarPaper")
+  () => import("./Pages/InteractivePapers/MathSeminarPaper/MathSeminarPaper")
 );
 const Muchumme = React.lazy(() => import("./Pages/Muchumme/Muchumme"));
 const SlidePuzzlePage = React.lazy(
@@ -24,7 +24,7 @@ const WebchillianPage = React.lazy(
   () => import("./Pages/Webchillian/WebchillianPage")
 );
 const SlidePuzzlePaper = React.lazy(
-  () => import("./Pages/SlidePuzzlePaper/SlidePuzzlePaper")
+  () => import("./Pages/InteractivePapers/SlidePuzzlePaper/SlidePuzzlePaper")
 );
 const CountdownPage = React.lazy(
   () => import("./Pages/Countdown/CountdownPage")

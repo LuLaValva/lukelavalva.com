@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/AcademicPaper.module.css";
+import styles from "./AcademicPaper.module.css";
 
 export type Citation = {
   title: string;

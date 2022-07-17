@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { GAINS_BY_NOTE, SCALES } from "./MusicalConstants";
 import Webchillian from "./Webchillian";
-import articleStyles from "../../styles/AcademicPaper.module.css";
+import articleStyles from "../InteractivePapers/AcademicPaper.module.css";
 import styles from "./Webchillian.module.css";
 
 const WebchillianPage = () => {

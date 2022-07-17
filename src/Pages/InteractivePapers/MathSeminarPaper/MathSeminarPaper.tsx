@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import styles from "../../styles/AcademicPaper.module.css";
+import styles from "../AcademicPaper.module.css";
 
 import "katex/dist/katex.min.css";
 import TeX from "@matejmazur/react-katex";
 
 import InteractiveMastermind, { InlineSolution } from "./InteractiveMastermind";
 import MastermindWithSolutionSpace from "./MastermindWithSolutionSpace";
-import Bibliography from "./Bibliography";
+import Bibliography from "../Bibliography";
 import NumberScrubber from "./NumberScrubber";
 import MastermindDistanceVector from "./MastermindDistanceVector";
 import MastermindWithHeuristic from "./MastermindWithHeuristic";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../styles/AcademicPaper.module.css";
+import styles from "../AcademicPaper.module.css";
 import { ActiveListener } from "react-event-injector";
 
 type Props = {

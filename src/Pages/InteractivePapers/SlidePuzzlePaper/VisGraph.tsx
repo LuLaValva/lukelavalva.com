@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DataSet } from "vis-data";
 import { Edge, Network, Node, Position } from "vis-network";
-import { getCachedPuzzle } from "./SlidePuzzleUtilities";
+import { getCachedPuzzle, isSolved } from "./SlidePuzzleUtilities";
 import styles from "./GenericSlidePuzzle.module.css";
 
 const NETWORK_OPTIONS = {
@@ -45,7 +45,7 @@ const NETWORK_OPTIONS = {
           }
           ctx.closePath();
 
-          ctx.fillStyle = "#444";
+          ctx.fillStyle = isSolved(id) ? "#406840" : "#444";
           ctx.strokeStyle = "#fff";
           ctx.lineWidth = 2;
           ctx.fill();

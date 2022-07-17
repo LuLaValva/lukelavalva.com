@@ -50,6 +50,6 @@ export function breakCompositeKey(key: string): [string, string] {
 
 export function isSolved(key: string) {
   for (let i = 2; i < key.length - 1; i++)
-    if (key.charAt(i) != (i - 2).toString()) return false;
+    if (key.charCodeAt(i) !== i - 1) return false;
   return true;
 }
