@@ -20,7 +20,11 @@ const SlidePuzzlePaper = () => {
         Today I'm going to talk about these puzzles mathematically, and together
         we will discover effective ways of solving them quickly.
       </div>
-      <ManualSlideGraphGenerator dimensions={[2, 2]} squareSize={10} />
+      <ManualSlideGraphGenerator
+        dimensions={[2, 3]}
+        squareSize={10}
+        includeShuffle
+      />
     </div>
   );
 };

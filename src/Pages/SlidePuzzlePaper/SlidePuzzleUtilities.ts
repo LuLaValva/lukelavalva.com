@@ -3,7 +3,13 @@ import { SlidePuzzle } from "./SlidePuzzleDisplay";
 function encodePuzzle(puzzle: SlidePuzzle): string {
   const nRows = String.fromCharCode(puzzle.length);
   const nCols = String.fromCharCode(puzzle[0].length);
-  return nRows + nCols + puzzle.map((row) => row.join("")).join("");
+  return (
+    nRows +
+    nCols +
+    puzzle
+      .map((row) => row.map((num) => String.fromCharCode(num)).join(""))
+      .join("")
+  );
 }
 
 function decodePuzzle(code: string): SlidePuzzle {
@@ -14,7 +20,7 @@ function decodePuzzle(code: string): SlidePuzzle {
     board
       .substring(i * nCols, i * nCols + nCols)
       .split("")
-      .map((char) => +char)
+      .map((char) => char.charCodeAt(0))
   );
 }
 
@@ -40,4 +46,10 @@ export function getCompositeKey(code1: string, code2: string): string {
 export function breakCompositeKey(key: string): [string, string] {
   const [code1, code2] = key.split(",");
   return [code1, code2];
+}
+
+export function isSolved(key: string) {
+  for (let i = 2; i < key.length - 1; i++)
+    if (key.charAt(i) != (i - 2).toString()) return false;
+  return true;
 }
