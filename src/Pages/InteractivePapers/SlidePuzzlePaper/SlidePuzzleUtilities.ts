@@ -53,3 +53,10 @@ export function isSolved(key: string) {
     if (key.charCodeAt(i) !== i - 1) return false;
   return true;
 }
+
+export function findHole(board: SlidePuzzle): [number, number] {
+  for (let row = 0; row < board.length; row++)
+    for (let col = 0; col < board[row].length; col++)
+      if (board[row][col] === 0) return [row, col];
+  return [-1, -1];
+}

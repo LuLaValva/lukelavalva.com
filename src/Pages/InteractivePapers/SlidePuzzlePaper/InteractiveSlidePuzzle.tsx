@@ -4,6 +4,7 @@ import SlidePuzzleDisplay, {
   SlidePuzzle,
 } from "./SlidePuzzleDisplay";
 import styles from "./GenericSlidePuzzle.module.css";
+import { findHole } from "./SlidePuzzleUtilities";
 
 function initialHolePosition(nRows: number, nCols: number): Coordinates {
   return [nRows - 1, nCols - 1];
@@ -24,6 +25,7 @@ const InteractiveSlidePuzzle: React.FC<{
   sizeUnit?: string;
   includeShuffleButton?: boolean;
   shuffleImmediately?: boolean;
+  boardState?: SlidePuzzle;
   onUpdate?: (newBoard: SlidePuzzle) => void;
 }> = ({
   dimensions: [nRows, nCols],
@@ -31,6 +33,7 @@ const InteractiveSlidePuzzle: React.FC<{
   sizeUnit,
   includeShuffleButton = false,
   shuffleImmediately = false,
+  boardState,
   onUpdate,
 }) => {
   const [board, setBoard] = useState(() => generateBoard(nRows, nCols));
@@ -39,12 +42,12 @@ const InteractiveSlidePuzzle: React.FC<{
   );
 
   useEffect(() => {
-    const board = generateBoard(nRows, nCols);
+    const board = boardState || generateBoard(nRows, nCols);
     setBoard(board);
-    setHole(initialHolePosition(nRows, nCols));
+    setHole(findHole(board));
     onUpdate && onUpdate(board);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nRows, nCols]);
+  }, [nRows, nCols, boardState]);
 
   const attemptSquareSlide = ([row, col]: Coordinates) => {
     let newBoard;
