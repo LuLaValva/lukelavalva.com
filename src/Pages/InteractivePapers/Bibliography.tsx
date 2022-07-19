@@ -49,7 +49,11 @@ const Bibliography = (props: Props) => {
             {citation.year && ` (${citation.year})`}. <i>{citation.title}</i>.{" "}
             {citation.published}
             {citation.published && ". "}
-            {citation.url && <a href={citation.url}>{citation.url}</a>}
+            {citation.url && (
+              <a href={citation.url} target="_blank" rel="noreferrer">
+                {citation.url}
+              </a>
+            )}
           </div>
         ))}
     </>

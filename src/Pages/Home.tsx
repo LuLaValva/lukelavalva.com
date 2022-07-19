@@ -42,18 +42,23 @@ const Home = (props: Props) => {
           Face Slide
         </BoxInSky>
       </Link>
-      <Link to="/albums" className={styles.boxLink}>
-        <BoxInSky width={27} left={142} top={50}>
-          My opinions about a bunch of albums
+      <Link to="/theoryofsliding" className={styles.boxLink}>
+        <BoxInSky width={24} left={141} top={23}>
+          Theory of Sliding
         </BoxInSky>
       </Link>
       <Link to="/webchillian" className={styles.boxLink}>
-        <BoxInSky width={22} left={166} top={33}>
+        <BoxInSky width={22} left={116} top={55}>
           The Webchillian
         </BoxInSky>
       </Link>
+      <Link to="/albums" className={styles.boxLink}>
+        <BoxInSky width={27} left={202} top={33}>
+          My opinions about a bunch of albums
+        </BoxInSky>
+      </Link>
       <Link to="/countdown" className={styles.boxLink}>
-        <BoxInSky width={16} left={196} top={66}>
+        <BoxInSky width={16} left={181} top={66}>
           Countdown Generator
         </BoxInSky>
       </Link>

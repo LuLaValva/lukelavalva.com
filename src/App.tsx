@@ -117,9 +117,9 @@ let App: React.FC = () => {
                 }
               />
               <Route
-                path="/slidepaper"
+                path="/theoryofsliding"
                 element={
-                  <Page title="Optimization of Slides">
+                  <Page title="Theory of Sliding">
                     <SlidePuzzlePaper />
                   </Page>
                 }

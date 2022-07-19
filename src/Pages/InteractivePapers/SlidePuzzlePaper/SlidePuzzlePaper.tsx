@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "../AcademicPaper.module.css";
-import Bibliography from "../Bibliography";
+import Bibliography, { Citation } from "../Bibliography";
 import InteractiveSlidePuzzle from "./InteractiveSlidePuzzle";
 import ManualSlideGraphGenerator from "./ManualSlideGraphGenerator";
 
@@ -10,19 +10,29 @@ import TeX from "@matejmazur/react-katex";
 
 const sectionBreak = <div className={styles.sectionBreak} />;
 
-const references = {
+const references: { [key: string]: Citation } = {
   kim19: {
     title: "Blog: Solving the 15 Puzzle",
     authors: ["Michael Kim"],
     year: 2019,
     url: "https://michael.kim/blog/puzzle",
   },
+  johnson79: {
+    title: 'Notes on the "15" Puzzle',
+    authors: ["Wm. Wooley Johnson", "William E. Story"],
+    year: 1879,
+    published: "American Journal of Mathematics, 2 (4): 397-404",
+    url: "https://doi.org/10.2307%2F2369492",
+  },
 };
 
 const SlidePuzzlePaper = () => {
   return (
     <div className={styles.paper}>
-      <h1>Optimal Slide Puzzle Solutions</h1>
+      <h1>Theory of Sliding</h1>
+      <h3>
+        Finding truths about sliding puzzles using Graph Theory and Group Theory
+      </h3>
 
       <InteractiveSlidePuzzle
         dimensions={[3, 3]}
@@ -31,15 +41,19 @@ const SlidePuzzlePaper = () => {
       />
 
       <div className={styles.paragraph}>
-        This puzzle almost needs no introduction. Everybody loves slide puzzles!
-        Today I'm going to talk about these puzzles mathematically, and together
-        we will discover effective ways of solving them quickly.
+        This puzzle almost needs no introduction. Everybody loves sliding
+        puzzles! Today I'm going to talk about these puzzles mathematically, and
+        together we will discover effective ways of solving them quickly. Before
+        you move ahead, please feel free to meddle with the 3x3 puzzle above
+        until it has returned to sequential order.
       </div>
 
       {sectionBreak}
 
+      <h2>The State Graph</h2>
+
       <div className={styles.paragraph}>
-        Before discussing any approaches for quickly solving slide puzzles, I
+        Before discussing any approaches for quickly solving sliding puzzles, I
         would like to introduce you to a mathematically comprehensive
         representation. Suppose that we attribute each state of the puzzle to a
         single node in a graph that consists of all possible states. Then each
@@ -73,10 +87,12 @@ const SlidePuzzlePaper = () => {
 
       {sectionBreak}
 
+      <h2>Puzzle Solvability</h2>
+
       <div className={styles.paragraph}>
         Readers who are keen on combinatorics may have noticed something
         peculiar about the size of the graph for the 2x2 puzzle. Before the
-        restrictions of a slide puzzle are analyzed with keen eyes, it is easy
+        restrictions of a sliding puzzle are analyzed with keen eyes, it is easy
         to suppose that the number of nodes in the graph is the same as the
         number of possible permutations of 4 digits. Then the number of possible
         board states should be
@@ -96,6 +112,20 @@ const SlidePuzzlePaper = () => {
         ]}
         squareSize={10}
       />
+
+      <div className={styles.paragraph}>
+        As it turns out, this is true for <i>all</i> sliding puzzles. Thus, for
+        any board with <TeX>m</TeX> rows and <TeX>n</TeX> columns, the number of
+        reachable states is
+        <TeX block math="\frac{(mn)!}{2}." />
+        To understand why half of all sliding puzzles are unsolvable, we can
+        refer to an argument made{" "}
+        <a href={references.johnson79.url} target="_blank" rel="noreferrer">
+          back in 1879
+        </a>{" "}
+        by Wm. Woolsey Johnson and its generalization by his colleague, William
+        E. Story.
+      </div>
 
       {sectionBreak}
 

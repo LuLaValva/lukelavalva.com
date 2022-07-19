@@ -3,6 +3,10 @@
   text-align: center;
 }
 
+.paper > h3 {
+  color: #aaa;
+}
+
 .paper div.paragraph {
   max-width: 700px;
   text-align: justify;

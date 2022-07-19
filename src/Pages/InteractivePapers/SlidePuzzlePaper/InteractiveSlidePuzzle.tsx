@@ -33,7 +33,7 @@ const InteractiveSlidePuzzle: React.FC<{
   sizeUnit,
   includeShuffleButton = false,
   shuffleImmediately = false,
-  boardState,
+  boardState: externalState,
   onUpdate,
 }) => {
   const [board, setBoard] = useState(() => generateBoard(nRows, nCols));
@@ -42,12 +42,12 @@ const InteractiveSlidePuzzle: React.FC<{
   );
 
   useEffect(() => {
-    const board = boardState || generateBoard(nRows, nCols);
+    const board = externalState || generateBoard(nRows, nCols);
     setBoard(board);
     setHole(findHole(board));
     onUpdate && onUpdate(board);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nRows, nCols, boardState]);
+  }, [nRows, nCols, externalState]);
 
   const attemptSquareSlide = ([row, col]: Coordinates) => {
     let newBoard;
