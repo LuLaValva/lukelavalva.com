@@ -62,6 +62,11 @@ const Home = (props: Props) => {
           Countdown Generator
         </BoxInSky>
       </Link>
+      <Link to="/wordle" className={styles.boxLink}>
+        <BoxInSky width={13} left={273} top={22}>
+          Wordle Clone
+        </BoxInSky>
+      </Link>
       <BoxInSky width={24} left={3400} top={2}>
         Haha you made it to the end
       </BoxInSky>
