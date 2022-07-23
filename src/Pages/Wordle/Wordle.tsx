@@ -235,9 +235,7 @@ const Wordle: React.FC<{
             onClick={() => {
               if (navigator.share !== undefined) {
                 navigator.share({
-                  title: "LaVordle",
                   text: makeGameCompleteMessage(evaluations, numGuessed),
-                  url: "https://lukelavalva.com",
                 });
               } else {
                 navigator.clipboard.writeText(
