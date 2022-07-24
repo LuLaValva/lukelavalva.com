@@ -7,7 +7,7 @@ import ManualSlideGraphGenerator from "./ManualSlideGraphGenerator";
 
 import "katex/dist/katex.min.css";
 import TeX from "@matejmazur/react-katex";
-import SlidePuzzleWithGroups from "./SlidePuzzleWithGroups";
+import SlidePuzzleWithCycles from "./SlidePuzzleWithCycles";
 import { SlidePuzzle } from "./SlidePuzzleDisplay";
 import { getCycle } from "./SlidePuzzleUtilities";
 
@@ -200,14 +200,40 @@ const SlidePuzzlePaper = () => {
         note is that, because permutations are one-to-one functions, it is
         impossible for a number to be a part of more than one cycle. Since they
         are mutually exclusive, we can consistently count the number of cycles
-        in each sliding puzzle. In the 24-puzzle below, each cycle is colored
-        separately.
+        in each sliding puzzle. In the 24-puzzle below, each cycle is assigned
+        to a color. All cycles are listed below, in proper mathematical
+        notation.
       </P>
 
-      <SlidePuzzleWithGroups
-        dimensions={[5, 5]}
+      <SlidePuzzleWithCycles
+        dimensions={[3, 3]}
         includeIndices
+        showCycleNotation
+      />
+
+      <P>
+        The observation made by Johnson &amp; Story is that each time a move is
+        made, the number of cycles changes by exactly 1. If the blank space
+        moves to a space that is already a part of its cycle, its cycle splits
+        in two. If it moves to a space that is a part of a different cycle then
+        the cycles are merged. Therefore, the number of cycles switches between
+        an even and odd number every move. This is referred to as the{" "}
+        <em>parity</em> of the permutation.
+      </P>
+      <P>
+        Recall that if we imagine a superimposed checkerboard, the color of the
+        empty space also switches every move. This means that, in a solvable
+        puzzle, the parity of the generated permutation is always odd when the
+        blank space is on the same checkerboard color as the bottom right corner
+        and it is always even otherwise. If the parity does not match the
+        location of the blank space, then the puzzle is impossible to solve.
+        This is true for any board dimensions.
+      </P>
+
+      <SlidePuzzleWithCycles
+        dimensions={[5, 5]}
         squareSize={4}
+        includeIndices
       />
 
       {sectionBreak}

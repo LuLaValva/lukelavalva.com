@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import InteractiveSlidePuzzle from "./InteractiveSlidePuzzle";
 import { SlidePuzzle } from "./SlidePuzzleDisplay";
+import TeX from "@matejmazur/react-katex";
 
 const GROUP_COLORS = [
   "none",
@@ -30,7 +31,7 @@ const GROUP_COLORS = [
 ];
 
 const atIndex = (puzzle: SlidePuzzle, index: number) =>
-  puzzle[Math.floor(index / puzzle.length)][index % puzzle[0].length];
+  puzzle[Math.floor(index / puzzle[0].length)][index % puzzle[0].length];
 
 function assignGroup(
   puzzle: SlidePuzzle,
@@ -38,15 +39,19 @@ function assignGroup(
   root: number,
   groupNum: number
 ) {
+  const cycle: number[] = [];
   let i = root;
   do {
     groupMap[i] = groupNum;
+    cycle.push(i);
     i = atIndex(puzzle, i);
   } while (i !== root);
+  return cycle;
 }
 
-const SlidePuzzleWithGroups: React.FC<{
+const SlidePuzzleWithCycles: React.FC<{
   onUpdate?: (puzzle: SlidePuzzle) => void;
+  showCycleNotation?: boolean;
   dimensions: [rows: number, cols: number];
   includeShuffleButton?: boolean;
   shuffleImmediately?: boolean;
@@ -54,16 +59,21 @@ const SlidePuzzleWithGroups: React.FC<{
   squareSize?: number;
   sizeUnit?: string;
   includeIndices?: boolean;
-}> = ({ onUpdate, ...props }) => {
+}> = ({ onUpdate, showCycleNotation = false, ...props }) => {
   const [groupColors, setGroupColors] = useState<{ [piece: number]: string }>();
+  const [cycles, setCycles] = useState<number[][]>([]);
 
   const generateColors = (puzzle: SlidePuzzle) => {
-    const [nRows, nCols] = props.dimensions;
+    const [nRows, nCols] = [puzzle.length, puzzle[0].length];
     const groupMap: number[] = Array(nRows * nCols).fill(-1);
     let colorIndex = 0;
+    const cycles: number[][] = [];
 
     for (let i = 0; i < groupMap.length; i++)
-      if (groupMap[i] === -1) assignGroup(puzzle, groupMap, i, colorIndex++);
+      if (groupMap[i] === -1)
+        cycles.push(assignGroup(puzzle, groupMap, i, colorIndex++));
+
+    setCycles(cycles);
 
     setGroupColors(
       Object.fromEntries(
@@ -77,12 +87,22 @@ const SlidePuzzleWithGroups: React.FC<{
   };
 
   return (
-    <InteractiveSlidePuzzle
-      onUpdate={generateColors}
-      assignedColors={groupColors}
-      {...props}
-    />
+    <>
+      <InteractiveSlidePuzzle
+        onUpdate={generateColors}
+        assignedColors={groupColors}
+        {...props}
+      />
+      {showCycleNotation && (
+        <TeX
+          block
+          math={String.raw`\begin{pmatrix}${cycles
+            .map((cycle) => cycle.join("&"))
+            .join(String.raw`\end{pmatrix}\begin{pmatrix}`)}\end{pmatrix}`}
+        />
+      )}
+    </>
   );
 };
 
-export default SlidePuzzleWithGroups;
+export default SlidePuzzleWithCycles;
