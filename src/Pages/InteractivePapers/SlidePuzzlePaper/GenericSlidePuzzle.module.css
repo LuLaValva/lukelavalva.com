@@ -59,6 +59,7 @@
   box-shadow:  white 0 0 1em, inset white 0 0 1em;
   border-radius: 3em;
   margin: 4vh auto;
+  overflow: clip;
 }
 
 .puzzleGraph .puzzle {

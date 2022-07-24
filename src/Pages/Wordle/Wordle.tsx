@@ -178,7 +178,7 @@ const Wordle: React.FC<{
         latestWordEval.every((val) => val === BULL) ||
         numGuessed === NUM_GUESSES - 1
       )
-        setGameOver(true);
+        setTimeout(() => setGameOver(true), numLetters * 400 + 200);
     } else {
       setGuessedWrong(true);
     }
@@ -241,6 +241,7 @@ const Wordle: React.FC<{
                 navigator.clipboard.writeText(
                   makeGameCompleteMessage(evaluations, numGuessed)
                 );
+                alert("copied!");
               }
             }}
           >
