@@ -11,10 +11,19 @@ const SlidePuzzleDisplay: React.FC<{
   piecePositions: SlidePuzzle;
   squareSize?: number;
   sizeUnit?: string;
+  includeIndices?: boolean;
   onSquareClick?: (coords: Coordinates) => void;
-}> = ({ piecePositions, squareSize = 5, sizeUnit = "vmin", onSquareClick }) => {
+  assignedColors?: { [piece: number]: string };
+}> = ({
+  piecePositions,
+  squareSize = 5,
+  sizeUnit = "rem",
+  includeIndices = false,
+  onSquareClick,
+  assignedColors,
+}) => {
+  const [nRows, nCols] = [piecePositions.length, piecePositions[0].length];
   const [isSolved, piecePositionMap]: [boolean, Coordinates[]] = useMemo(() => {
-    const [nRows, nCols] = [piecePositions.length, piecePositions[0].length];
     const positions = [...Array(nRows * nCols)];
     let isSolved = true;
 
@@ -30,7 +39,7 @@ const SlidePuzzleDisplay: React.FC<{
       })
     );
     return [isSolved, positions];
-  }, [piecePositions]);
+  }, [nCols, nRows, piecePositions]);
 
   const squareBaseStyles = {
     width: `${squareSize}${sizeUnit}`,
@@ -43,8 +52,8 @@ const SlidePuzzleDisplay: React.FC<{
     <div
       className={`${styles.puzzle} ${isSolved ? styles.solved : ""}`}
       style={{
-        width: `${squareSize * piecePositions[0].length}${sizeUnit}`,
-        height: `${squareSize * piecePositions.length}${sizeUnit}`,
+        width: `${squareSize * nCols}${sizeUnit}`,
+        height: `${squareSize * nRows}${sizeUnit}`,
         borderWidth: `${squareSize / 5}${sizeUnit}`,
         borderRadius: `${squareSize / 5}${sizeUnit}`,
       }}
@@ -59,10 +68,12 @@ const SlidePuzzleDisplay: React.FC<{
                 transform: `translate(${col * squareSize}${sizeUnit}, ${
                   row * squareSize
                 }${sizeUnit})`,
+                backgroundColor: assignedColors ? assignedColors[i] : undefined,
               }}
               onClick={onSquareClick && (() => onSquareClick([row, col]))}
             >
               {i}
+              {includeIndices && <div>{row * nCols + col}</div>}
             </button>
           )
       )}

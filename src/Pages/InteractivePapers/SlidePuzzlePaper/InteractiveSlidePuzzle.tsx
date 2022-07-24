@@ -21,20 +21,21 @@ function generateBoard(nRows: number, nCols: number): SlidePuzzle {
 
 const InteractiveSlidePuzzle: React.FC<{
   dimensions: [rows: number, cols: number];
-  squareSize?: number;
-  sizeUnit?: string;
   includeShuffleButton?: boolean;
   shuffleImmediately?: boolean;
   boardState?: SlidePuzzle;
   onUpdate?: (newBoard: SlidePuzzle) => void;
+  squareSize?: number;
+  sizeUnit?: string;
+  includeIndices?: boolean;
+  assignedColors?: { [piece: number]: string };
 }> = ({
   dimensions: [nRows, nCols],
-  squareSize,
-  sizeUnit,
   includeShuffleButton = false,
   shuffleImmediately = false,
   boardState: externalState,
   onUpdate,
+  ...props
 }) => {
   const [board, setBoard] = useState(() => generateBoard(nRows, nCols));
   const [[holeRow, holeCol], setHole] = useState(() =>
@@ -133,9 +134,8 @@ const InteractiveSlidePuzzle: React.FC<{
     <>
       <SlidePuzzleDisplay
         piecePositions={board}
-        squareSize={squareSize}
-        sizeUnit={sizeUnit}
         onSquareClick={attemptSquareSlide}
+        {...props}
       />
       {includeShuffleButton && (
         <button onClick={shuffle} className={styles.actionButton}>

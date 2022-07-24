@@ -10,7 +10,7 @@
   background-color: #4f43;
 }
 
-.puzzle > * {
+.puzzle > button {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -22,6 +22,13 @@
   font-family: inherit;
   transition: inherit;
   user-select: none;
+}
+
+.puzzle > button > div {
+  position: absolute;
+  font-size: 0.4em;
+  left: 8%;
+  top: 6%;
 }
 
 .actionButton {

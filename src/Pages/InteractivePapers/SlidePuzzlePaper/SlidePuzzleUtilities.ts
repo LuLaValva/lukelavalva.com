@@ -60,3 +60,15 @@ export function findHole(board: SlidePuzzle): [number, number] {
       if (board[row][col] === 0) return [row, col];
   return [-1, -1];
 }
+
+export function getCycle(permutation: number[], startPoint: number = 0) {
+  const cycle: number[] = [];
+  if (permutation.length) {
+    let curr = startPoint;
+    do {
+      cycle.push(curr);
+      curr = permutation[curr];
+    } while (curr !== startPoint);
+  }
+  return cycle;
+}
