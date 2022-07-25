@@ -68,6 +68,14 @@
   font-style: normal;
 }
 
+.paper ol > li {
+  margin-bottom: 1em;
+}
+
+.paper ol > li:last-child {
+  margin-bottom: inherit;
+}
+
 .draggableNumber {
   border: 1px solid white;
   border-radius: 0.2em;

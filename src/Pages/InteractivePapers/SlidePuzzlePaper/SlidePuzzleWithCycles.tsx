@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import InteractiveSlidePuzzle from "./InteractiveSlidePuzzle";
 import { SlidePuzzle } from "./SlidePuzzleDisplay";
 import TeX from "@matejmazur/react-katex";
+import { findHole } from "./SlidePuzzleUtilities";
 
 const GROUP_COLORS = [
   "none",
@@ -52,6 +53,7 @@ function assignGroup(
 const SlidePuzzleWithCycles: React.FC<{
   onUpdate?: (puzzle: SlidePuzzle) => void;
   showCycleNotation?: boolean;
+  showNumCyclesAndManhattanDistance?: boolean;
   dimensions: [rows: number, cols: number];
   includeShuffleButton?: boolean;
   shuffleImmediately?: boolean;
@@ -59,9 +61,15 @@ const SlidePuzzleWithCycles: React.FC<{
   squareSize?: number;
   sizeUnit?: string;
   includeIndices?: boolean;
-}> = ({ onUpdate, showCycleNotation = false, ...props }) => {
+}> = ({
+  onUpdate,
+  showCycleNotation = false,
+  showNumCyclesAndManhattanDistance = false,
+  ...props
+}) => {
   const [groupColors, setGroupColors] = useState<{ [piece: number]: string }>();
   const [cycles, setCycles] = useState<number[][]>([]);
+  const [manhattanDist, setManhattanDist] = useState(0);
 
   const generateColors = (puzzle: SlidePuzzle) => {
     const [nRows, nCols] = [puzzle.length, puzzle[0].length];
@@ -83,6 +91,13 @@ const SlidePuzzleWithCycles: React.FC<{
       )
     );
 
+    if (showNumCyclesAndManhattanDistance) {
+      const [holeRow, holeCol] = findHole(puzzle);
+      setManhattanDist(
+        puzzle.length - holeRow + puzzle[0].length - holeCol - 2
+      );
+    }
+
     onUpdate && onUpdate(puzzle);
   };
 
@@ -99,6 +114,20 @@ const SlidePuzzleWithCycles: React.FC<{
           math={String.raw`\begin{pmatrix}${cycles
             .map((cycle) => cycle.join("&"))
             .join(String.raw`\end{pmatrix}\begin{pmatrix}`)}\end{pmatrix}`}
+        />
+      )}
+      {showNumCyclesAndManhattanDistance && (
+        <TeX
+          math={String.raw`
+            \begin{aligned}
+              \text{Number of Cycles} & = ${cycles.length}\ \text{(${
+            cycles.length & 1 ? "odd" : "even"
+          })} \\
+              \text{Manhattan Distance} & = ${manhattanDist}\ \text{(${
+            manhattanDist & 1 ? "odd" : "even"
+          })}
+            \end{aligned}
+          `}
         />
       )}
     </>
