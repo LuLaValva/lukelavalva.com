@@ -3,20 +3,8 @@ import seedrandom from "seedrandom";
 import styles from "./Wordle.module.css";
 import WordleKeyboard from "./WordleKeyboard";
 
-export type WordLength =
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15;
+export type WordLength = 4 | 5 | 6 | 7;
+
 const MISS = 0,
   COW = 1,
   BULL = 2;
@@ -154,8 +142,9 @@ const Wordle: React.FC<{
   useEffect(() => {
     const wordList: string[] =
       require(`./WordLists/words${numLetters}`).default;
+    const common: string[] = require(`./WordLists/common${numLetters}`).default;
     setWordList(wordList);
-    setSolution(wordList[Math.floor(seedrandom(seed)() * wordList.length)]);
+    setSolution(common[Math.floor(seedrandom(seed)() * common.length)]);
   }, [numLetters, seed]);
 
   const addKeyColor = (key: string, color: 0 | 1 | 2) => {
