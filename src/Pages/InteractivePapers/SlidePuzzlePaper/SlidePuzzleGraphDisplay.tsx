@@ -3,8 +3,8 @@ import { breakCompositeKey } from "./SlidePuzzleUtilities";
 import VisGraph from "./VisGraph";
 
 export type SlidePuzzleGraph = {
-  nodes: { [puzzleKey: string]: boolean };
-  connections: { [compositeKey: string]: boolean };
+  nodes: Set<string>;
+  connections: Set<string>;
 };
 
 const SlidePuzzleGraphDisplay: React.FC<{
@@ -12,14 +12,14 @@ const SlidePuzzleGraphDisplay: React.FC<{
 }> = ({ graph }) => {
   const visNodes = useMemo(
     () =>
-      Object.keys(graph.nodes).map((id) => {
+      Array.from(graph.nodes).map((id) => {
         return { id };
       }),
     [graph.nodes]
   );
   const visEdges = useMemo(
     () =>
-      Object.keys(graph.connections).map((compositeKey) => {
+      Array.from(graph.connections).map((compositeKey) => {
         const [from, to] = breakCompositeKey(compositeKey);
         return { from, to, id: compositeKey };
       }),

@@ -72,3 +72,42 @@ export function getCycle(permutation: number[], startPoint: number = 0) {
   }
   return cycle;
 }
+
+export function generateBoard(nRows: number, nCols: number): SlidePuzzle {
+  const board = [...Array(nRows)].map((_, row) =>
+    [...Array(nCols)].map((_, col) => row * nCols + col + 1)
+  );
+  const [holeRow, holeCol] = [nRows - 1, nCols - 1];
+  board[holeRow][holeCol] = 0;
+  return board;
+}
+
+function swapTiles(
+  puzzle: SlidePuzzle,
+  [row1, col1]: [number, number],
+  [row2, col2]: [number, number]
+): SlidePuzzle {
+  const p = [...puzzle];
+  p[row1] = [...p[row1]];
+  if (row2 !== row1) p[row2] = [...p[row2]];
+  [p[row1][col1], p[row2][col2]] = [p[row2][col2], p[row1][col1]];
+  return p;
+}
+
+export function getMoves(puzzle: SlidePuzzle): SlidePuzzle[] {
+  const [nRows, nCols] = [puzzle.length, puzzle[0].length];
+  const [holeRow, holeCol] = findHole(puzzle);
+  const moves = [];
+
+  if (holeRow > 0)
+    moves.push(swapTiles(puzzle, [holeRow, holeCol], [holeRow - 1, holeCol]));
+  if (holeRow < nRows - 1)
+    moves.push(swapTiles(puzzle, [holeRow, holeCol], [holeRow + 1, holeCol]));
+
+  if (holeCol > 0)
+    moves.push(swapTiles(puzzle, [holeRow, holeCol], [holeRow, holeCol - 1]));
+  if (holeCol < nCols - 1)
+    moves.push(swapTiles(puzzle, [holeRow, holeCol], [holeRow, holeCol + 1]));
+
+  return moves;
+}

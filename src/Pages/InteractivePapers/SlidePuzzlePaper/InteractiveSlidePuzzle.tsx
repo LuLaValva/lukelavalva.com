@@ -4,20 +4,7 @@ import SlidePuzzleDisplay, {
   SlidePuzzle,
 } from "./SlidePuzzleDisplay";
 import styles from "./GenericSlidePuzzle.module.css";
-import { findHole } from "./SlidePuzzleUtilities";
-
-function initialHolePosition(nRows: number, nCols: number): Coordinates {
-  return [nRows - 1, nCols - 1];
-}
-
-function generateBoard(nRows: number, nCols: number): SlidePuzzle {
-  const board = [...Array(nRows)].map((_, row) =>
-    [...Array(nCols)].map((_, col) => row * nCols + col + 1)
-  );
-  const [holeRow, holeCol] = initialHolePosition(nRows, nCols);
-  board[holeRow][holeCol] = 0;
-  return board;
-}
+import { findHole, generateBoard } from "./SlidePuzzleUtilities";
 
 const InteractiveSlidePuzzle: React.FC<{
   dimensions: [rows: number, cols: number];
@@ -38,9 +25,7 @@ const InteractiveSlidePuzzle: React.FC<{
   ...props
 }) => {
   const [board, setBoard] = useState(() => generateBoard(nRows, nCols));
-  const [[holeRow, holeCol], setHole] = useState(() =>
-    initialHolePosition(nRows, nCols)
-  );
+  const [[holeRow, holeCol], setHole] = useState(() => [nRows - 1, nCols - 1]);
 
   useEffect(() => {
     const board = externalState || generateBoard(nRows, nCols);

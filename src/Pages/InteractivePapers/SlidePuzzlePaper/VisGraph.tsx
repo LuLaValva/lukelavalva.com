@@ -1,24 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DataSet } from "vis-data";
-import { Edge, Network, Node, Position } from "vis-network";
+import { Edge, Network, Node, Options } from "vis-network";
 import { getCachedPuzzle, isSolved } from "./SlidePuzzleUtilities";
 import styles from "./GenericSlidePuzzle.module.css";
 
-const NETWORK_OPTIONS = {
-  edges: { color: "#777", width: 4 },
+const NETWORK_OPTIONS: Options & {
   nodes: {
-    shape: "custom",
-    ctxRenderer: ({
-      ctx,
-      id,
-      x,
-      y,
-    }: {
+    ctxRenderer: (options: {
       ctx: CanvasRenderingContext2D;
       id: string;
       x: number;
       y: number;
-    }) => {
+    }) => void;
+  };
+} = {
+  edges: { color: "#777", width: 4 },
+  nodes: {
+    shape: "custom",
+    ctxRenderer: ({ ctx, id, x, y }) => {
       return {
         drawNode: () => {
           const puzzle = getCachedPuzzle(id);
@@ -79,7 +78,6 @@ const NETWORK_OPTIONS = {
 const VisGraph: React.FC<{
   nodes: { id: string }[];
   edges: { id: string; from: string; to: string }[];
-  onPositionUpdate?: (positions: { [nodeId: string]: Position }) => void;
 }> = (props) => {
   const parent = useRef<HTMLDivElement>(null);
   const [nodes] = useState(() => new DataSet<Node>());
@@ -87,18 +85,15 @@ const VisGraph: React.FC<{
 
   useEffect(() => {
     if (!parent.current) return;
-    const network = new Network(
-      parent.current,
-      { nodes, edges },
-      NETWORK_OPTIONS
-    );
-    network.on("initRedraw", () => {
-      props.onPositionUpdate && props.onPositionUpdate(network.getPositions());
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    new Network(parent.current, { nodes, edges }, NETWORK_OPTIONS);
   }, [edges, nodes]);
 
   useEffect(() => {
+    if (props.nodes.length < nodes.length) {
+      const oldIds = new Set(nodes.getIds() as string[]);
+      Object.values(props.nodes).forEach(({ id }) => oldIds.delete(id));
+      nodes.remove(Array.from(oldIds));
+    }
     nodes.update(props.nodes);
   }, [nodes, props.nodes]);
 

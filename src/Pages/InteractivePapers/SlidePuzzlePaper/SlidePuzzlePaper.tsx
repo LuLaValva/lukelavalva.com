@@ -10,6 +10,7 @@ import TeX from "@matejmazur/react-katex";
 import SlidePuzzleWithCycles from "./SlidePuzzleWithCycles";
 import { SlidePuzzle } from "./SlidePuzzleDisplay";
 import { getCycle } from "./SlidePuzzleUtilities";
+import IncrementalSlideGraphGenerator from "./IncrementalSlideGraphGenerator";
 
 const sectionBreak = <div className={styles.sectionBreak} />;
 const P: React.FC<{ children?: React.ReactNode }> = (props) => (
@@ -284,10 +285,28 @@ const SlidePuzzlePaper = () => {
       <h2>Finding an Optimal Solution</h2>
 
       <P>
-        The naive method for finding an optimal solution for a given slide
-        puzzle is to construct a tree that explores all solutions breadth-first,
-        beginning with the current state, until the solved state is reached.
+        A naive method for finding the optimal solution starting from a specific
+        state is to construct a graph that explores all other puzzle states
+        breadth-first until the solved state is reached by one of the branches.
+        Since a return to a state that has already been visited guarantees a
+        longer solution than what is already known to be possible, we can
+        refrain from ever visiting a single state more than once. This means
+        that our graph will contain no loops, so we will call it a <em>tree</em>
+        .
       </P>
+
+      <P>
+        In the example below, we can use this algorithm to quickly find the
+        fastest possible path to the solution.
+      </P>
+
+      <IncrementalSlideGraphGenerator
+        dimensions={[2, 3]}
+        rootState={[
+          [4, 0, 1],
+          [2, 5, 3],
+        ]}
+      />
 
       {sectionBreak}
 
