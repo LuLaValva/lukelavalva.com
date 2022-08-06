@@ -22,10 +22,12 @@ const EMOJIS = {
 
 const makeGameCompleteMessage = (
   evaluations: ((0 | 1 | 2)[] | undefined)[],
-  score: number
-) => `LaVordle ${new Date().toLocaleDateString()}: ${score}/${
-  evaluations.length
-}
+  score: number | undefined
+) => `LaVordle ${new Date().toLocaleDateString("en-US", {
+  month: "numeric",
+  day: "numeric",
+  year: "2-digit",
+})}: ${score ?? "X"}/${evaluations.length}
 
 ${evaluations
   .filter((row) => row !== undefined)
@@ -218,17 +220,28 @@ const Wordle: React.FC<{
       {/* Popup */}
       {gameOver && (
         <div className={styles.popup}>
-          <h1>{won ? "You Win!" : "You are awful at this."}</h1>
-          <pre>{makeGameCompleteMessage(evaluations, numGuessed)}</pre>
+          <h1>
+            {won ? "You Win!" : "You are awful at this."} The word was{" "}
+            <em>{solution}</em>.
+          </h1>
+          <pre>
+            {makeGameCompleteMessage(evaluations, won ? numGuessed : undefined)}
+          </pre>
           <button
             onClick={() => {
               if (navigator.share !== undefined) {
                 navigator.share({
-                  text: makeGameCompleteMessage(evaluations, numGuessed),
+                  text: makeGameCompleteMessage(
+                    evaluations,
+                    won ? numGuessed : undefined
+                  ),
                 });
               } else {
                 navigator.clipboard.writeText(
-                  makeGameCompleteMessage(evaluations, numGuessed)
+                  makeGameCompleteMessage(
+                    evaluations,
+                    won ? numGuessed : undefined
+                  )
                 );
                 alert("copied!");
               }

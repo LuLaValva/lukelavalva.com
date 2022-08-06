@@ -112,3 +112,8 @@
 .popup pre {
   font-size: 3vmin;
 }
+
+.popup em {
+  color: yellow;
+  font-style: inherit;
+}
