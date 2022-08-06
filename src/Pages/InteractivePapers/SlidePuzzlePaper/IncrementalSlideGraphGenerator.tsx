@@ -12,6 +12,7 @@ import {
   isSolved,
 } from "./SlidePuzzleUtilities";
 import styles from "./GenericSlidePuzzle.module.css";
+import SlideMoveCycleDisplay from "./SlideMoveCycleDisplay";
 
 type IdTree = {
   [id: string]: IdTree;
@@ -39,6 +40,12 @@ function dropLeaves(tree: IdTree, callback?: (id: string) => boolean) {
       if (!callback || !callback(id)) delete tree[id];
     } else dropLeaves(children, callback);
   });
+}
+
+function getMoveCycle(tree: IdTree): SlidePuzzle[] {
+  if (indicatesLeaf(tree)) return [];
+  const [key, val] = Object.entries(tree)[0];
+  return [getCachedPuzzle(key), ...getMoveCycle(val)];
 }
 
 const IncrementalSlideGraphGenerator: React.FC<{
@@ -142,6 +149,7 @@ const IncrementalSlideGraphGenerator: React.FC<{
           Expand Tree
         </button>
       )}
+      {showedPath && <SlideMoveCycleDisplay cycle={getMoveCycle(graph.tree)} />}
     </>
   );
 };
