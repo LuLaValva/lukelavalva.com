@@ -5,10 +5,10 @@ import WordleKeyboard, { GenericKeyHandler } from "./WordleKeyboard";
 import styles from "./Wordle.module.css";
 
 export const BLOCKS = {
-  [Eval.MISS]: "▇",
-  [Eval.COW]: "▄",
-  [Eval.BULL]: "▁",
-  [-1]: "▒",
+  [Eval.MISS]: "▢",
+  [Eval.COW]: "▥",
+  [Eval.BULL]: "▣",
+  [-1]: "▤",
 };
 
 const makeGameCompleteMessage = (
@@ -22,7 +22,7 @@ const makeGameCompleteMessage = (
   year: "2-digit",
 })}: ${evaluations
   .map(({ won }) => (won === undefined ? "X" : won + 1))
-  .join("|")}
+  .join(" | ")}
 
 ${evaluations[0].evals
   .filter((row) => row !== undefined)
