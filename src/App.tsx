@@ -30,6 +30,7 @@ const CountdownPage = React.lazy(
   () => import("./Pages/Countdown/CountdownPage")
 );
 const WordlePage = React.lazy(() => import("./Pages/Wordle/WordlePage"));
+const FFFdlePage = React.lazy(() => import("./Pages/Wordle/FFFdle"));
 
 const Page: React.FC<{
   title: string;
@@ -138,6 +139,14 @@ let App: React.FC = () => {
                 element={
                   <Page title="Wordle">
                     <WordlePage />
+                  </Page>
+                }
+              />
+              <Route
+                path="/444dle"
+                element={
+                  <Page title="444dle">
+                    <FFFdlePage />
                   </Page>
                 }
               />

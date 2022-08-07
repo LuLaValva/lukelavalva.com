@@ -67,6 +67,11 @@ const Home = (props: Props) => {
           Wordle Clone
         </BoxInSky>
       </Link>
+      <Link to="/444dle" className={styles.boxLink}>
+        <BoxInSky width={9} left={278} top={30}>
+          444dle
+        </BoxInSky>
+      </Link>
       <BoxInSky width={24} left={3400} top={2}>
         Haha you made it to the end
       </BoxInSky>

@@ -4,24 +4,27 @@ import styles from "./Wordle.module.css";
 import WordleKeyboard from "./WordleKeyboard";
 
 export type WordLength = 4 | 5 | 6 | 7;
+export enum Eval {
+  MISS,
+  COW,
+  BULL,
+}
 
-const MISS = 0,
-  COW = 1,
-  BULL = 2;
-
-export const colorClasses = {
-  [MISS]: "miss",
-  [COW]: "cow",
-  [BULL]: "bull",
+export const EVAL_COLORS = {
+  [Eval.MISS]: "#777",
+  [Eval.COW]: "#a80",
+  [Eval.BULL]: "#080",
 };
-const EMOJIS = {
-  [MISS]: "⚪",
-  [COW]: "🟠",
-  [BULL]: "🟢",
+
+export const EMOJIS = {
+  [Eval.MISS]: "⚪",
+  [Eval.COW]: "🟠",
+  [Eval.BULL]: "🟢",
+  [-1]: "⚫",
 };
 
 const makeGameCompleteMessage = (
-  evaluations: ((0 | 1 | 2)[] | undefined)[],
+  evaluations: (Eval[] | undefined)[],
   score: number | undefined
 ) => `LaVordle ${new Date().toLocaleDateString("en-US", {
   month: "numeric",
@@ -32,42 +35,35 @@ const makeGameCompleteMessage = (
 ${evaluations
   .filter((row) => row !== undefined)
   .map((row) =>
-    (row as (0 | 1 | 2)[]).map((evaluation) => EMOJIS[evaluation]).join("")
+    (row as Eval[]).map((evaluation) => EMOJIS[evaluation]).join("")
   )
   .join("\n")}
 
 https://lukelavalva.com/wordle`;
 
-function evaluate(
-  guess: string,
-  solution: string,
-  addKeyColor: (key: string, color: 0 | 1 | 2) => void
-) {
+export function evaluate(guess: string, solution: string) {
   const solChars = solution.split("");
-  const evaluation: (0 | 1 | 2)[] = Array(guess.length).fill(MISS);
+  const evaluation: Eval[] = Array(guess.length).fill(Eval.MISS);
   for (let i = guess.length - 1; i >= 0; i--) {
-    addKeyColor(guess.charAt(i), MISS);
     if (solChars[i] === guess.charAt(i)) {
       solChars.splice(i, 1);
-      evaluation[i] = BULL;
-      addKeyColor(guess.charAt(i), BULL);
+      evaluation[i] = Eval.BULL;
     }
   }
   for (let i = guess.length - 1; i >= 0; i--)
-    if (evaluation[i] !== BULL) {
+    if (evaluation[i] !== Eval.BULL) {
       const foundIndex = solChars.indexOf(guess.charAt(i));
       if (foundIndex !== -1) {
         solChars.splice(foundIndex, 1);
         evaluation[i] = 1;
-        addKeyColor(guess.charAt(i), COW);
       }
     }
   return evaluation;
 }
 
-const Letter: React.FC<{
+export const Letter: React.FC<{
   char?: string;
-  evaluation?: 0 | 1 | 2;
+  evaluation?: Eval;
   index: number;
 }> = ({ char, evaluation, index }) => {
   let displayClass = styles.empty;
@@ -76,12 +72,10 @@ const Letter: React.FC<{
 
   return (
     <div
-      className={[
-        styles.letter,
-        displayClass,
-        evaluation === undefined ? undefined : styles[colorClasses[evaluation]],
-      ].join(" ")}
+      className={styles.letter + " " + displayClass}
       style={{
+        backgroundColor:
+          evaluation === undefined ? undefined : EVAL_COLORS[evaluation],
         animationDelay: evaluation === undefined ? "0" : index * 0.4 + "s",
         transitionDelay:
           evaluation === undefined ? "0" : index * 0.4 + 0.2 + "s",
@@ -92,10 +86,10 @@ const Letter: React.FC<{
   );
 };
 
-const Row: React.FC<{
+export const Row: React.FC<{
   numLetters: WordLength;
   word: string;
-  evaluation?: (0 | 1 | 2)[];
+  evaluation?: Eval[];
   guessedWrong?: boolean;
 }> = ({ numLetters, word, evaluation, guessedWrong }) => {
   return (
@@ -114,6 +108,38 @@ const Row: React.FC<{
   );
 };
 
+export const Board: React.FC<{
+  numLetters: WordLength;
+  guesses: string[];
+  evaluations: (Eval[] | undefined)[];
+  numGuessed: number;
+  guessedWrong: boolean;
+  locked?: number;
+}> = ({
+  numLetters,
+  guesses,
+  evaluations,
+  numGuessed,
+  guessedWrong,
+  locked,
+}) => {
+  return (
+    <div className={styles.wordBox + " " + (locked && styles.locked)}>
+      {guesses.map((guess, i) => (
+        <Row
+          key={i}
+          numLetters={numLetters}
+          word={locked !== undefined && i > locked ? "" : guess}
+          evaluation={
+            locked !== undefined && i > locked ? undefined : evaluations[i]
+          }
+          guessedWrong={numGuessed === i && guessedWrong}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Wordle: React.FC<{
   numLetters: WordLength;
   seed: string;
@@ -125,15 +151,15 @@ const Wordle: React.FC<{
   const [guesses, setGuesses] = useState<string[]>(() =>
     Array(NUM_GUESSES).fill("")
   );
-  const [evaluations, setEvaluations] = useState<((0 | 1 | 2)[] | undefined)[]>(
-    [...Array(NUM_GUESSES)]
-  );
+  const [evaluations, setEvaluations] = useState<(Eval[] | undefined)[]>([
+    ...Array(NUM_GUESSES),
+  ]);
   const [numGuessed, setNumGuessed] = useState(0);
   const [guessedWrong, setGuessedWrong] = useState(false);
-  const [keyColors, setKeyColors] = useState<{ [key: string]: 0 | 1 | 2 }>({});
+  const [keyColors, setKeyColors] = useState<{ [key: string]: Eval }>({});
   const [gameOver, setGameOver] = useState(false);
   const won = useMemo(
-    () => evaluations[numGuessed - 1]?.every((val) => val === BULL),
+    () => evaluations[numGuessed - 1]?.every((val) => val === Eval.BULL),
     [evaluations, numGuessed]
   );
 
@@ -149,7 +175,7 @@ const Wordle: React.FC<{
     setSolution(common[Math.floor(seedrandom(seed)() * common.length)]);
   }, [numLetters, seed]);
 
-  const addKeyColor = (key: string, color: 0 | 1 | 2) => {
+  const addKeyColor = (key: string, color: Eval) => {
     setKeyColors((keyColors) => {
       if (keyColors[key] === undefined || keyColors[key] < color)
         return { ...keyColors, [key]: color };
@@ -161,12 +187,15 @@ const Wordle: React.FC<{
     const guess = guesses[numGuessed];
     if (wordList.includes(guess)) {
       const newEvaluations = [...evaluations];
-      const latestWordEval = evaluate(guess, solution, addKeyColor);
+      const latestWordEval = evaluate(guess, solution);
+      latestWordEval.forEach((val, i) => {
+        addKeyColor(guess.charAt(i), val);
+      });
       newEvaluations[numGuessed] = latestWordEval;
       setEvaluations(newEvaluations);
       setNumGuessed(numGuessed + 1);
       if (
-        latestWordEval.every((val) => val === BULL) ||
+        latestWordEval.every((val) => val === Eval.BULL) ||
         numGuessed === NUM_GUESSES - 1
       )
         setTimeout(() => setGameOver(true), numLetters * 400 + 200);
@@ -205,17 +234,14 @@ const Wordle: React.FC<{
 
   return (
     <>
-      <div className={styles.wordBox}>
-        {guesses.map((guess, i) => (
-          <Row
-            key={i}
-            numLetters={numLetters}
-            word={guess}
-            evaluation={evaluations[i]}
-            guessedWrong={numGuessed === i && guessedWrong}
-          />
-        ))}
-      </div>
+      <Board
+        numLetters={numLetters}
+        guesses={guesses}
+        evaluations={evaluations}
+        guessedWrong={guessedWrong}
+        numGuessed={numGuessed}
+      />
+
       <WordleKeyboard keyEvent={handleKeydown} keyColors={keyColors} />
       {/* Popup */}
       {gameOver && (
