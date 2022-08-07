@@ -22,7 +22,7 @@ const makeGameCompleteMessage = (
   year: "2-digit",
 })}: ${evaluations
   .map(({ won }) => (won === undefined ? "X" : won + 1))
-  .join(" | ")}
+  .join("|")}
 
 ${evaluations[0].evals
   .filter((row) => row !== undefined)
@@ -36,7 +36,7 @@ ${evaluations[0].evals
           )
           .join("")
       )
-      .join("|")
+      .join(" | ")
   )
   .join("\n")}
 
