@@ -5,10 +5,10 @@ import WordleKeyboard, { GenericKeyHandler } from "./WordleKeyboard";
 import styles from "./Wordle.module.css";
 
 export const BLOCKS = {
-  [Eval.MISS]: "▢",
-  [Eval.COW]: "▥",
-  [Eval.BULL]: "▣",
-  [-1]: "▤",
+  [Eval.MISS]: "◯",
+  [Eval.COW]: "◎",
+  [Eval.BULL]: "◉",
+  [-1]: "◍",
 };
 
 const makeGameCompleteMessage = (
