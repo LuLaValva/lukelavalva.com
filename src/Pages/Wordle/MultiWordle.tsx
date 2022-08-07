@@ -1,19 +1,28 @@
 import React, { useEffect, useMemo, useState } from "react";
 import seedrandom from "seedrandom";
-import { Board, EMOJIS, Eval, evaluate, WordLength } from "./Wordle";
+import { Board, Eval, evaluate, WordLength } from "./Wordle";
 import WordleKeyboard, { GenericKeyHandler } from "./WordleKeyboard";
 import styles from "./Wordle.module.css";
+
+export const BLOCKS = {
+  [Eval.MISS]: "▇",
+  [Eval.COW]: "▄",
+  [Eval.BULL]: "▁",
+  [-1]: "▒",
+};
 
 const makeGameCompleteMessage = (
   evaluations: {
     evals: (Eval[] | undefined)[];
     won: number | undefined;
   }[]
-) => `LaVordle ${new Date().toLocaleDateString("en-US", {
+) => `444dle ${new Date().toLocaleDateString("en-US", {
   month: "numeric",
   day: "numeric",
   year: "2-digit",
-})}: ${evaluations.map(({ won }) => won ?? "X").join("|")}
+})}: ${evaluations
+  .map(({ won }) => (won === undefined ? "X" : won + 1))
+  .join("|")}
 
 ${evaluations[0].evals
   .filter((row) => row !== undefined)
@@ -23,7 +32,7 @@ ${evaluations[0].evals
         evals[i]
           ?.map(
             (evaluation) =>
-              EMOJIS[won !== undefined && won < i ? -1 : evaluation]
+              BLOCKS[won !== undefined && won < i ? -1 : evaluation]
           )
           .join("")
       )
@@ -60,7 +69,10 @@ const MultiWordle: React.FC<{
   const [keyColors, setKeyColors] = useState<{ [key: string]: Eval[] }>({});
   const [gameOver, setGameOver] = useState(false);
 
-  const won = useMemo(() => evaluations.every((val) => val.won), [evaluations]);
+  const won = useMemo(
+    () => evaluations.every((val) => val.won !== undefined),
+    [evaluations]
+  );
 
   useEffect(() => {
     (won || numGuessed === numGuesses) &&
@@ -172,15 +184,15 @@ const MultiWordle: React.FC<{
 
       {gameOver && (
         <div className={styles.popup}>
-          <h1>
+          <h2>
             |{" "}
             {solutions.map((word) => (
               <>
                 {" "}
-                <em>{word}</em> |
+                <em key={word}>{word}</em> |
               </>
             ))}
-          </h1>
+          </h2>
           <h1>{won ? "You Win!" : "You are awful at this."}</h1>
           <pre>{makeGameCompleteMessage(evaluations)}</pre>
           <button
