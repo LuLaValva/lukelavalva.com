@@ -1,14 +1,45 @@
 import React, { useEffect, useMemo, useState } from "react";
 import seedrandom from "seedrandom";
-import { Board, Eval, evaluate, WordLength } from "./Wordle";
+import { Board, EMOJIS, Eval, evaluate, WordLength } from "./Wordle";
 import WordleKeyboard, { GenericKeyHandler } from "./WordleKeyboard";
 import styles from "./Wordle.module.css";
 
-export const BLOCKS = {
-  [Eval.MISS]: "◇",
-  [Eval.COW]: "◈",
-  [Eval.BULL]: "◆",
-  [-1]: "◇",
+type EvalSet = {
+  evals: (Eval[] | undefined)[];
+  won: number | undefined;
+};
+
+const getEmojiRow = ({ evals, won }: EvalSet, i: number) =>
+  evals[i]
+    ?.map(
+      (evaluation) => EMOJIS[won !== undefined && won < i ? -1 : evaluation]
+    )
+    .join("");
+
+const evalsToEmojis = (evaluations: EvalSet[]) => {
+  const [first, second, third] = evaluations;
+  let emojis = "";
+  for (
+    let i = 0;
+    first.won !== undefined && second.won !== undefined
+      ? i <= first.won || i <= second.won
+      : i < first.evals.length;
+    i++
+  ) {
+    emojis += getEmojiRow(first, i) + "  " + getEmojiRow(second, i) + "\n";
+  }
+
+  emojis += "\n";
+
+  for (
+    let i = 0;
+    third.won !== undefined ? i <= third.won : i < third.evals.length;
+    i++
+  ) {
+    emojis += "             " + getEmojiRow(third, i) + "\n";
+  }
+
+  return emojis;
 };
 
 const makeGameCompleteMessage = (
@@ -24,21 +55,7 @@ const makeGameCompleteMessage = (
   .map(({ won }) => (won === undefined ? "X" : won + 1))
   .join("|")}
 
-${evaluations[0].evals
-  .filter((row) => row !== undefined)
-  .map((_, i) =>
-    evaluations
-      .map(({ evals, won }) =>
-        evals[i]
-          ?.map(
-            (evaluation) =>
-              BLOCKS[won !== undefined && won < i ? -1 : evaluation]
-          )
-          .join("")
-      )
-      .join(" | ")
-  )
-  .join("\n")}
+${evalsToEmojis(evaluations)}
 
 https://lukelavalva.com/444dle`;
 
@@ -53,12 +70,7 @@ const MultiWordle: React.FC<{
   const [guesses, setGuesses] = useState<string[]>(() =>
     Array(numGuesses).fill("")
   );
-  const [evaluations, setEvaluations] = useState<
-    {
-      evals: (Eval[] | undefined)[];
-      won: number | undefined;
-    }[]
-  >(() =>
+  const [evaluations, setEvaluations] = useState<EvalSet[]>(() =>
     [...Array(numWords)].map(() => ({
       evals: Array(numGuesses),
       won: undefined,

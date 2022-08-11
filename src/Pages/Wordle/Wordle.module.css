@@ -107,10 +107,15 @@
   background-color: #888;
   font-size: 5vmin;
   width: 30vmin;
+  margin-top: 5vh;
 }
 
 .popup pre {
   font-size: 3vmin;
+  font-family: inherit;
+  text-align: left;
+  width: fit-content;
+  margin: auto;
 }
 
 .popup em {
