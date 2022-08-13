@@ -36,7 +36,7 @@ const evalsToEmojis = (evaluations: EvalSet[]) => {
     third.won !== undefined ? i <= third.won : i < third.evals.length;
     i++
   ) {
-    emojis += "             " + getEmojiRow(third, i) + "\n";
+    emojis += "            " + getEmojiRow(third, i) + "\n";
   }
 
   return emojis;
@@ -206,7 +206,23 @@ const MultiWordle: React.FC<{
             ))}
           </h2>
           <h1>{won ? "You Win!" : "You are awful at this."}</h1>
-          <pre>{makeGameCompleteMessage(evaluations)}</pre>
+          <pre>
+            {evaluations[0].evals
+              .filter((row) => row !== undefined)
+              .map((_, i) =>
+                evaluations
+                  .map(({ evals, won }) =>
+                    evals[i]
+                      ?.map(
+                        (evaluation) =>
+                          EMOJIS[won !== undefined && won < i ? -1 : evaluation]
+                      )
+                      .join("")
+                  )
+                  .join("   ")
+              )
+              .join("\n")}
+          </pre>
           <button
             onClick={() => {
               if (navigator.share !== undefined) {
