@@ -66,23 +66,24 @@ const SlidePuzzlePaper = () => {
         across the nation and captured the minds of thousands of individuals.
         The rules are simple: starting from a scrambled state, it is possible to
         solve the puzzle by repeatedly sliding adjacent tiles into the empty
-        space until the numbers are in sequence, with <TeX>1</TeX> in the upper
-        left hand corner. This puzzle and its variants have gone by many names,
+        space until the numbers are back in sequence, with <TeX>1</TeX>{" "}
+        stationed in the upper left hand corner. If you haven't done it before,
+        feel free to try your hand at solving the puzzle above before you
+        continue reading. This puzzle and its variants have gone by many names,
         but for purposes of this article I will be calling them{" "}
         <TeX>m\times n</TeX> sliding puzzles, where <TeX>m</TeX> represents the
-        number of rows and <TeX>n</TeX> the number of columns. If you haven't
-        done it before, please try your hand at solving the <TeX>3\times 3</TeX>{" "}
-        puzzle above before you continue reading.
+        number of rows and <TeX>n</TeX> the number of columns.
       </P>
 
       <P>
-        After looking hard enough, you may discover that there is a lot to learn
-        from these simple puzzles. In this article, I would like to introduce
-        You to the relationship between sliding puzzles and various mathematical
+        While it may not seem so at first, there is actually a lot to learn from
+        these simple puzzles. In this article, I would like to introduce you to
+        the relationship between sliding puzzles and various mathematical
         disciplines, including graph theory and group theory. Along the way
         we'll find optimal solutions for some of the smaller puzzles, show why{" "}
         <i>nobody</i> has yet found them for larger ones, and explore the
-        feasibility of the following $1,000 configuration from the 1890s.
+        feasibility of reaching a solution from the following $1,000
+        configuration from the 1890s.
       </P>
 
       <InteractiveSlidePuzzle
@@ -101,44 +102,50 @@ const SlidePuzzlePaper = () => {
       <h2>The State Graph</h2>
 
       <P>
-        Before discussing any approaches for quickly solving sliding puzzles, I
-        would like to introduce you to a mathematically comprehensive
-        representation. Suppose that we attribute each state of the puzzle to a
-        single node in a graph that consists of all possible states. Then each
-        of the possible moves from these states can be associated with an edge
-        that connects two states together.
+        Before moving forward with some of the interesting mathemaical
+        properties of sliding puzzles, let's gather our bearings by exploring
+        some alternative methods of visualization. To start, we can attribute
+        each state of the puzzle to a single node in a graph. Each time we make
+        a move, a new edge is generated between the previos move and the current
+        one. After we've seen all possible puzzle states and all of the moves
+        between them, we will have a complete picture of the puzzle and all of
+        its possibilities.
       </P>
 
       <P>
         For <i>very</i> small puzzles, this graph is small enough that it is
-        easy to generate quickly and understand at a glance. For example, please
-        play around with this <TeX>2\times 2</TeX> puzzle. You'll be able to
-        visit all possible states of the puzzle in 12 movies, and perform all
-        transitions in 13.
+        easy to generate quickly and understand at a glance. For example, take a
+        moment to play around with this <TeX>2\times 2</TeX> puzzle. You'll be
+        able to visit all possible states within only 12 movies, and the 13th
+        will complete the graph.
       </P>
 
       <ManualSlideGraphGenerator dimensions={[2, 2]} />
 
       <div className={styles.aside}>
         Quick tip: Navigate graphs by pinching, scrolling, or dragging and move
-        individual nodes around using your finger or mouse. Graph display
-        technology provided by{" "}
+        individual nodes around using your finger or mouse [
         <a href="https://visjs.org/" target="_blank" rel="noreferrer">
           vis.js
         </a>
-        .
+        ].
       </div>
 
       <P>
-        However, the graphs for most puzzles are not nearly as comprehensible.
-        After only one additional column has been added to the previous puzzle,
-        the graph increases in size by a considerable amount. After a few
-        shuffles of this <TeX>2\times 3</TeX> puzzle, the network of discovered
-        states blows the graph of the <TeX>2\times 2</TeX> puzzle out of the
-        water.
+        After only one additional column has been added, the graph increases in
+        size by a considerable amount. After a few shuffles of this{" "}
+        <TeX>2\times 3</TeX> puzzle, you may discover that the graph is so large
+        that it is difficult to follow.
       </P>
 
       <ManualSlideGraphGenerator dimensions={[2, 3]} includeShuffle />
+
+      <P>
+        Of course, it doesn't stop here. As the size of the puzzle grows, its
+        state graph does too. In the next section we'll be doing some work to
+        figure out just how big those graphs get, and discover some interesting
+        qualities of the puzzle that may not have been obvious at first.
+      </P>
 
       {sectionBreak}
 
@@ -147,16 +154,16 @@ const SlidePuzzlePaper = () => {
       <P>
         Readers who are keen on combinatorics may have noticed something
         peculiar about the size of the graph generated by the{" "}
-        <TeX>2\times 2</TeX> puzzle. Before the restrictions of a sliding puzzle
-        are taken into account, it may come across as obvious that the number of
-        nodes in the graph should the same as the number of possible 4-digit
-        permutations. Then the number of possible board states should be
+        <TeX>2\times 2</TeX> puzzle. If there are 4 pieces in the puzzle and we
+        can organize them in any way we'd like, then the number of possible
+        states should be the same as the number of length-4 permutations.
+        Following this logic, the number of possible states should come out to
         <TeX block>4!=4\cdot3\cdot2\cdot1=24.</TeX>
-        However, this is not the case. In fact, the actual number of possible
-        states for this puzzle is exactly <i>half</i> of the number of possible
-        permutations. This is because 50% of board states are actually entirely
-        unreachable. No matter the number of moves, it is impossible to reach a
-        solution from the following board:
+        However, this is not the case. We learned earlier that the actual number
+        of reachable states in the <TeX>2\times 2</TeX> puzzle is actually 12.
+        This means that 50% of the possible configurations must be unreachable!
+        After some experimentation, this becomes clear. No matter the number of
+        moves, it is impossible to reach a solution from the following state:
       </P>
 
       <InteractiveSlidePuzzle
@@ -177,45 +184,44 @@ const SlidePuzzlePaper = () => {
         <a href={references.johnson79.url} target="_blank" rel="noreferrer">
           back in 1879
         </a>{" "}
-        by Wm. Woolsey Johnson and its generalization by his colleague William
-        E. Story.
+        by Wm. Woolsey Johnson and its subsequent generalization by William E.
+        Story.
       </P>
 
       <P>
         The Johnson &amp; Story argument, in its long-winded 19th century
         mathematical vernacular, begins with the recognition that each time a
-        square is moved into the empty space there are two constants that
-        change:
+        square is moved into the empty space there are two values that change:
         <ol>
           <li>
-            If we impose a checkerboard pattern on the puzzle, then the color
-            that the blank space is on changes with every move. This "color" can
-            also be found by calculating the number of rows and columns that the
-            empty space has been displaced from its solved position and checking
-            whether it is even or odd. This metric, where rows and columns are
-            counted, is known as "Manhattan distance" because it is indicative
-            of the way that cars travel amongst streets in a grid pattern.
+            <em>Parity of Manhattan Distance</em>: If we add together the number
+            of rows and columns that the empty space has traveled from the
+            bottom right corner, it will switch between being even and odd every
+            single move. This metric is known as "Manhattan distance" because it
+            is indicative of the way that cars travel among city streets.
           </li>
           <li>
-            The <em>parity</em> of the number of cycles in the permutation
-            generated by each of the squares and their indices.
+            <em>Parity of Permutation Cycles</em>: This value will take a bit
+            longer to explain than Manhattan distance, so hold tight for the
+            next few paragraphs. If you're familiar with group theory, feel free
+            to skim through.
           </li>
         </ol>
-        That second constant requires a reasonable understanding of structures
-        in group theory, so let's break it down. First, we define the{" "}
-        <em>index</em> of a square to be read row-by-row, starting at 0. Below
-        is a standard square <TeX>3\times 3</TeX> puzzle with indices included:
+        To find the permutation cycles, we can begin by defining the{" "}
+        <em>index</em> of each piece in the puzzle to be read row-by-row,
+        starting at 0. Below is a <TeX>3\times 3</TeX> puzzle with indices
+        included:
       </P>
 
       <InteractiveSlidePuzzle dimensions={[3, 3]} includeIndices />
 
       <P>
-        To find the permutation generated by a given puzzle state, we generate a
-        map between all indices and the numbers that are on them, where the
-        blank space represents zero. This map is typically written in{" "}
-        <em>permutation notation</em>, which is most easily understood in a
-        demonstration. The diagram below the following puzzle describes its
-        state as a permutation.
+        To find the permutation generated by a given puzzle state, we can refer
+        to the map between all indices and the numbers that are on them (for
+        simplicity, the "number" of the blank space is 0). This map is typically
+        written in <em>permutation notation</em>, which is most easily
+        understood by demonstration. The diagram below the following puzzle
+        describes its state as a permutation.
       </P>
 
       <InteractiveSlidePuzzle
@@ -234,7 +240,9 @@ const SlidePuzzlePaper = () => {
       />
 
       <P>
-        In the puzzle above 0 maps to {permutation[0]}, which in turn maps to{" "}
+        In a permutation, mapping a value from the top row to its associated
+        number on the bottom is called <em>permuting</em>. In the puzzle above,
+        0 permutes to {permutation[0]} which in turn permutes to{" "}
         {permutation[permutation[0]]}. We can find a <em>cycle</em> by
         recursively permuting a number until it returns to its original
         position. The cycle that includes 0 in this permutation can be written
@@ -251,14 +259,21 @@ const SlidePuzzlePaper = () => {
       />
 
       <P>
-        Please feel free to play with the puzzle above until you have an
-        understanding of how these cycles are generated. An important fact to
-        note is that, because permutations are one-to-one functions, it is
-        impossible for a number to be a part of more than one cycle. Since they
-        are mutually exclusive, we can consistently count the number of cycles
-        in each sliding puzzle. In the <TeX>5\times 5</TeX> puzzle below, each
-        cycle is assigned to a color. All cycles are listed below, in proper
-        mathematical notation.
+        To really get an understanding of each generated permutation and its
+        cycles, mess with the <TeX>3\times 3</TeX> puzzle above and watch how
+        the values change.
+      </P>
+
+      <P>
+        An important note is that, because each value is found once and only
+        once on the top and bottom of each permutation (this means they're
+        one-to-one functions), it is impossible for a number to be a part of
+        more than one cycle. Since the cycles are mutually exclusive, we can
+        actually represent each permutation by just the list of the cycles that
+        it generates. In the <TeX>3\times 3</TeX> puzzle below, each cycle is
+        assigned to a color and listed below, in proper cycle notation. As you
+        move the pieces around, the number of cycles will constantly be
+        changing.
       </P>
 
       <SlidePuzzleWithCycles
@@ -268,23 +283,22 @@ const SlidePuzzlePaper = () => {
       />
 
       <P>
-        The observation made by Johnson &amp; Story is that each time a move is
-        made, the number of cycles changes by exactly 1. If the blank space
-        moves to a space that is already a part of its cycle, its cycle splits
-        in two. If it moves to a space that is a part of a different cycle then
-        the cycles are merged. Therefore, the number of cycles switches between
-        an even and odd number every move. This is referred to as the{" "}
-        <em>parity</em> of the permutation.
+        The observation made by Johnson &amp; Story in 1879 was that each time
+        they made a move , the number of cycles changed by exactly 1. If the
+        blank space moves to a space that is already a part of its cycle, its
+        cycle splits in two. If it moves to a space that is a part of a
+        different cycle, then the two cycles are merged. Therefore, the number
+        of cycles switches between an even and odd number every move. This is
+        referred to as the <em>parity</em> of the permutation.
       </P>
 
       <P>
-        Recall that if we imagine a superimposed checkerboard, the color of the
-        empty space also switches every move. This means that, in a solvable
-        puzzle, the parity of the generated permutation is always odd when the
-        Manhattan distance of the blank space from its target location is even,
-        and vice versa. If this is not the case, then the puzzle is impossible
-        to solve. This is true for all finite sliding puzzles, regardless of
-        their dimensions.
+        Recall that the parity of the manhattan distance also changes with every
+        move. This means that, in a solvable puzzle, the parity of the generated
+        permutation is always odd when the Manhattan distance is even, and vice
+        versa. If this is not the case, then the puzzle must be impossible to
+        solve. This is true for all finite sliding puzzles, regardless of their
+        dimensions.
       </P>
 
       <SlidePuzzleWithCycles
@@ -295,8 +309,9 @@ const SlidePuzzlePaper = () => {
       />
 
       <P>
-        Thus, we can deduce very quickly that the following popular puzzle
-        arrangement is impossible to solve!
+        Using this knowledge and some computational visualization, we can deduce
+        in seconds that the following popular puzzle arrangement is actually
+        impossible to solve!
       </P>
 
       <SlidePuzzleWithCycles
@@ -313,10 +328,11 @@ const SlidePuzzlePaper = () => {
       />
 
       <P>
-        For those who are familiar with abstract algebra, it has been proven any
-        square puzzle with odd number of tiles <TeX>n</TeX> is isomorphic to its
-        respective alternating group <TeX>A_n.</TeX> That discussion is beyond
-        the scope of this article, but you can read more about it in{" "}
+        For those who are familiar with abstract algebra and group theory, it
+        has been shown any square puzzle with odd number of tiles <TeX>n</TeX>{" "}
+        is isomorphic to its respective alternating group <TeX>A_n.</TeX> That
+        discussion is beyond the scope of this article, but you can read more
+        about it in{" "}
         <a href={references.beeler15.url} target="_blank" rel="noreferrer">
           this excellent paper by Robert A. Beeler
         </a>
@@ -328,19 +344,24 @@ const SlidePuzzlePaper = () => {
       <h2>Finding an Optimal Solution</h2>
 
       <P>
-        A naive method for finding the optimal solution starting from a specific
-        state is to construct a graph that explores all other puzzle states
-        breadth-first until the solved state is reached by one of the branches.
-        Since a return to a state that has already been visited guarantees a
-        longer solution than what is already known to be possible, we can
-        refrain from ever visiting a single state more than once. This means
-        that our graph will contain no loops, so we will call it a <em>tree</em>
-        .
+        Now that we're done with our little detour into group theory, let's take
+        a step back to the state graph in order to find some fast solutions.
+      </P>
+
+      <P>
+        A naive method for finding the optimal solution from a given state is to
+        construct a graph that explores all other states breadth-first until the
+        solved state is reached by one of the branches. Since returning to a
+        state that has already been visited guarantees a longer solution than
+        what is already known to be possible, we can refrain from ever visiting
+        a known state more than once. This means that our graph will contain no
+        loops, so we can call it a <em>tree</em>.
       </P>
 
       <P>
         In the example below, we can use this algorithm to quickly find the
-        fastest possible path to the solution.
+        fastest possible path to the solution (From this state you'll only need
+        8 moves to make it there, so don't stop short!).
       </P>
 
       <IncrementalSlideGraphGenerator
@@ -355,15 +376,15 @@ const SlidePuzzlePaper = () => {
         While this is an effective method for finding the solution in small
         puzzles, the number of possible board states in larger ones makes it
         computationally infeasible to follow the algorithm for long. As we
-        learned earlier, in a <TeX>5\times 5</TeX> sliding puzzle there are{" "}
-        <TeX math="\frac{25!}{2}\approx 7.76\times 10^{24}" /> possible states
-        to explore, which is an unfathomably large number. When using the
-        breadth-first search technique, we are limited by not only the amount of
-        time it takes to explore all of the possible next moves, but also by the
-        space that it takes to store all of the visited states. In fact, the
-        number of states in a <TeX>5\times 5</TeX> sliding puzzle is so large
-        that no algorithm has yet discovered the number of moves that are
-        required in the worst case.
+        learned earlier, in a <TeX>5\times 5</TeX> sliding puzzle there are
+        <TeX block math="\frac{25!}{2}\approx 7.76\times 10^{24}" />
+        possible states to explore, which is an unfathomably large number. When
+        using the breadth-first search technique, we are limited not only by the
+        amount of time it takes to explore all of the possible next moves, but
+        also by the space that it takes to store all of the previously visited
+        states. In fact, there are so many states in a <TeX>5\times 5</TeX>{" "}
+        sliding puzzle that no algorithm has yet discovered the board states
+        which are provably the furthest from being solved.
       </P>
 
       {sectionBreak}
