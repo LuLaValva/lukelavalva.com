@@ -1,7 +1,7 @@
 .puzzle {
   border: solid #fff3;
   background-color: #fff2;
-  margin: 1em auto;
+  margin: 1rem auto;
   transition: all 0.1s, background-color 0.5s;
   position: relative;
 }
@@ -54,10 +54,10 @@
 
 .puzzleGraph {
   width: 90%;
-  max-width: 100vh;
+  max-width: 55rem;
   height: 50vh;
-  box-shadow:  white 0 0 1em, inset white 0 0 1em;
-  border-radius: 3em;
+  box-shadow:  white 0 0 1rem, inset white 0 0 1rem;
+  border-radius: 3rem;
   margin: 4vh auto;
   overflow: clip;
 }

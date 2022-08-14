@@ -11,6 +11,7 @@ import SlidePuzzleWithCycles from "./SlidePuzzleWithCycles";
 import { SlidePuzzle } from "./SlidePuzzleDisplay";
 import { getCycle } from "./SlidePuzzleUtilities";
 import IncrementalSlideGraphGenerator from "./IncrementalSlideGraphGenerator";
+import SlidePuzzleWithReductionColors from "./SlidePuzzleWithReductionColors";
 
 const sectionBreak = <div className={styles.sectionBreak} />;
 const P: React.FC<{ children?: React.ReactNode }> = (props) => (
@@ -44,7 +45,22 @@ const references: { [key: string]: Citation } = {
     published: "Wikipedia, The Free Encyclopedia",
     url: "https://en.wikipedia.org/wiki/15_puzzle",
   },
+  wiki_astar: {
+    title: "A* search algorithm",
+    authors: ["Wikipedia Contributors"],
+    published: "Wikipedia, The Free Encyclopedia",
+    url: "https://en.wikipedia.org/wiki/A*_search_algorithm",
+  },
 };
+
+const Ref: React.FC<{ for: Citation; children?: React.ReactNode }> = ({
+  for: citation,
+  children,
+}) => (
+  <a href={citation.url} target="_blank" rel="noreferrer">
+    {children}
+  </a>
+);
 
 const SlidePuzzlePaper = () => {
   const [permutationPuzzle, setPermutationPuzzle] = useState<SlidePuzzle>([]);
@@ -106,10 +122,10 @@ const SlidePuzzlePaper = () => {
         properties of sliding puzzles, let's gather our bearings by exploring
         some alternative methods of visualization. To start, we can attribute
         each state of the puzzle to a single node in a graph. Each time we make
-        a move, a new edge is generated between the previos move and the current
-        one. After we've seen all possible puzzle states and all of the moves
-        between them, we will have a complete picture of the puzzle and all of
-        its possibilities.
+        a move, a new edge is generated between the previous move and the
+        current one. After we've seen all possible puzzle states and all of the
+        moves between them, we will have a complete picture of the puzzle and
+        all of its possibilities.
       </P>
 
       <P>
@@ -159,11 +175,11 @@ const SlidePuzzlePaper = () => {
         states should be the same as the number of length-4 permutations.
         Following this logic, the number of possible states should come out to
         <TeX block>4!=4\cdot3\cdot2\cdot1=24.</TeX>
-        However, this is not the case. We learned earlier that the actual number
-        of reachable states in the <TeX>2\times 2</TeX> puzzle is actually 12.
-        This means that 50% of the possible configurations must be unreachable!
-        After some experimentation, this becomes clear. No matter the number of
-        moves, it is impossible to reach a solution from the following state:
+        However, this is not the case. We learned earlier that the number of
+        reachable states in the <TeX>2\times 2</TeX> puzzle is actually 12. This
+        means that 50% of the possible configurations must be unreachable! After
+        some experimentation, this becomes clear. No matter the number of moves,
+        it is impossible to reach a solution from the following state:
       </P>
 
       <InteractiveSlidePuzzle
@@ -181,11 +197,8 @@ const SlidePuzzlePaper = () => {
         <TeX block math="\frac{(mn)!}{2}." />
         To understand why half of all sliding puzzles are unsolvable, we can
         refer to an argument made{" "}
-        <a href={references.johnson79.url} target="_blank" rel="noreferrer">
-          back in 1879
-        </a>{" "}
-        by Wm. Woolsey Johnson and its subsequent generalization by William E.
-        Story.
+        <Ref for={references.johnson79}>back in 1879</Ref> by Wm. Woolsey
+        Johnson and its generalization by William E. Story.
       </P>
 
       <P>
@@ -266,7 +279,7 @@ const SlidePuzzlePaper = () => {
 
       <P>
         An important note is that, because each value is found once and only
-        once on the top and bottom of each permutation (this means they're
+        once on the top and bottom of the permutation (this means they're
         one-to-one functions), it is impossible for a number to be a part of
         more than one cycle. Since the cycles are mutually exclusive, we can
         actually represent each permutation by just the list of the cycles that
@@ -284,7 +297,7 @@ const SlidePuzzlePaper = () => {
 
       <P>
         The observation made by Johnson &amp; Story in 1879 was that each time
-        they made a move , the number of cycles changed by exactly 1. If the
+        they made a move, the number of cycles changed by exactly 1. If the
         blank space moves to a space that is already a part of its cycle, its
         cycle splits in two. If it moves to a space that is a part of a
         different cycle, then the two cycles are merged. Therefore, the number
@@ -292,12 +305,14 @@ const SlidePuzzlePaper = () => {
         referred to as the <em>parity</em> of the permutation.
       </P>
 
+      {sectionBreak}
+
       <P>
         Recall that the parity of the manhattan distance also changes with every
         move. This means that, in a solvable puzzle, the parity of the generated
         permutation is always odd when the Manhattan distance is even, and vice
         versa. If this is not the case, then the puzzle must be impossible to
-        solve. This is true for all finite sliding puzzles, regardless of their
+        solve! This is true for all finite sliding puzzles, regardless of their
         dimensions.
       </P>
 
@@ -333,9 +348,9 @@ const SlidePuzzlePaper = () => {
         is isomorphic to its respective alternating group <TeX>A_n.</TeX> That
         discussion is beyond the scope of this article, but you can read more
         about it in{" "}
-        <a href={references.beeler15.url} target="_blank" rel="noreferrer">
+        <Ref for={references.beeler15}>
           this excellent paper by Robert A. Beeler
-        </a>
+        </Ref>
         .
       </P>
 
@@ -383,8 +398,44 @@ const SlidePuzzlePaper = () => {
         amount of time it takes to explore all of the possible next moves, but
         also by the space that it takes to store all of the previously visited
         states. In fact, there are so many states in a <TeX>5\times 5</TeX>{" "}
-        sliding puzzle that no algorithm has yet discovered the board states
-        which are provably the furthest from being solved.
+        sliding puzzle that no algorithm has yet determined which ones that are
+        furthest from being solved.
+      </P>
+
+      {sectionBreak}
+
+      <P>
+        The breadth-first search algorithm is not the most efficient way to find
+        the fastest solution to a sliding puzzle. Faster methods involve
+        prioritizing specific paths first based on a heuristic like in the{" "}
+        <Ref for={references.wiki_astar}>A* algorithm</Ref>, indexing
+        symmetries, and pruning certain sections by marking them as "not worth
+        exploring". These improvements may be worth exploring in a future
+        article, but because the state space grows so quickly as the board size
+        increases it is still untenable to consider searching through it for an
+        optimal solution on larger boards. Therefore, we're going to have to
+        start considering some strategies for finding suboptimal solutions.
+      </P>
+
+      <P>
+        If you've solved a few slide puzzles yourself, you may have developed a
+        few strategies for solving them incrementally instead of looking at all
+        of the pieces at once. One of the first qualities that most people
+        notice is that once they've solved the top row or leftmost column, those
+        pieces can be left alone until the puzzle is complete. Effectively, the
+        size of the puzzle shrinks by one row or column each time one of them is
+        solved.
+      </P>
+
+      <SlidePuzzleWithReductionColors dimensions={[4, 4]} squareSize={4.5} />
+
+      <P>
+        With this in mind, we can find a solution that is close to optimal if we
+        use the same breadth-first strategy as before, but only do so until we
+        reach a state which has completed either the top row or the leftmost
+        column. Then we can repeat the process while ignoring the solved rows
+        and columns, with a smaller state space to explore each time, until the
+        puzzle has been completed.
       </P>
 
       {sectionBreak}
