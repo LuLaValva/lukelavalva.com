@@ -459,10 +459,40 @@ const SlidePuzzlePaper = () => {
 
       {sectionBreak}
 
+      <h2>Closing Remarks</h2>
+
+      <P>
+        I hope that you finish reading this post with more questions than you
+        have answers. How can we modify our algorithm so it requires less graph
+        traversal? Are there other metrics that we can use to determine if a
+        specific configuration is unsolvable? Do these lessons generalize to
+        sliding puzzles in 3, 4, and 5 dimensions? Hopefully, I've provided you
+        with the intuition and knowledge to start to search for some answers.
+      </P>
+
+      {sectionBreak}
+
+      <div className={styles.paragraph}>
+        If you'd like to learn how this was made, you're welcome to{" "}
+        <a
+          href="https://github.com/LuLaValva/lukelavalva.com/tree/main/src/Pages/InteractivePapers/SlidePuzzlePaper"
+          target="_blank"
+          rel="noreferrer"
+        >
+          explore the code on GitHub
+        </a>
+        .
+      </div>
+
+      {sectionBreak}
+
       <Bibliography citations={references} />
 
       {sectionBreak}
 
+      <div className={styles.aside} style={{ textAlign: "center" }}>
+        Inspiration for this article from 3blue1brown's SoME 2.
+      </div>
       <div className={styles.aside} style={{ textAlign: "center" }}>
         For more shenanigans, check out <Link to="/">my website</Link>.
       </div>

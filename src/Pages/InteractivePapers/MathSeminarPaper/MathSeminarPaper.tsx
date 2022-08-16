@@ -867,7 +867,7 @@ const MathSeminarPaper: React.FC = () => {
       <div className={styles.paragraph}>
         If you'd like to learn how this project was made, you're welcome to{" "}
         <a
-          href="https://github.com/LuLaValva/lukelavalva.com/tree/main/src/Pages/MathSeminarPaper"
+          href="https://github.com/LuLaValva/lukelavalva.com/tree/main/src/Pages/InteractivePapers/MathSeminarPaper"
           target="_blank"
           rel="noreferrer"
         >
