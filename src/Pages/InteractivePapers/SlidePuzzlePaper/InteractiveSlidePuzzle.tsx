@@ -16,11 +16,13 @@ const InteractiveSlidePuzzle: React.FC<{
   sizeUnit?: string;
   includeIndices?: boolean;
   assignedColors?: { [piece: number]: string };
+  shuffleIterations?: number;
 }> = ({
   dimensions: [nRows, nCols],
   includeShuffleButton = false,
   shuffleImmediately = false,
   boardState: externalState,
+  shuffleIterations,
   onUpdate,
   ...props
 }) => {
@@ -94,7 +96,7 @@ const InteractiveSlidePuzzle: React.FC<{
 
   const shuffle = () => {
     if (!shuffleInterval) {
-      const iterations = (nRows * nCols) ** 2;
+      const iterations = shuffleIterations ?? (nRows * nCols) ** 2;
       const moveDelay = 100;
 
       let i = 0;

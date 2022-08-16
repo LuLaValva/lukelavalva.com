@@ -5,7 +5,7 @@ import styles from "./GenericSlidePuzzle.module.css";
  * Must be a rectangular grid of **UNIQUE** digits from `0` to `rows*cols`.
  */
 export type SlidePuzzle = number[][];
-export type Coordinates = [number, number];
+export type Coordinates = [row: number, col: number];
 
 const SlidePuzzleDisplay: React.FC<{
   piecePositions: SlidePuzzle;

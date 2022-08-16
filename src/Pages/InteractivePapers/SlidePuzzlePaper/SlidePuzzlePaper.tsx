@@ -424,19 +424,38 @@ const SlidePuzzlePaper = () => {
         notice is that once they've solved the top row or leftmost column, those
         pieces can be left alone until the puzzle is complete. Effectively, the
         size of the puzzle shrinks by one row or column each time one of them is
-        solved.
+        solved. Try using this strategy to solve the puzzle below.
       </P>
 
-      <SlidePuzzleWithReductionColors dimensions={[4, 4]} squareSize={4.5} />
+      <SlidePuzzleWithReductionColors
+        dimensions={[4, 4]}
+        squareSize={4.5}
+        boardState={[
+          [0, 1, 2, 4],
+          [5, 6, 3, 8],
+          [9, 11, 7, 12],
+          [13, 10, 14, 15],
+        ]}
+        showDims
+      />
 
       <P>
         With this in mind, we can find a solution that is close to optimal if we
-        use the same breadth-first strategy as before, but only do so until we
-        reach a state which has completed either the top row or the leftmost
-        column. Then we can repeat the process while ignoring the solved rows
-        and columns, with a smaller state space to explore each time, until the
-        puzzle has been completed.
+        use the same breadth-first strategy as before, but stop as soon as we
+        reach a state with either the top row or the leftmost column completed.
+        Then we can repeat the process while ignoring the solved rows and
+        columns until the puzzle has been completed. While this strategy will
+        not always give us the fastest solution, we can use it to solve the
+        puzzle at a rapid pace. Below, take some time to mix up the puzzle
+        before letting our new algorithm solve it incrementally.
       </P>
+
+      <SlidePuzzleWithReductionColors
+        dimensions={[4, 4]}
+        squareSize={4.5}
+        showReduceButton
+        includeShuffleButton
+      />
 
       {sectionBreak}
 

@@ -94,17 +94,21 @@ function swapTiles(
   return p;
 }
 
-export function getMoves(puzzle: SlidePuzzle): SlidePuzzle[] {
+export function getMoves(
+  puzzle: SlidePuzzle,
+  minRow = 0,
+  minCol = 0
+): SlidePuzzle[] {
   const [nRows, nCols] = [puzzle.length, puzzle[0].length];
   const [holeRow, holeCol] = findHole(puzzle);
   const moves = [];
 
-  if (holeRow > 0)
+  if (holeRow > minRow)
     moves.push(swapTiles(puzzle, [holeRow, holeCol], [holeRow - 1, holeCol]));
   if (holeRow < nRows - 1)
     moves.push(swapTiles(puzzle, [holeRow, holeCol], [holeRow + 1, holeCol]));
 
-  if (holeCol > 0)
+  if (holeCol > minCol)
     moves.push(swapTiles(puzzle, [holeRow, holeCol], [holeRow, holeCol - 1]));
   if (holeCol < nCols - 1)
     moves.push(swapTiles(puzzle, [holeRow, holeCol], [holeRow, holeCol + 1]));
