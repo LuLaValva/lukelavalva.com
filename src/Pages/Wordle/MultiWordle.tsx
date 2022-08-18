@@ -121,7 +121,7 @@ const MultiWordle: React.FC<{
 
   const submitWord = () => {
     const guess = guesses[numGuessed];
-    if (wordList.includes(guess)) {
+    if (wordList.includes(guess) || solutions.includes(guess)) {
       setEvaluations((evaluations) =>
         evaluations.map((evaluations, index) => {
           const newEvals = [...evaluations.evals];

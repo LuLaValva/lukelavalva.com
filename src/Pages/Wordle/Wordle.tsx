@@ -185,7 +185,7 @@ const Wordle: React.FC<{
 
   const submitWord = () => {
     const guess = guesses[numGuessed];
-    if (wordList.includes(guess)) {
+    if (wordList.includes(guess) || guess === solution) {
       const newEvaluations = [...evaluations];
       const latestWordEval = evaluate(guess, solution);
       latestWordEval.forEach((val, i) => {
