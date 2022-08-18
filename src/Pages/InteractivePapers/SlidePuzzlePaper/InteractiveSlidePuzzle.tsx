@@ -30,7 +30,9 @@ const InteractiveSlidePuzzle: React.FC<{
   const [[holeRow, holeCol], setHole] = useState(() => [nRows - 1, nCols - 1]);
 
   useEffect(() => {
-    const board = externalState || generateBoard(nRows, nCols);
+    const board = externalState
+      ? externalState.map((row) => [...row])
+      : generateBoard(nRows, nCols);
     setBoard(board);
     setHole(findHole(board));
     onUpdate && onUpdate(board);

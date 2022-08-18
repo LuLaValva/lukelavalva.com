@@ -451,7 +451,7 @@ const SlidePuzzlePaper = () => {
       </P>
 
       <SlidePuzzleWithReductionColors
-        dimensions={[4, 4]}
+        dimensions={[3, 4]}
         squareSize={4.5}
         showReduceButton
         includeShuffleButton
