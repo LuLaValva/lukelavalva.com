@@ -1,7 +1,5 @@
 # Luke LaValva's Personal Website
 
-Here, I have created a bunch of little projects and
-put some information about myself.
+A bunch of little projects and some information about Luke.
 
-This website was made with React, so far it has treated me
-well so I probably won't switch frameworks anytime soon.
+This website was made with React, maybe one day I'll switch to something better.
