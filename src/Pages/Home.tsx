@@ -1,12 +1,11 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import styles from "../styles/App.module.css";
 import BoxInSky from "../Elements/BoxInSky";
+import BoxLink from "../Elements/BoxLink";
+import RunawayBox from "../Elements/RunawayBox";
 
-interface Props {}
-
-const Home = (props: Props) => {
+const Home = () => {
   const [left, setLeft] = useState(0);
 
   function handleScroll(e: React.UIEvent<HTMLElement>) {
@@ -19,59 +18,44 @@ const Home = (props: Props) => {
 
   return (
     <div className={styles.sky} onScroll={handleScroll} onWheel={handleWheel}>
-      <BoxInSky width={25} left={5} top={4}>
-        <h1>Luke LaValva</h1>
+      <BoxInSky width={9} left={5} top={4} size={3}>
+        Luke LaValva
       </BoxInSky>
       <a href="/resume.pdf" className={styles.boxLink}>
-        <BoxInSky width={23} left={30} top={30}>
+        <BoxInSky width={14} left={2} top={57} size={0.9}>
           My Resume
         </BoxInSky>
       </a>
-      <Link to="/cowsandbulls" className={styles.boxLink}>
-        <BoxInSky width={20} left={67} top={60}>
-          Cows, Bulls, and Beyond
-        </BoxInSky>
-      </Link>
-      <Link to="/greedygorillas" className={styles.boxLink}>
-        <BoxInSky width={20} left={85} top={35}>
-          Greedy Gorillas Game
-        </BoxInSky>
-      </Link>
-      <Link to="/slide" className={styles.boxLink}>
-        <BoxInSky width={20} left={133} top={10}>
-          Face Slide
-        </BoxInSky>
-      </Link>
-      <Link to="/theoryofsliding" className={styles.boxLink}>
-        <BoxInSky width={24} left={141} top={23}>
-          Theory of Sliding
-        </BoxInSky>
-      </Link>
-      <Link to="/webchillian" className={styles.boxLink}>
-        <BoxInSky width={22} left={116} top={55}>
-          The Webchillian
-        </BoxInSky>
-      </Link>
-      <Link to="/albums" className={styles.boxLink}>
-        <BoxInSky width={27} left={202} top={33}>
-          My opinions about a bunch of albums
-        </BoxInSky>
-      </Link>
-      <Link to="/countdown" className={styles.boxLink}>
-        <BoxInSky width={16} left={181} top={66}>
-          Countdown Generator
-        </BoxInSky>
-      </Link>
-      <Link to="/wordle" className={styles.boxLink}>
-        <BoxInSky width={13} left={273} top={22}>
-          Wordle Clone
-        </BoxInSky>
-      </Link>
-      <Link to="/444dle" className={styles.boxLink}>
-        <BoxInSky width={9} left={278} top={30}>
-          444dle
-        </BoxInSky>
-      </Link>
+      <BoxLink to="/cowsandbulls" width={20} left={47} top={60} size={1.4}>
+        Cows, Bulls, and Beyond
+      </BoxLink>
+      <BoxLink to="/webchillian" width={22} left={71} top={15} size={1.1}>
+        The Webchillian
+      </BoxLink>
+      <BoxLink to="/greedygorillas" width={13} left={106} top={35} size={0.8}>
+        Greedy Gorillas
+      </BoxLink>
+      <BoxLink to="/slide" width={20} left={113} top={7} size={1}>
+        Face Slide
+      </BoxLink>
+      <BoxLink to="/theoryofsliding" width={14} left={121} top={19} size={1.6}>
+        Theory of Sliding
+      </BoxLink>
+      <BoxLink to="/countdown" width={16} left={152} top={68} size={1.05}>
+        Countdown Generator
+      </BoxLink>
+      <BoxLink to="/albums" width={21} left={168} top={53} size={0.8}>
+        My opinions about a bunch of albums
+      </BoxLink>
+      <RunawayBox width={11} left={172} top={14} size={0.75}>
+        Super Secret Information
+      </RunawayBox>
+      <BoxLink to="/wordle" width={13} left={197} top={62} size={0.9}>
+        Wordle Clone
+      </BoxLink>
+      <BoxLink to="/444dle" width={9} left={206} top={46} size={1.3}>
+        444dle
+      </BoxLink>
       <BoxInSky width={24} left={3400} top={2}>
         Haha you made it to the end
       </BoxInSky>

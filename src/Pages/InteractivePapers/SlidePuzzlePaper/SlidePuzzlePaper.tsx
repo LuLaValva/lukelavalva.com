@@ -467,7 +467,7 @@ const SlidePuzzlePaper = () => {
         traversal? Are there other metrics that we can use to determine if a
         specific configuration is unsolvable? Do these lessons generalize to
         sliding puzzles in 3, 4, and 5 dimensions? Hopefully, I've provided you
-        with the intuition and knowledge to start to search for some answers.
+        with the intuition and knowledge to continue this search on your own.
       </P>
 
       {sectionBreak}
