@@ -159,6 +159,7 @@ let App: React.FC = () => {
                 }
               />
               <Route
+                path="/*"
                 element={
                   <Page title="Luke LaValva - Not Found">
                     <PageNotFound />
