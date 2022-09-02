@@ -1,6 +1,6 @@
 import React from "react";
-import { ApiConstants } from "../consts";
-import styles from "../styles/GreedyGorillas.module.css";
+import { ApiConstants } from "../../consts";
+import styles from "./GreedyGorillas.module.css";
 
 interface RoleSelectionProps {
   roles: number[];

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../styles/GreedyGorillas.module.css";
+import styles from "./GreedyGorillas.module.css";
 
 interface Props {
   socketConnectionFunction: (username: string, room: string) => void;

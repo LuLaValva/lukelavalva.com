@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import GGLogin from "./GGLogin";
-import { ApiConstants } from "../consts";
+import { ApiConstants } from "../../consts";
 import GreedyGorillasGame from "./GreedyGorillasGame";
 import GreedyGorillasLobby from "./GreedyGorillasLobby";
 

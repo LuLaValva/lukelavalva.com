@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Player, GameState } from "./GreedyGorillasPage";
 import PlayerDisplay from "./PlayerDisplay";
-import styles from "../styles/GreedyGorillas.module.css";
+import styles from "./GreedyGorillas.module.css";
 import GreedyGorillasPlayerActions from "./GreedyGorillasPlayerActions";
 import GreedyGorillasHeaderMessage from "./GreedyGorillasHeaderMessage";
 

@@ -7,7 +7,7 @@ import SubPage from "./Pages/SubPage";
 const AlbumRatingPage = React.lazy(() => import("./Pages/AlbumRatingPage"));
 const ResumePage = React.lazy(() => import("./Pages/ResumePage"));
 const GreedyGorillasPage = React.lazy(
-  () => import("./GreedyGorillas/GreedyGorillasPage")
+  () => import("./Pages/GreedyGorillas/GreedyGorillasPage")
 );
 const MathSeminarPaper = React.lazy(
   () => import("./Pages/InteractivePapers/MathSeminarPaper/MathSeminarPaper")

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/GreedyGorillas.module.css";
+import styles from "./GreedyGorillas.module.css";
 
 interface Props {
   score: number;

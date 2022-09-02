@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Player } from "./GreedyGorillasPage";
-import styles from "../styles/GreedyGorillas.module.css";
+import styles from "./GreedyGorillas.module.css";
 import GorillaRiveComponent from "./GorillaRiveComponent";
-import { ApiConstants } from "../consts";
+import { ApiConstants } from "../../consts";
 
 interface Props {
   player: Player;

@@ -2,7 +2,7 @@ import React from "react";
 import { GameState, Player } from "./GreedyGorillasPage";
 import GreedyGorillasRoleSelection from "./GreedyGorillasRoleSelection";
 import PlusMinusScoreDisplay from "./PlusMinusScoreDisplay";
-import styles from "../styles/GreedyGorillas.module.css";
+import styles from "./GreedyGorillas.module.css";
 
 interface Props {
   players: { [connectionId: string]: Player };

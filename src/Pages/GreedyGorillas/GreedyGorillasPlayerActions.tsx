@@ -1,6 +1,6 @@
 import React from "react";
 import { Player, GameState } from "./GreedyGorillasPage";
-import styles from "../styles/GreedyGorillas.module.css";
+import styles from "./GreedyGorillas.module.css";
 
 interface ActionButtonProps {
   text: string;
