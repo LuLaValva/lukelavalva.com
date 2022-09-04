@@ -72,9 +72,8 @@ export function generateCageMap(n: number) {
   return cages;
 }
 
-function chooseOperation(
+export function getCageTiles(
   cageMap: number[][],
-  matrix: number[][],
   cageRow: number,
   cageCol: number
 ) {
@@ -94,6 +93,25 @@ function chooseOperation(
       }
     );
   }
+
+  return cageTiles;
+}
+
+enum Operation {
+  DIVIDE = "/",
+  MULTIPLY = "x",
+  SUBTRACT = "-",
+  ADD = "+",
+}
+
+function chooseOperation(
+  cageMap: number[][],
+  matrix: number[][],
+  cageRow: number,
+  cageCol: number
+) {
+  const cageTiles = getCageTiles(cageMap, cageRow, cageCol);
+
   if (cageTiles.length === 1) {
     const [[row, col]] = cageTiles;
     return "" + matrix[row][col];
@@ -101,16 +119,18 @@ function chooseOperation(
   if (cageTiles.length === 2) {
     const [[r1, c1], [r2, c2]] = cageTiles;
     const [x, y] = [matrix[r1][c1], matrix[r2][c2]];
-    if (x % y === 0 && Math.random() < 0.5) return "" + x / y + "/";
-    if (y % x === 0 && Math.random() < 0.5) return "" + y / x + "/";
-    if (y > x && Math.random() < 0.5) return "" + (y - x) + "-";
-    if (x > y && Math.random() < 0.5) return "" + (x - y) + "-";
+    if (x % y === 0 && Math.random() < 0.5)
+      return "" + x / y + Operation.DIVIDE;
+    if (y % x === 0 && Math.random() < 0.5)
+      return "" + y / x + Operation.DIVIDE;
+    if (y > x && Math.random() < 0.5) return "" + (y - x) + Operation.SUBTRACT;
+    if (x > y && Math.random() < 0.5) return "" + (x - y) + Operation.SUBTRACT;
   }
   if (Math.random() < 0.5)
     return (
       "" +
       cageTiles.reduce((sum, [row, col]) => (sum += matrix[row][col]), 0) +
-      "+"
+      Operation.ADD
     );
   return (
     "" +
@@ -118,7 +138,7 @@ function chooseOperation(
       (product, [row, col]) => (product *= matrix[row][col]),
       1
     ) +
-    "x"
+    Operation.MULTIPLY
   );
 }
 
@@ -136,4 +156,24 @@ export function generateLabels(cageMap: number[][]) {
   }
 
   return labels;
+}
+
+export function satisfyOperation(numbers: number[], operation: string) {
+  const goal = +operation.slice(0, -1);
+  switch (operation.slice(-1)) {
+    case Operation.DIVIDE: {
+      const [x, y] = numbers;
+      return x / y === goal || y / x === goal;
+    }
+    case Operation.SUBTRACT: {
+      const [x, y] = numbers;
+      return x - y === goal || y - x === goal;
+    }
+    case Operation.ADD:
+      return numbers.reduce((sum, n) => (n += sum), 0) === goal;
+    case Operation.MULTIPLY:
+      return numbers.reduce((product, n) => (n *= product), 1) === goal;
+    default:
+      return numbers[0] === +operation;
+  }
 }

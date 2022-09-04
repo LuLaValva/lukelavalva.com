@@ -13,8 +13,8 @@ enum Color {
   GREEN,
 }
 
-/** [0] represents the background color of the square */
-type SquareDetails = Color[];
+/** [0] represents the background color of the tile */
+type TileDetails = Color[];
 
 export type Cages = {
   labels?: string[];
@@ -24,9 +24,13 @@ export type Cages = {
 const LatinSquareBase: React.FC<{
   n: number;
   cages?: Cages;
-}> = ({ n, cages }) => {
+  onUpdate?: (matrix: number[][], row: number, col: number) => void;
+  additionalConflicts?: boolean[][];
+  autoFillRed?: boolean;
+}> = ({ n, cages, onUpdate, additionalConflicts, autoFillRed = false }) => {
   const [matrix, setMatrix] = useState<number[][]>([]);
-  const [matrixDetails, setMatrixDetails] = useState<SquareDetails[][]>([]);
+  const [linearConflicts, setLinearConflicts] = useState<boolean[][]>([]);
+  const [matrixDetails, setMatrixDetails] = useState<TileDetails[][]>([]);
   const [focus, setFocus] = useState<[number, number] | undefined>();
   const [selected, setSelected] = useState<boolean[][]>([]);
   const [selectMode, setSelectMode] = useState<Color>(Color.NONE);
@@ -34,7 +38,7 @@ const LatinSquareBase: React.FC<{
   const [borderClasses, setBorderClasses] = useState<string[][]>([]);
   const [labels, setLabels] = useState<(string | undefined)[][]>([]);
 
-  const squareRefs = useRef<(HTMLElement | null)[][]>([]);
+  const tileRefs = useRef<(HTMLElement | null)[][]>([]);
 
   useEffect(() => {
     if (!cages || cages.cageMap.length !== n) return;
@@ -69,7 +73,8 @@ const LatinSquareBase: React.FC<{
   }, [cages, n]);
 
   const clearSelected = useCallback(() => {
-    setSelected([...Array(n)].map(() => Array(n).fill(false)));
+    setSelected(() => [...Array(n)].map(() => Array(n).fill(false)));
+    setJustWrote(false);
   }, [n]);
 
   const clearMatrix = useCallback(() => {
@@ -79,6 +84,7 @@ const LatinSquareBase: React.FC<{
         [...Array(n)].map(() => Array(n + 1).fill(Color.NONE))
       )
     );
+    setLinearConflicts([...Array(n)].map(() => Array(n).fill(false)));
     clearSelected();
   }, [clearSelected, n]);
 
@@ -92,65 +98,99 @@ const LatinSquareBase: React.FC<{
     [forRow, forCol]: [number, number],
     num: number
   ) => {
-    const onRows = matrix.flatMap(({ [forCol]: squareN }, rowI) =>
-      squareN === num ? [rowI] : []
+    const onRows = matrix.flatMap(({ [forCol]: tileN }, rowI) =>
+      tileN === num ? [rowI] : []
     );
-    const onCols = matrix[forRow].flatMap((squareN, colI) =>
-      squareN === num ? [colI] : []
+    const onCols = matrix[forRow].flatMap((tileN, colI) =>
+      tileN === num ? [colI] : []
     );
 
-    setMatrixDetails((details) => {
-      const newDetails = [...details];
+    setLinearConflicts((conflictMatrix) => {
+      const newConflicts = [...conflictMatrix];
       const rowConflict = onRows.length >= 2;
       onRows.forEach((rowI) => {
-        const color =
+        newConflicts[rowI] = [...newConflicts[rowI]];
+        newConflicts[rowI][forCol] =
           rowConflict ||
-          matrix[rowI].some((val, colI) => forCol !== colI && val === num)
-            ? Color.RED
-            : Color.NONE;
-        newDetails[rowI] = [...newDetails[rowI]];
-        newDetails[rowI][forCol] = [...newDetails[rowI][forCol]];
-        newDetails[rowI][forCol][0] = color;
+          matrix[rowI].some((val, colI) => forCol !== colI && val === num);
       });
 
       const colConflict = onCols.length >= 2;
-      newDetails[forRow] = [...newDetails[forRow]];
+      newConflicts[forRow] = [...newConflicts[forRow]];
       onCols.forEach((colI) => {
-        const color =
+        newConflicts[forRow][colI] =
           colConflict ||
-          matrix.some(({ [colI]: val }, rowI) => forRow !== rowI && val === num)
-            ? Color.RED
-            : Color.NONE;
-        newDetails[forRow][colI] = [...newDetails[forRow][colI]];
-        newDetails[forRow][colI][0] = color;
+          matrix.some(
+            ({ [colI]: val }, rowI) => forRow !== rowI && val === num
+          );
       });
 
-      return newDetails;
+      if (onCols.length <= 1 && onRows.length <= 1) {
+        newConflicts[forRow][forCol] = false;
+      }
+
+      return newConflicts;
     });
   };
 
+  useEffect(() => {
+    setMatrixDetails((details) =>
+      details.map((row, rowI) =>
+        row.map((tile, colI) => {
+          tile = [...tile];
+          tile[0] =
+            linearConflicts?.[rowI]?.[colI] ||
+            additionalConflicts?.[rowI]?.[colI]
+              ? Color.RED
+              : Color.NONE;
+          return tile;
+        })
+      )
+    );
+  }, [linearConflicts, additionalConflicts]);
+
   const writeBigNumber = (num: number) => {
     if (!focus) return;
+    const [rowI, colI] = focus;
 
     const newMatrix = [...matrix];
-    newMatrix[focus[0]] = [...newMatrix[focus[0]]];
-    newMatrix[focus[0]][focus[1]] = num;
+    newMatrix[rowI] = [...newMatrix[rowI]];
+    newMatrix[rowI][colI] = num;
 
     setMatrix(newMatrix);
 
-    num && calcConflicts(newMatrix, focus, num);
-    const prevNum = matrix[focus[0]][focus[1]];
+    const prevNum = matrix[rowI][colI];
     prevNum && calcConflicts(newMatrix, focus, prevNum);
+    num && calcConflicts(newMatrix, focus, num);
 
     if (num === 0) {
       setMatrixDetails((details) => {
-        const [row, col] = focus;
         const newDetails = [...details];
-        newDetails[row] = [...newDetails[row]];
-        newDetails[row][col] = Array(n + 1).fill(Color.NONE);
+        newDetails[rowI] = [...newDetails[rowI]];
+        newDetails[rowI][colI] = Array(n + 1).fill(Color.NONE);
         return newDetails;
       });
     }
+    if (autoFillRed) {
+      setMatrixDetails((details) =>
+        details.map((row, i) => {
+          if (i === rowI)
+            return row.map((detail) => {
+              detail = [...detail];
+              prevNum && (detail[prevNum] = Color.NONE);
+              num && (detail[num] = Color.RED);
+              return detail;
+            });
+          row = [...row];
+          row[colI] = [...row[colI]];
+          prevNum && (row[colI][prevNum] = Color.NONE);
+          num && (row[colI][num] = Color.RED);
+          return row;
+        })
+      );
+    }
+
+    onUpdate?.(newMatrix, rowI, colI);
   };
 
   const writeLittleNumber = (num: number) => {
@@ -178,56 +218,77 @@ const LatinSquareBase: React.FC<{
 
   const write = (num: number) => {
     if (selectMode === Color.NONE) writeBigNumber(num);
-    else writeLittleNumber(num);
-    setJustWrote(true);
+    else {
+      writeLittleNumber(num);
+      setJustWrote(true);
+    }
   };
 
-  const select = (modeChange?: boolean) => {
-    if (justWrote && !modeChange) {
+  const moveFocus = (
+    rowOffset: number,
+    colOffset: number,
+    selectPrevious?: boolean
+  ) => {
+    const newFocus: [number, number] = focus
+      ? [(focus[0] + n + rowOffset) % n, (focus[1] + n + colOffset) % n]
+      : [0, 0];
+    if (focus && selectPrevious) {
+      select(focus, true);
+      select(newFocus, true);
+    }
+    setFocus(newFocus);
+  };
+
+  const toggleSelectMode = (mode: Color) => {
+    setSelectMode(selectMode === mode ? Color.NONE : mode);
+    if (selectMode === mode) clearSelected();
+    else if (selectMode === Color.NONE) {
+      clearSelected();
+      select();
+    }
+  };
+
+  const select = (location = focus, overrideToggle?: boolean) => {
+    if (justWrote) {
       clearSelected();
       setJustWrote(false);
     }
-    focus &&
-      (modeChange || selectMode !== Color.NONE) &&
+    location &&
       setSelected((selected) => {
         const newSelected = [...selected];
-        newSelected[focus[0]] = [...newSelected[focus[0]]];
-        newSelected[focus[0]][focus[1]] =
-          modeChange || !newSelected[focus[0]][focus[1]];
+        newSelected[location[0]] = [...newSelected[location[0]]];
+        newSelected[location[0]][location[1]] =
+          overrideToggle ?? !newSelected[location[0]][location[1]];
         return newSelected;
       });
   };
 
-  const keyPress = ({ key, repeat }: KeyEvent) => {
+  const keyPress = ({ key, shiftKey }: KeyEvent) => {
     // if (repeat) return;
 
     switch (key) {
       case "ArrowUp":
-        setFocus(focus ? [(focus[0] + n - 1) % n, focus[1]] : [0, 0]);
+        moveFocus(-1, 0, shiftKey);
         break;
       case "ArrowLeft":
-        setFocus(focus ? [focus[0], (focus[1] + n - 1) % n] : [0, 0]);
+        moveFocus(0, -1, shiftKey);
         break;
       case "ArrowDown":
-        setFocus(focus ? [(focus[0] + 1) % n, focus[1]] : [0, 0]);
+        moveFocus(1, 0, shiftKey);
         break;
       case "ArrowRight":
-        setFocus(focus ? [focus[0], (focus[1] + 1) % n] : [0, 0]);
+        moveFocus(0, 1, shiftKey);
         break;
       case "Backspace":
         write(0);
         break;
       case "r":
       case "R":
-        setSelectMode(selectMode === Color.RED ? Color.NONE : Color.RED);
-        if (selectMode === Color.RED) clearSelected();
-        else select(true);
+        toggleSelectMode(Color.RED);
         break;
       case "g":
       case "G":
-        setSelectMode(selectMode === Color.GREEN ? Color.NONE : Color.GREEN);
-        if (selectMode === Color.GREEN) clearSelected();
-        else select(true);
+        toggleSelectMode(Color.GREEN);
         break;
       case "n":
       case "N":
@@ -242,21 +303,39 @@ const LatinSquareBase: React.FC<{
     }
   };
 
+  const selectCross = (location = focus) => {
+    if (!location) return;
+    setSelectMode(Color.RED);
+
+    const [fromRow, fromCol] = location;
+    setSelected((selected) =>
+      selected.map((row, rowI) => {
+        if (rowI === fromRow) {
+          return Array(n).fill(true);
+        } else {
+          const newRow = [...row];
+          newRow[fromCol] = true;
+          return newRow;
+        }
+      })
+    );
+  };
+
   useEffect(() => {
     clearMatrix();
-    squareRefs.current = [];
+    tileRefs.current = [];
     setFocus(undefined);
   }, [n, clearMatrix]);
 
   useEffect(() => {
-    if (focus) squareRefs.current[focus[0]]?.[focus[1]]?.focus();
+    if (focus) tileRefs.current[focus[0]]?.[focus[1]]?.focus();
   }, [focus]);
 
   const focusedNum = focus ? matrix[focus[0]][focus[1]] : 0;
   return (
     <div
       className={`${styles.board} ${styles[`mode${selectMode}`]}`}
-      style={{ "--num-squares": n } as React.CSSProperties}
+      style={{ "--num-tiles": n } as React.CSSProperties}
       onKeyDown={keyPress}
     >
       {matrix.map((row, rowI) => (
@@ -265,10 +344,10 @@ const LatinSquareBase: React.FC<{
             <button
               key={colI}
               ref={(el) => {
-                squareRefs.current[rowI] ??= [];
-                squareRefs.current[rowI][colI] = el;
+                tileRefs.current[rowI] ??= [];
+                tileRefs.current[rowI][colI] = el;
               }}
-              className={`${styles.square} ${
+              className={`${styles.tile} ${
                 focus && num && num === focusedNum && styles.numberHighlight
               } ${
                 matrixDetails[rowI]?.[colI][0] === Color.RED &&
@@ -277,6 +356,10 @@ const LatinSquareBase: React.FC<{
                 borderClasses[rowI]?.[colI]
               }`}
               onClick={() => boardClick(rowI, colI)}
+              onDoubleClick={() => num > 0 && selectCross([rowI, colI])}
+              onKeyDown={({ key }) =>
+                key === "Enter" && num > 0 && selectCross([rowI, colI])
+              }
               onFocus={() => setFocus([rowI, colI])}
               onBlur={() => setFocus(undefined)}
             >

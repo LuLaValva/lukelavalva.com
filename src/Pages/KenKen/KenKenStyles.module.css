@@ -5,15 +5,15 @@
   flex-direction: column;
   width: fit-content;
   margin: auto;
-  --num-squares: 9;
-  --square-font-size: calc(min(20rem, 45vmin) / var(--num-squares));
+  --num-tiles: 9;
+  --tile-font-size: calc(min(20rem, 45vmin) / var(--num-tiles));
 }
 
 .row {
   display: flex;
 }
 
-.square {
+.tile {
   border: inherit;
   border-right: 1px solid #fff4;
   border-bottom: 1px solid #fff4;
@@ -21,7 +21,7 @@
   height: 2em;
   line-height: 2em;
   text-align: center;
-  font-size: var(--square-font-size);
+  font-size: var(--tile-font-size);
   background-color: inherit;
   color: inherit;
   font-family: inherit;
@@ -29,21 +29,21 @@
   position: relative;
 }
 
-.square.left {
+.tile.left {
   border-left: 3px solid white;
 }
-.square.top {
+.tile.top {
   border-top: 3px solid white;
 }
 
-.square:focus {
+.tile:focus {
   box-shadow: inset 0 0 0.5em #fffa;
   outline: none;
 }
-.mode1 .square:focus {
+.mode1 .tile:focus {
   box-shadow: inset 0 0 0.5em #f00a;
 }
-.mode2 .square:focus {
+.mode2 .tile:focus {
   box-shadow: inset 0 0 0.5em #0f0a;
 }
 
@@ -67,7 +67,7 @@
   background-color: #faa4;
 }
 
-.square > .label {
+.tile > .label {
   position: absolute;
   line-height: normal;
   font-size: 0.4em;
