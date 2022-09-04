@@ -239,12 +239,12 @@ const LatinSquareBase: React.FC<{
     setFocus(newFocus);
   };
 
-  const toggleSelectMode = (mode: Color) => {
+  const toggleSelectMode = (mode: Color, autoSelect = true) => {
     setSelectMode(selectMode === mode ? Color.NONE : mode);
     if (selectMode === mode) clearSelected();
     else if (selectMode === Color.NONE) {
       clearSelected();
-      select();
+      autoSelect && select();
     }
   };
 
@@ -334,56 +334,100 @@ const LatinSquareBase: React.FC<{
   const focusedNum = focus ? matrix[focus[0]][focus[1]] : 0;
   return (
     <div
-      className={`${styles.board} ${styles[`mode${selectMode}`]}`}
       style={{ "--num-tiles": n } as React.CSSProperties}
-      onKeyDown={keyPress}
+      className={styles.latinSquareBase}
     >
-      {matrix.map((row, rowI) => (
-        <div className={styles.row} key={rowI}>
-          {row.map((num, colI) => (
-            <button
-              key={colI}
-              ref={(el) => {
-                tileRefs.current[rowI] ??= [];
-                tileRefs.current[rowI][colI] = el;
-              }}
-              className={`${styles.tile} ${
-                focus && num && num === focusedNum && styles.numberHighlight
-              } ${
-                matrixDetails[rowI]?.[colI][0] === Color.RED &&
-                styles.conflicting
-              } ${selected[rowI][colI] && styles.selected} ${
-                borderClasses[rowI]?.[colI]
-              }`}
-              onClick={() => boardClick(rowI, colI)}
-              onDoubleClick={() => num > 0 && selectCross([rowI, colI])}
-              onKeyDown={({ key }) =>
-                key === "Enter" && num > 0 && selectCross([rowI, colI])
-              }
-              onFocus={() => setFocus([rowI, colI])}
-              onBlur={() => setFocus(undefined)}
-            >
-              {num === 0 ? (
-                <div className={styles.littleNumbers}>
-                  {matrixDetails[rowI][colI].slice(1).map((color, i) => (
-                    <div
-                      className={`${styles[`little${color}`]} ${
-                        i + 1 === focusedNum && styles.highlighted
-                      }`}
-                      key={i}
-                    >
-                      {i + 1}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                num
-              )}
-              <div className={styles.label}>{labels[rowI]?.[colI]}</div>
-            </button>
-          ))}
-        </div>
-      ))}
+      <div
+        className={`${styles.board} ${styles[`mode${selectMode}`]}`}
+        onKeyDown={keyPress}
+      >
+        {matrix.map((row, rowI) => (
+          <div className={styles.row} key={rowI}>
+            {row.map((num, colI) => (
+              <button
+                key={colI}
+                ref={(el) => {
+                  tileRefs.current[rowI] ??= [];
+                  tileRefs.current[rowI][colI] = el;
+                }}
+                className={`${styles.tile} ${
+                  focus && num && num === focusedNum && styles.numberHighlight
+                } ${
+                  matrixDetails[rowI]?.[colI][0] === Color.RED &&
+                  styles.conflicting
+                } ${selected[rowI][colI] && styles.selected} ${
+                  borderClasses[rowI]?.[colI]
+                }`}
+                onClick={() => boardClick(rowI, colI)}
+                onDoubleClick={() => num > 0 && selectCross([rowI, colI])}
+                onKeyDown={({ key }) =>
+                  key === "Enter" && num > 0 && selectCross([rowI, colI])
+                }
+                onFocus={() => setFocus([rowI, colI])}
+              >
+                {num === 0 ? (
+                  <div className={styles.littleNumbers}>
+                    {matrixDetails[rowI][colI].slice(1).map((color, i) => (
+                      <div
+                        className={`${styles[`little${color}`]} ${
+                          i + 1 === focusedNum && styles.highlighted
+                        }`}
+                        key={i}
+                      >
+                        {i + 1}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  num
+                )}
+                <div className={styles.label}>{labels[rowI]?.[colI]}</div>
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+      {/* Bottom Menu */}
+      <div className={styles.digitList}>
+        {[...Array(n + 1)].map((_, i) => (
+          <button
+            key={i}
+            onClick={() => write(i)}
+            className={i ? undefined : styles.zero}
+          >
+            {i}
+          </button>
+        ))}
+      </div>
+      <div className={styles.modeList}>
+        <button
+          onClick={() => {
+            setSelectMode(Color.NONE);
+            clearSelected();
+          }}
+          className={`${styles.normal} ${
+            selectMode === Color.NONE && styles.activeMode
+          }`}
+        >
+          (C/N)
+        </button>
+        <button
+          onClick={() => toggleSelectMode(Color.RED, false)}
+          className={`${styles.red} ${
+            selectMode === Color.RED && styles.activeMode
+          }`}
+        >
+          (R)
+        </button>
+        <button
+          onClick={() => toggleSelectMode(Color.GREEN, false)}
+          className={`${styles.green} ${
+            selectMode === Color.GREEN && styles.activeMode
+          }`}
+        >
+          (G)
+        </button>
+      </div>
     </div>
   );
 };

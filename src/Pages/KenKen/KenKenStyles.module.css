@@ -1,12 +1,16 @@
+.latinSquareBase {
+  --num-tiles: 9;
+  --tile-font-size: calc(min(20rem, 45vmin) / var(--num-tiles));
+  padding-top: 1rem;
+}
+
 .board {
-  border-right: 3px solid white;
-  border-bottom: 3px solid white;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
   display: flex;
   flex-direction: column;
   width: fit-content;
   margin: auto;
-  --num-tiles: 9;
-  --tile-font-size: calc(min(20rem, 45vmin) / var(--num-tiles));
 }
 
 .row {
@@ -15,8 +19,8 @@
 
 .tile {
   border: inherit;
-  border-right: 1px solid #fff4;
-  border-bottom: 1px solid #fff4;
+  border-left: 1px solid #fff4;
+  border-top: 1px solid #fff4;
   width: 2em;
   height: 2em;
   line-height: 2em;
@@ -27,13 +31,14 @@
   font-family: inherit;
   transition: color 0.1s, background-color 0.1s;
   position: relative;
+  padding: 0;
 }
 
 .tile.left {
-  border-left: 3px solid white;
+  border-left: 1px solid white;
 }
 .tile.top {
-  border-top: 3px solid white;
+  border-top: 1px solid white;
 }
 
 .tile:focus {
@@ -96,6 +101,7 @@
   height: 1.3em;
   border-radius: 50%;
   font-size: 0.3em;
+  padding: 0;
 }
 
 .littleNumbers > div.little0 {
@@ -114,4 +120,81 @@
 }
 .littleNumbers > div.little2.highlighted {
   background-color: #0f06;
+}
+
+/* Bottom Menu */
+
+.digitList, .modeList {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.digitList {
+  gap: calc(var(--tile-font-size) / 5);
+  margin: 1rem 0;
+}
+.modeList {
+  gap: calc(var(--tile-font-size) / 2);
+  height: calc(var(--tile-font-size) * 2.5);
+}
+
+.digitList > button, .modeList > button {
+  border: 1px solid white;
+  background-color: transparent;
+  font-family: inherit;
+  color: inherit;
+  border-radius: 0.25em;
+  transition: all 0.2s;
+  text-align: center;
+  padding: 0;
+}
+.digitList > button:hover, .modeList > button:hover {
+  background-color: #fff3;
+}
+.digitList > button:active, .modeList > button:active {
+  background-color: #fff6;
+  transition: background-color 0.05s;
+}
+.digitList > button {
+  font-size: var(--tile-font-size);
+  width: 1.6em;
+  height: 2.5em;
+}
+.modeList > button {
+  font-size: calc(var(--tile-font-size) * 0.7);
+  width: 3.5em;
+  line-height: 2em;
+  align-self: center;
+}
+
+.digitList > .zero {
+  color: gray;
+}
+
+.modeList > .activeMode {
+  font-size: var(--tile-font-size);
+}
+
+.modeList > .red {
+  color: red;
+  background-color: #faa4;
+  border-color: red;
+}
+.modeList > .red:hover {
+  background-color: #faa6;
+}
+.modeList > .red:active {
+  background-color: #faa8;
+}
+
+.modeList > .green {
+  color: #8f8;
+  background-color: #afa4;
+  border-color: #8f8;
+}
+.modeList > .green:hover {
+  background-color: #afa6;
+}
+.modeList > .green:active {
+  background-color: #afa8;
 }
