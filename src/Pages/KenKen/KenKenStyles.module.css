@@ -1,0 +1,117 @@
+.board {
+  border-right: 3px solid white;
+  border-bottom: 3px solid white;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin: auto;
+  --num-squares: 9;
+  --square-font-size: calc(min(20rem, 45vmin) / var(--num-squares));
+}
+
+.row {
+  display: flex;
+}
+
+.square {
+  border: inherit;
+  border-right: 1px solid #fff4;
+  border-bottom: 1px solid #fff4;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  font-size: var(--square-font-size);
+  background-color: inherit;
+  color: inherit;
+  font-family: inherit;
+  transition: color 0.1s, background-color 0.1s;
+  position: relative;
+}
+
+.square.left {
+  border-left: 3px solid white;
+}
+.square.top {
+  border-top: 3px solid white;
+}
+
+.square:focus {
+  box-shadow: inset 0 0 0.5em #fffa;
+  outline: none;
+}
+.mode1 .square:focus {
+  box-shadow: inset 0 0 0.5em #f00a;
+}
+.mode2 .square:focus {
+  box-shadow: inset 0 0 0.5em #0f0a;
+}
+
+.mode1 .selected {
+  background-color: #f005;
+}
+.mode2 .selected {
+  background-color: #0f05;
+}
+
+.numberHighlight {
+  background-color: #fff2;
+}
+
+.conflicting {
+  color: red;
+  background-color: #f882;
+}
+
+.numberHighlight.conflicting {
+  background-color: #faa4;
+}
+
+.square > .label {
+  position: absolute;
+  line-height: normal;
+  font-size: 0.4em;
+  left: 8%;
+  top: 3%;
+  color: white;
+}
+
+.littleNumbers {
+  display: flex;
+  flex-wrap: wrap;
+  position: absolute;
+  width: 1.5em;
+  height: 70%;
+  right: 0;
+  left: 0;
+  margin: auto;
+  bottom: 0;
+  justify-content: center;
+  align-content: center;
+}
+
+.littleNumbers > div {
+  line-height: normal;
+  width: 1.3em;
+  height: 1.3em;
+  border-radius: 50%;
+  font-size: 0.3em;
+}
+
+.littleNumbers > div.little0 {
+  color: transparent;
+}
+
+.littleNumbers > div.little1 {
+  color: #faa;
+}
+.littleNumbers > div.little1.highlighted {
+  background-color: #f006;
+}
+
+.littleNumbers > div.little2 {
+  color: #afa;
+}
+.littleNumbers > div.little2.highlighted {
+  background-color: #0f06;
+}

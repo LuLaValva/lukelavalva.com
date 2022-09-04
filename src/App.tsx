@@ -31,6 +31,7 @@ const CountdownPage = React.lazy(
 );
 const WordlePage = React.lazy(() => import("./Pages/Wordle/WordlePage"));
 const FFFdlePage = React.lazy(() => import("./Pages/Wordle/FFFdle"));
+const KenKenPage = React.lazy(() => import("./Pages/KenKen/KenKenPage"));
 
 const Page: React.FC<{
   title: string;
@@ -147,6 +148,14 @@ let App: React.FC = () => {
                 element={
                   <Page title="444dle">
                     <FFFdlePage />
+                  </Page>
+                }
+              />
+              <Route
+                path="/kenken"
+                element={
+                  <Page title="KenKen">
+                    <KenKenPage />
                   </Page>
                 }
               />
