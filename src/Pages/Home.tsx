@@ -38,8 +38,11 @@ const Home = () => {
       <BoxLink to="/slide" width={20} left={113} top={7} size={1}>
         Face Slide
       </BoxLink>
-      <BoxLink to="/theoryofsliding" width={14} left={121} top={19} size={1.6}>
+      <BoxLink to="/theoryofsliding" width={13} left={121} top={19} size={1.7}>
         Theory of Sliding
+      </BoxLink>
+      <BoxLink to="/kenken" width={9} left={134} top={45} size={1.3}>
+        KenKen
       </BoxLink>
       <BoxLink to="/countdown" width={16} left={152} top={68} size={1.05}>
         Countdown Generator

@@ -198,3 +198,61 @@
 .modeList > .green:active {
   background-color: #afa8;
 }
+
+/* Settings */
+.settingsBox {
+  position: fixed;
+  width: 80vmin;
+  height: 70vh;
+  left: 50%;
+  top: 50%;
+  margin-left: -45vmin;
+  margin-top: -40vh;
+  background-color: #444;
+  box-shadow: #ccc 0 0 5vmin;
+  border-radius: 5vmin;
+  padding: 5vh 5vmin;
+  text-align: center;
+}
+
+.settingsBox .inputs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 2em;
+  padding: 2em;
+  border-radius: 1em;
+  background-color: #0004;
+}
+
+.settingsBox .inputs div {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.settingsBox input {
+  border: 2px solid white;
+  background-color: #242424;
+  font-size: 2em;
+  padding: 0.2em;
+  color: white;
+  font-family: inherit;
+  border-radius: 0.4em;
+  text-align: center;
+}
+
+.settingsBox button {
+  border: 2px solid white;
+  background-color: #242424;
+  font-size: 3em;
+  padding: 0.2em 1em;
+  border-radius: 0.4em;
+  color: white;
+  transition: all 0.3s;
+}
+
+.settingsBox button:hover {
+  background-color: #383838;
+  transform: scale(1.2);
+}

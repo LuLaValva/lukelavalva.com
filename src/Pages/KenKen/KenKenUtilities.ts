@@ -1,20 +1,26 @@
+import seedrandom, { PRNG } from "seedrandom";
+
 function diagonalLatinSquare(n: number) {
   return [...Array(n)].map((_, i) =>
     [...Array(n)].map((_, j) => ((i + j) % n) + 1)
   );
 }
 
-function shuffle<T>(arr: T[]) {
+function shuffle<T>(arr: T[], rng = seedrandom()) {
   return arr
-    .map((val) => ({ val, shuf: Math.random() }))
+    .map((val) => ({ val, shuf: rng() }))
     .sort((a, b) => a.shuf - b.shuf)
     .map(({ val }) => val);
 }
 
-export function randomLatinSquare(n: number, numShuffles: number = 5) {
+export function randomLatinSquare(
+  n: number,
+  numShuffles: number = 5,
+  rng?: PRNG
+) {
   let square = diagonalLatinSquare(n);
   for (let i = 0; i < numShuffles; i++) {
-    const shuffled = shuffle(square);
+    const shuffled = shuffle(square, rng);
     const rotated = shuffled[0].map((_, i) => shuffled.map((row) => row[i]));
     square = rotated;
   }
@@ -36,19 +42,18 @@ function makeCage(
   cages: number[][],
   startRow: number,
   startCol: number,
-  cageIndex: number
+  cageIndex: number,
+  rng = seedrandom()
 ) {
   cages[startRow][startCol] = cageIndex;
   let adjacentTiles = getAdjacent(cages, startRow, startCol);
   for (
     let numTiles = 1;
-    numTiles < 4 &&
-    adjacentTiles.length > 0 &&
-    Math.random() < 0.75 ** numTiles;
+    numTiles < 4 && adjacentTiles.length > 0 && rng() < 0.75 ** numTiles;
     numTiles++
   ) {
     const [[row, col]] = adjacentTiles.splice(
-      Math.floor(Math.random() * adjacentTiles.length),
+      Math.floor(rng() * adjacentTiles.length),
       1
     );
     cages[row][col] = cageIndex;
@@ -59,13 +64,15 @@ function makeCage(
   }
 }
 
-export function generateCageMap(n: number) {
+export function generateCageMap(n: number, seed?: string) {
+  const rng = seedrandom(seed);
+
   const cages: number[][] = [...Array(n)].map(() => Array(n).fill(-1));
   let currCage = 0;
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
       if (cages[i][j] === -1) {
-        makeCage(cages, i, j, currCage++);
+        makeCage(cages, i, j, currCage++, rng);
       }
     }
   }
@@ -108,7 +115,8 @@ function chooseOperation(
   cageMap: number[][],
   matrix: number[][],
   cageRow: number,
-  cageCol: number
+  cageCol: number,
+  rng = seedrandom()
 ) {
   const cageTiles = getCageTiles(cageMap, cageRow, cageCol);
 
@@ -119,14 +127,12 @@ function chooseOperation(
   if (cageTiles.length === 2) {
     const [[r1, c1], [r2, c2]] = cageTiles;
     const [x, y] = [matrix[r1][c1], matrix[r2][c2]];
-    if (x % y === 0 && Math.random() < 0.5)
-      return "" + x / y + Operation.DIVIDE;
-    if (y % x === 0 && Math.random() < 0.5)
-      return "" + y / x + Operation.DIVIDE;
-    if (y > x && Math.random() < 0.5) return "" + (y - x) + Operation.SUBTRACT;
-    if (x > y && Math.random() < 0.5) return "" + (x - y) + Operation.SUBTRACT;
+    if (x % y === 0 && rng() < 0.5) return "" + x / y + Operation.DIVIDE;
+    if (y % x === 0 && rng() < 0.5) return "" + y / x + Operation.DIVIDE;
+    if (y > x && rng() < 0.5) return "" + (y - x) + Operation.SUBTRACT;
+    if (x > y && rng() < 0.5) return "" + (x - y) + Operation.SUBTRACT;
   }
-  if (Math.random() < 0.5)
+  if (rng() < 0.5)
     return (
       "" +
       cageTiles.reduce((sum, [row, col]) => (sum += matrix[row][col]), 0) +
@@ -142,15 +148,17 @@ function chooseOperation(
   );
 }
 
-export function generateLabels(cageMap: number[][]) {
+export function generateLabels(cageMap: number[][], seed?: string) {
+  const rng = seedrandom(seed);
+
   const n = cageMap.length;
-  const latinSquare = randomLatinSquare(n);
+  const latinSquare = randomLatinSquare(n, 5, rng);
   const labels = [];
 
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
       if (cageMap[i][j] === labels.length) {
-        labels.push(chooseOperation(cageMap, latinSquare, i, j));
+        labels.push(chooseOperation(cageMap, latinSquare, i, j, rng));
       }
     }
   }

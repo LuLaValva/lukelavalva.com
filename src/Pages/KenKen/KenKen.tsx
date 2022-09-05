@@ -9,15 +9,16 @@ import LatinSquareBase, { Cages } from "./LatinSquareBase";
 
 const KenKen: React.FC<{
   n: number;
-}> = ({ n }) => {
+  seed?: string;
+}> = ({ n, seed }) => {
   const [cages, setCages] = useState<Cages & { labels: string[] }>();
   const [conflicts, setConflicts] = useState<boolean[][]>();
 
   useEffect(() => {
-    const cageMap = generateCageMap(n);
-    setCages({ cageMap, labels: generateLabels(cageMap) });
+    const cageMap = generateCageMap(n, seed);
+    setCages({ cageMap, labels: generateLabels(cageMap, seed) });
     setConflicts(undefined);
-  }, [n]);
+  }, [n, seed]);
 
   const onUpdate = (matrix: number[][], row: number, col: number) => {
     if (!cages) return;

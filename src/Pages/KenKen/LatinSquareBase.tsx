@@ -90,7 +90,7 @@ const LatinSquareBase: React.FC<{
 
   const boardClick = (row: number, col: number) => {
     setFocus([row, col]);
-    select();
+    select([row, col]);
   };
 
   const calcConflicts = (
