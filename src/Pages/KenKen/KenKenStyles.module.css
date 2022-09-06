@@ -212,6 +212,7 @@
   box-shadow: #ccc 0 0 5vmin;
   border-radius: 5vmin;
   padding: 5vh 5vmin;
+  overflow: scroll;
   text-align: center;
 }
 
@@ -219,7 +220,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  margin: 2em;
+  margin: 1em;
   padding: 2em;
   border-radius: 1em;
   background-color: #0004;
@@ -240,6 +241,7 @@
   font-family: inherit;
   border-radius: 0.4em;
   text-align: center;
+  max-width: 50vw;
 }
 
 .settingsBox button {
@@ -255,4 +257,14 @@
 .settingsBox button:hover {
   background-color: #383838;
   transform: scale(1.2);
+}
+
+.settingsBox h1 {
+  padding: 0;
+  margin: 0;
+}
+
+.settingsBox p {
+  color: #ccc;
+  margin: 0;
 }

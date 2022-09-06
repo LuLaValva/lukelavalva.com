@@ -17,17 +17,18 @@ const KenKenPage = () => {
           <h1>KenKen!</h1>
           <p>
             It's like Sudoku, but with math and stuff. Also known in certain
-            circles as Mathdoku
+            circles as Mathdoku.
           </p>
           <div className={styles.inputs}>
             <div>
-              <label htmlFor="size">Board Size</label>
+              <label htmlFor="size">Board Size ({size})</label>
               <input
-                type="number"
+                type="range"
                 value={size}
                 id="size"
                 min={3}
                 max={9}
+                step={1}
                 onChange={(e) => setSize(+e.target.value)}
               />
             </div>
