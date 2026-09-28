@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { API } from "aws-amplify";
+const ALBUMS = [
+  { name: "Graceland", artist: "Paul Simon" },
+  { name: "Hawaii: Part II", artist: "Miracle Musical" },
+  { name: "Bookends", artist: "Simon & Garfunkel" },
+  { name: "In Between Dreams", artist: "Jack Johnson" },
+  { name: "Comfort Eagle", artist: "Cake" },
+  {
+    name: "Lola vs. Powerman and the Money-Go-Round, Pt. 1",
+    artist: "The Kinks",
+  },
+  { name: "Magical Mystery Tour", artist: "The Beatles" },
+  { name: "Out of the Blue", artist: "Electric Light Orchestra" },
+  { name: "Marvin's Marvelous Mechanical Museum", artist: "Tally Hall" },
+];
 
-import { ApiConstants } from "../consts";
-
-type AlbumRatingPageProps = {};
-
-type Album = { name: String; artist: String };
-
-const AlbumRatingPage: React.FC<AlbumRatingPageProps> = () => {
-  const [albums, setAlbums] = useState<Album[]>([]);
-
-  useEffect(() => {
-    API.get(ApiConstants.ALBUMS_NAME, ApiConstants.ALBUMS_PATH, {}).then(
-      (res: { albums: Album[] }) => setAlbums(res.albums)
-    );
-  }, []);
-
+const AlbumRatingPage = () => {
   return (
     <>
       <p>
@@ -25,7 +24,7 @@ const AlbumRatingPage: React.FC<AlbumRatingPageProps> = () => {
         albums in no particular order:
       </p>
       <ul>
-        {albums.map((album, key) => (
+        {ALBUMS.map((album, key) => (
           <li key={key}>
             {album.name} ({album.artist})
           </li>
