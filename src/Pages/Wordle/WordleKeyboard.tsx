@@ -2,28 +2,15 @@ import React from "react";
 import { Eval, EVAL_COLORS } from "./Wordle";
 import styles from "./WordleKeyboard.module.css";
 
-export type GenericKeyHandler = (e: { key: string }) => void;
+type GenericKeyHandler = (e: { key: string }) => void;
 
 const Key: React.FC<{
   letter: string;
   keyEvent: GenericKeyHandler;
-  color?: Eval | Eval[];
+  color?: Eval;
 }> = ({ letter, keyEvent, color }) => {
-  let colorStyles: React.CSSProperties = {};
-  switch (typeof color) {
-    case "number":
-      colorStyles.backgroundColor = EVAL_COLORS[color];
-      break;
-    case "object":
-      const percent = 100 / color.length;
-      colorStyles.backgroundImage = `linear-gradient(to right, ${color
-        .map(
-          (color, i) =>
-            `${EVAL_COLORS[color]} ${percent * i}% ${percent * (i + 1)}%`
-        )
-        .join(", ")})`;
-      break;
-  }
+  const colorStyles: React.CSSProperties =
+    color === undefined ? {} : { backgroundColor: EVAL_COLORS[color] };
 
   return (
     <button
@@ -40,7 +27,7 @@ const Key: React.FC<{
 const KeyList: React.FC<{
   keys: string[];
   keyEvent: GenericKeyHandler;
-  keyColors: { [letter: string]: Eval | Eval[] };
+  keyColors: { [letter: string]: Eval };
 }> = ({ keys, keyEvent, keyColors }) => {
   return (
     <>
@@ -58,7 +45,7 @@ const KeyList: React.FC<{
 
 const WordleKeyboard: React.FC<{
   keyEvent: GenericKeyHandler;
-  keyColors: { [letter: string]: Eval | Eval[] };
+  keyColors: { [letter: string]: Eval };
 }> = ({ keyEvent, keyColors }) => {
   return (
     <div className={styles.keyboard}>

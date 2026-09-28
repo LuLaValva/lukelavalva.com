@@ -16,11 +16,10 @@ export const EVAL_COLORS = {
   [Eval.BULL]: "#080",
 };
 
-export const EMOJIS = {
+const EMOJIS = {
   [Eval.MISS]: "⚪",
   [Eval.COW]: "🟠",
   [Eval.BULL]: "🟢",
-  [-1]: "⚫",
 };
 
 const makeGameCompleteMessage = (
@@ -41,7 +40,7 @@ ${evaluations
 
 https://lukelavalva.com/wordle`;
 
-export function evaluate(guess: string, solution: string) {
+function evaluate(guess: string, solution: string) {
   const solChars = solution.split("");
   const evaluation: Eval[] = Array(guess.length).fill(Eval.MISS);
   for (let i = guess.length - 1; i >= 0; i--) {
@@ -61,7 +60,7 @@ export function evaluate(guess: string, solution: string) {
   return evaluation;
 }
 
-export const Letter: React.FC<{
+const Letter: React.FC<{
   char?: string;
   evaluation?: Eval;
   index: number;
@@ -86,7 +85,7 @@ export const Letter: React.FC<{
   );
 };
 
-export const Row: React.FC<{
+const Row: React.FC<{
   numLetters: WordLength;
   word: string;
   evaluation?: Eval[];
@@ -108,31 +107,21 @@ export const Row: React.FC<{
   );
 };
 
-export const Board: React.FC<{
+const Board: React.FC<{
   numLetters: WordLength;
   guesses: string[];
   evaluations: (Eval[] | undefined)[];
   numGuessed: number;
   guessedWrong: boolean;
-  locked?: number;
-}> = ({
-  numLetters,
-  guesses,
-  evaluations,
-  numGuessed,
-  guessedWrong,
-  locked,
-}) => {
+}> = ({ numLetters, guesses, evaluations, numGuessed, guessedWrong }) => {
   return (
-    <div className={styles.wordBox + " " + (locked && styles.locked)}>
+    <div className={styles.wordBox}>
       {guesses.map((guess, i) => (
         <Row
           key={i}
           numLetters={numLetters}
-          word={locked !== undefined && i > locked ? "" : guess}
-          evaluation={
-            locked !== undefined && i > locked ? undefined : evaluations[i]
-          }
+          word={guess}
+          evaluation={evaluations[i]}
           guessedWrong={numGuessed === i && guessedWrong}
         />
       ))}
