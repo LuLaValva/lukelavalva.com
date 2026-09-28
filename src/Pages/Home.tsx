@@ -56,9 +56,11 @@ const Home = () => {
       <BoxLink to="/wordle" width={13} left={197} top={62} size={0.9}>
         Wordle Clone
       </BoxLink>
-      <BoxLink to="/444dle" width={9} left={206} top={46} size={1.3}>
-        444dle
-      </BoxLink>
+      <a href="https://lavalva.dev/game/444dle" className={styles.boxLink}>
+        <BoxInSky width={9} left={206} top={46} size={1.3}>
+          444dle
+        </BoxInSky>
+      </a>
       <BoxInSky width={24} left={3400} top={2}>
         Haha you made it to the end
       </BoxInSky>

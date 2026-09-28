@@ -30,8 +30,14 @@ const CountdownPage = React.lazy(
   () => import("./Pages/Countdown/CountdownPage")
 );
 const WordlePage = React.lazy(() => import("./Pages/Wordle/WordlePage"));
-const FFFdlePage = React.lazy(() => import("./Pages/Wordle/FFFdle"));
 const KenKenPage = React.lazy(() => import("./Pages/KenKen/KenKenPage"));
+
+const Redirect: React.FC<{ to: string }> = ({ to }) => {
+  useEffect(() => {
+    window.location.replace(to);
+  }, [to]);
+  return null;
+};
 
 const Page: React.FC<{
   title: string;
@@ -145,11 +151,7 @@ let App: React.FC = () => {
               />
               <Route
                 path="/444dle"
-                element={
-                  <Page title="444dle">
-                    <FFFdlePage />
-                  </Page>
-                }
+                element={<Redirect to="https://lavalva.dev/game/444dle" />}
               />
               <Route
                 path="/kenken"
