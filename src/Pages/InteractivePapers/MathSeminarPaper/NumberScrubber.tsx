@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../AcademicPaper.module.css";
-import { ActiveListener } from "react-event-injector";
 
 type Props = {
   value: number;
@@ -12,8 +11,23 @@ type Props = {
 const NumberScrubber = (props: Props) => {
   const [currentValue, setCurrentValue] = useState(props.value);
   const [pointerStartPos, setPointerStartPos] = useState({ x: 0, y: 0 });
+  const scrubber = useRef<HTMLDivElement>(null);
 
   useEffect(() => setCurrentValue(props.value), [props.value]);
+
+  // React listens for touches passively, where preventDefault does nothing, so
+  // the drag would scroll the page out from under itself.
+  useEffect(() => {
+    const element = scrubber.current;
+    if (!element) return;
+    const holdStill = (e: TouchEvent) => e.preventDefault();
+    element.addEventListener("touchstart", holdStill, { passive: false });
+    element.addEventListener("touchmove", holdStill, { passive: false });
+    return () => {
+      element.removeEventListener("touchstart", holdStill);
+      element.removeEventListener("touchmove", holdStill);
+    };
+  }, []);
 
   const applyBounds = (value: number) => {
     if (props.min && value < props.min) return props.min;
@@ -25,19 +39,11 @@ const NumberScrubber = (props: Props) => {
     props.updateValue(applyBounds(newValue));
   };
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
   const handlePointerStart = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.currentTarget.setPointerCapture(e.pointerId);
     e.currentTarget.focus();
     setPointerStartPos({ x: e.clientX, y: e.clientY });
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    e.preventDefault();
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -91,21 +97,17 @@ const NumberScrubber = (props: Props) => {
   };
 
   return (
-    <ActiveListener
-      onTouchStartCapture={handleTouchStart}
-      onTouchMoveCapture={handleTouchMove}
+    <div
+      ref={scrubber}
+      className={styles.draggableNumber}
+      onPointerDown={handlePointerStart}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerEnd}
+      onKeyDown={handleKeyPress}
+      tabIndex={0}
     >
-      <div
-        className={styles.draggableNumber}
-        onPointerDown={handlePointerStart}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerEnd}
-        onKeyDown={handleKeyPress}
-        tabIndex={0}
-      >
-        {currentValue}
-      </div>
-    </ActiveListener>
+      {currentValue}
+    </div>
   );
 };
 
